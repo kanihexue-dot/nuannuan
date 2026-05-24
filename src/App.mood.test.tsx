@@ -16,5 +16,6 @@ describe("stage mood switching", () => {
 
     expect(stage).toHaveAttribute("data-mood", "warmth");
     expect(screen.getByText("台灯暖光")).toBeInTheDocument();
+    expect(screen.queryByText("被理解")).not.toBeInTheDocument();
   });
 });
