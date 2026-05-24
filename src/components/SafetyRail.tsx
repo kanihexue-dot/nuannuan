@@ -22,6 +22,9 @@ export function SafetyRail({ activeLevel }: SafetyRailProps) {
           </li>
         ))}
       </ul>
+      <p className="safety-rail__note">
+        L2/L3 仅在检测到更高风险信号时激活，当前演示默认停留在低压场景。
+      </p>
     </aside>
   );
 }

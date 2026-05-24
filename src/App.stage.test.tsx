@@ -16,6 +16,7 @@ describe("presentation layout", () => {
     expect(screen.getByRole("heading", { name: "极致共情回应" })).toBeInTheDocument();
     expect(screen.getByText("L0 温和陪伴")).toBeInTheDocument();
     expect(screen.getByText("L3 紧急分流")).toBeInTheDocument();
+    expect(screen.getByText("L2/L3 仅在检测到更高风险信号时激活，当前演示默认停留在低压场景。")).toBeInTheDocument();
     expect(screen.getByText("不分析，不说教。")).toBeInTheDocument();
     expect(safetyRail?.querySelector('li[data-active="true"]')).toHaveTextContent("L1 加强安抚");
 
