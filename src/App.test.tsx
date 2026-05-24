@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it } from "vitest";
 import App from "./App";
 
 describe("App", () => {
@@ -14,5 +16,27 @@ describe("App", () => {
     expect(
       screen.getByText("前台体验始终低压力，后台独立守住安全红线。")
     ).toBeInTheDocument();
+  });
+
+  it("moves the pressed state when a different overview step is selected", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    expect(screen.getByRole("button", { name: "03 极致共情回应" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+
+    await user.click(screen.getByRole("button", { name: "05 留白沉淀与隐私封存" }));
+
+    expect(screen.getByRole("button", { name: "05 留白沉淀与隐私封存" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    expect(screen.getByRole("button", { name: "03 极致共情回应" })).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
   });
 });
