@@ -76,6 +76,27 @@
   color: #ffffff;
   background: linear-gradient(160deg, #7063ef 0%, #4347b8 52%, #242e73 100%);
   box-shadow: 0 28px 56px rgba(73, 76, 166, 0.26);
+  transition: background 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.stage-canvas[data-mood="entry"] {
+  background: linear-gradient(160deg, #8479f6 0%, #645de0 48%, #373e92 100%);
+}
+
+.stage-canvas[data-mood="mapping"] {
+  background: linear-gradient(160deg, #6f79ef 0%, #5566d2 48%, #2f448f 100%);
+}
+
+.stage-canvas[data-mood="compassion"] {
+  background: linear-gradient(160deg, #7063ef 0%, #4347b8 52%, #242e73 100%);
+}
+
+.stage-canvas[data-mood="warmth"] {
+  background: linear-gradient(160deg, #7d76f0 0%, #5664ce 42%, #3c4b8d 100%);
+}
+
+.stage-canvas[data-mood="quiet"] {
+  background: linear-gradient(160deg, #6e69d4 0%, #5057b1 48%, #2c346d 100%);
 }
 
 .stage-canvas__header,
@@ -106,10 +127,33 @@
 }
 
 .stage-canvas__scene {
+  position: relative;
+  overflow: hidden;
   min-height: 220px;
   border-radius: 26px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stage-canvas__scene-glow {
+  position: absolute;
+  right: 10%;
+  bottom: 16%;
+  width: 24%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 213, 161, 0.95) 0%, rgba(255, 213, 161, 0) 70%);
+  filter: blur(8px);
+}
+
+.stage-canvas__scene-figure {
+  position: absolute;
+  left: 22%;
+  bottom: 20%;
+  width: 16%;
+  height: 28%;
+  border-radius: 48% 48% 32% 32%;
+  background: rgba(142, 164, 255, 0.88);
 }
 
 .stage-canvas__copy,
@@ -129,6 +173,21 @@
   margin-top: 0;
   color: var(--brand-strong);
   font-weight: 700;
+}
+
+.stage-canvas__keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stage-canvas__chip {
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: #f2efff;
+  color: var(--brand-strong);
+  font-size: 12px;
 }
 
 .stage-canvas__example strong {
@@ -163,6 +222,22 @@
   font-weight: 700;
 }
 
+@media (max-width: 1280px) {
+  .app-shell {
+    padding: 24px;
+  }
+
+  .presentation-hero,
+  .presentation-grid,
+  .stage-canvas__body {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
   .presentation-hero,
   .presentation-grid,
@@ -176,5 +251,11 @@
 
   .sidebar-rail {
     grid-template-rows: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-canvas {
+    transition: none;
   }
 }
