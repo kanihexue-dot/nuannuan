@@ -162,3 +162,19 @@
   color: var(--brand-strong);
   font-weight: 700;
 }
+
+@media (max-width: 900px) {
+  .presentation-hero,
+  .presentation-grid,
+  .stage-canvas__body {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-rail {
+    grid-template-rows: auto;
+  }
+}

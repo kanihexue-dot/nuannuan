@@ -9,14 +9,22 @@ describe("presentation layout", () => {
 
     render(<App />);
 
+    const safetyRail = screen.getByText("Safety Rail").closest("aside");
+    expect(safetyRail).not.toBeNull();
+
     expect(screen.getByLabelText("汇报提示框")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "极致共情回应" })).toBeInTheDocument();
     expect(screen.getByText("L0 温和陪伴")).toBeInTheDocument();
     expect(screen.getByText("L3 紧急分流")).toBeInTheDocument();
+    expect(screen.getByText("不分析，不说教。")).toBeInTheDocument();
+    expect(safetyRail?.querySelector('li[data-active="true"]')).toHaveTextContent("L1 加强安抚");
 
     await user.click(screen.getByRole("button", { name: "04 视觉治愈与转化" }));
 
     expect(screen.getByRole("heading", { name: "视觉治愈与转化" })).toBeInTheDocument();
     expect(screen.getByText("通过空间和光把情绪慢慢带离高压。")).toBeInTheDocument();
+    expect(screen.getByText("不靠说理完成变化。")).toBeInTheDocument();
+    expect(screen.queryByText("不分析，不说教。")).not.toBeInTheDocument();
+    expect(safetyRail?.querySelector('li[data-active="true"]')).toHaveTextContent("L0 温和陪伴");
   });
 });
