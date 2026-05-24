@@ -1,12 +1,16 @@
-const labels = [
-  "01 极速破冰",
-  "02 隐性感知识别",
-  "03 极致共情回应",
-  "04 视觉治愈与转化",
-  "05 留白沉淀与隐私封存"
-];
+import { useMemo, useState } from "react";
+import { FlowOverview } from "./components/FlowOverview";
+import { defaultStepId, presentationSteps } from "./data/steps";
+import type { StepId } from "./types";
 
 export default function App() {
+  const [activeStepId, setActiveStepId] = useState<StepId>(defaultStepId);
+
+  const activeStep = useMemo(
+    () => presentationSteps.find((step) => step.id === activeStepId) ?? presentationSteps[0],
+    [activeStepId]
+  );
+
   return (
     <main className="app-shell">
       <header className="hero-shell">
@@ -15,13 +19,11 @@ export default function App() {
         <p className="hero-subtitle">低摩擦情绪安置演示页</p>
       </header>
 
-      <nav aria-label="五步流程" className="step-shell">
-        {labels.map((label) => (
-          <button key={label} className="step-button" type="button">
-            {label}
-          </button>
-        ))}
-      </nav>
+      <FlowOverview
+        steps={presentationSteps}
+        activeStepId={activeStep.id}
+        onStepChange={setActiveStepId}
+      />
 
       <footer className="closing-shell">前台体验始终低压力，后台独立守住安全红线。</footer>
     </main>
