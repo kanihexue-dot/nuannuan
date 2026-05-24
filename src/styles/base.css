@@ -1,0 +1,74 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  background: var(--page-bg);
+  color: var(--ink-strong);
+}
+
+.app-shell {
+  max-width: var(--shell-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+.hero-shell {
+  margin-bottom: 24px;
+}
+
+.hero-kicker {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-strong);
+}
+
+.hero-shell h1 {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.08;
+}
+
+.hero-subtitle {
+  margin: 12px 0 0;
+  font-size: 18px;
+  color: var(--ink-mid);
+}
+
+.step-shell {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.step-button,
+.closing-shell {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.step-button {
+  min-height: 88px;
+  font: inherit;
+  color: var(--ink-strong);
+}
+
+.closing-shell {
+  padding: 18px 24px;
+  text-align: center;
+  color: var(--brand-strong);
+}

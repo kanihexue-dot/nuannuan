@@ -1,0 +1,15 @@
+:root {
+  --page-bg: linear-gradient(180deg, #f5f2fb 0%, #edf2fb 48%, #edf3ff 100%);
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-strong: #ffffff;
+  --ink-strong: #2c2f5c;
+  --ink-mid: #7b79a6;
+  --brand: #5a52ea;
+  --brand-strong: #453ec8;
+  --border-soft: #ebe7fb;
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --shadow-soft: 0 18px 38px rgba(114, 104, 204, 0.1);
+  --shell-width: 1440px;
+}
