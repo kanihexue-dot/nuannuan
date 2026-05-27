@@ -1,0 +1,35 @@
+# Cursor / agent workspace state
+.superpowers/
+
+# Independent nested repositories
+global-briefing/
+
+# Broken Git metadata backups
+.git.broken-*/
+
+# macOS and external-volume metadata
+.DS_Store
+._*
+.Spotlight-V100/
+.Trashes/
+.fseventsd/
+
+# Windows/external-drive metadata
+$RECYCLE.BIN/
+System Volume Information/
+
+# Temporary files and caches
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+cache/
+tmp/
+temp/
+
+# Local environments
+.venv/
+venv/
+node_modules/
