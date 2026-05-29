@@ -613,6 +613,13 @@ h2 {
   width: min(390px, calc(100vw - 32px));
 }
 
+.phone-shell--result .phone-hardware,
+.phone-shell--success .phone-hardware,
+.phone-shell--myPage .phone-hardware,
+.phone-shell--garden .phone-hardware {
+  width: min(390px, calc((100svh - 56px) * 9 / 16 + 28px), calc(100vw - 32px));
+}
+
 .phone-speaker {
   background: rgba(255, 255, 255, 0.18);
   border-radius: 999px;
@@ -627,28 +634,109 @@ h2 {
 
 .phone-screen {
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 226, 205, 0.95), transparent 18rem),
-    linear-gradient(180deg, #fffaf5 0%, #f8eee8 100%);
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.92) 0 1.5px, transparent 2px 100%),
+    radial-gradient(circle at 88% 28%, rgba(255, 255, 255, 0.86) 0 1.4px, transparent 2px 100%),
+    radial-gradient(circle at 18% 78%, rgba(255, 255, 255, 0.76) 0 1.6px, transparent 2px 100%),
+    radial-gradient(circle at 50% 0%, rgba(255, 236, 207, 0.96), transparent 18rem),
+    linear-gradient(180deg, #fff7df 0%, #fff1df 42%, #fdebdc 100%);
   border-radius: 34px;
   color: #3b2c31;
   height: min(780px, calc(100svh - 64px));
   min-height: 640px;
   overflow: hidden;
+  position: relative;
+}
+
+.phone-shell--result .phone-screen,
+.phone-shell--success .phone-screen,
+.phone-shell--myPage .phone-screen,
+.phone-shell--garden .phone-screen {
+  aspect-ratio: 9 / 16;
+  height: auto;
+  min-height: 0;
+}
+
+.phone-screen::before,
+.phone-screen::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+.phone-screen::before {
+  background:
+    radial-gradient(circle at 24px 24px, rgba(245, 174, 188, 0.5) 0 7px, transparent 8px),
+    radial-gradient(circle at 72px 18px, rgba(239, 205, 135, 0.42) 0 9px, transparent 10px),
+    radial-gradient(ellipse at center, rgba(139, 169, 80, 0.28) 0 42%, transparent 44%);
+  filter: blur(0.2px);
+  height: 150px;
+  left: -42px;
+  top: -36px;
+  transform: rotate(-18deg);
+  width: 180px;
+}
+
+.phone-screen::after {
+  background:
+    radial-gradient(circle at 40px 26px, rgba(245, 174, 188, 0.42) 0 7px, transparent 8px),
+    radial-gradient(circle at 92px 46px, rgba(250, 214, 139, 0.34) 0 9px, transparent 10px),
+    radial-gradient(ellipse at center, rgba(139, 169, 80, 0.24) 0 42%, transparent 44%);
+  bottom: -36px;
+  height: 150px;
+  right: -54px;
+  transform: rotate(18deg);
+  width: 190px;
 }
 
 .app-topbar {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 18px 20px 10px;
+  padding: 18px 20px 8px;
+  position: relative;
+  z-index: 2;
 }
 
-.app-topbar div {
-  display: grid;
-  gap: 2px;
+.topbar-back,
+.diary-pill {
+  align-items: center;
+  background: rgba(255, 252, 246, 0.78);
+  border: 1px solid rgba(221, 176, 146, 0.46);
+  box-shadow:
+    0 10px 24px rgba(139, 99, 72, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  color: #7b543c;
+  display: inline-flex;
 }
 
-.app-topbar span,
+.topbar-back {
+  border-radius: 999px;
+  font-size: 2rem;
+  height: 46px;
+  justify-content: center;
+  line-height: 1;
+  width: 46px;
+}
+
+button.topbar-back {
+  min-height: 46px;
+  padding: 0;
+}
+
+.diary-pill {
+  border-radius: 999px;
+  font-weight: 800;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 14px;
+}
+
+.diary-pill span {
+  color: #8b684e;
+  font-size: 1rem;
+}
+
 .mobile-eyebrow,
 .mini-grid span,
 .generated-note span,
@@ -661,22 +749,36 @@ h2 {
   letter-spacing: 0.05em;
 }
 
-.app-topbar strong {
-  color: #3d2c33;
-  font-size: 0.98rem;
-}
-
-.app-status {
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  padding: 0.3rem 0.58rem;
-}
-
 .app-screen {
   height: calc(100% - 61px);
   overflow-y: auto;
   padding: 12px 16px 18px;
+  position: relative;
   scrollbar-width: thin;
+  z-index: 1;
+}
+
+.app-screen--result,
+.app-screen--success,
+.app-screen--myPage,
+.app-screen--garden {
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+.sr-only {
+  clip: rect(0 0 0 0);
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .mobile-panel {
@@ -929,6 +1031,236 @@ h2 {
   padding-bottom: 12px;
 }
 
+.reference-seed-result {
+  aspect-ratio: 9 / 16;
+  display: block;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+
+.reference-seed-result__image {
+  display: block;
+  height: 100%;
+  inset: 0;
+  object-fit: fill;
+  position: absolute;
+  width: 100%;
+}
+
+.reference-primary-hit,
+.reference-secondary-hit,
+.reference-top-left-hit,
+.reference-success-primary-hit,
+.reference-success-secondary-hit,
+.reference-my-page-primary-hit,
+.reference-my-page-tools-hit,
+.reference-my-page-settings-hit,
+.reference-garden-seed-hit {
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 999px;
+  box-shadow: none;
+  min-height: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 2;
+}
+
+.reference-top-left-hit {
+  height: 5.6%;
+  left: 5.2%;
+  top: 3.2%;
+  width: 10%;
+}
+
+.reference-primary-hit {
+  height: 8.4%;
+  left: 8.8%;
+  top: 69.2%;
+  width: 82.4%;
+}
+
+.reference-secondary-hit {
+  height: 4.4%;
+  left: 32%;
+  top: 78.4%;
+  width: 36%;
+}
+
+.reference-success-primary-hit {
+  height: 7.2%;
+  left: 14%;
+  top: 69.2%;
+  width: 72%;
+}
+
+.reference-success-secondary-hit {
+  height: 4.3%;
+  left: 34%;
+  top: 78.4%;
+  width: 32%;
+}
+
+.reference-my-page-primary-hit {
+  height: 6.4%;
+  left: 8.9%;
+  top: 61.5%;
+  width: 31%;
+}
+
+.reference-my-page-tools-hit,
+.reference-my-page-settings-hit {
+  height: 5.8%;
+  top: 2.9%;
+  width: 10.3%;
+}
+
+.reference-my-page-tools-hit {
+  left: 74.6%;
+}
+
+.reference-my-page-settings-hit {
+  left: 86%;
+}
+
+.reference-primary-hit:hover,
+.reference-secondary-hit:hover,
+.reference-top-left-hit:hover,
+.reference-success-primary-hit:hover,
+.reference-success-secondary-hit:hover,
+.reference-my-page-primary-hit:hover,
+.reference-my-page-tools-hit:hover,
+.reference-my-page-settings-hit:hover,
+.reference-garden-seed-hit:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.22);
+  transform: none;
+}
+
+.reference-primary-hit:focus-visible,
+.reference-secondary-hit:focus-visible,
+.reference-top-left-hit:focus-visible,
+.reference-success-primary-hit:focus-visible,
+.reference-success-secondary-hit:focus-visible,
+.reference-my-page-primary-hit:focus-visible,
+.reference-my-page-tools-hit:focus-visible,
+.reference-my-page-settings-hit:focus-visible,
+.reference-garden-seed-hit:focus-visible {
+  outline: 3px solid rgba(177, 96, 95, 0.46);
+  outline-offset: 2px;
+}
+
+.reference-garden-back-hit {
+  height: 5.6%;
+  left: 3.4%;
+  top: 2.8%;
+  width: 9.8%;
+}
+
+.reference-garden-seed-hit {
+  border-radius: 28px;
+  height: 16%;
+  left: 5.6%;
+  width: 88.8%;
+}
+
+.reference-garden-seed-hit--1 {
+  top: 28.7%;
+}
+
+.reference-garden-seed-hit--2 {
+  top: 46.2%;
+}
+
+.reference-garden-seed-hit--3 {
+  top: 63.6%;
+}
+
+.reference-garden-seed-hit--4 {
+  top: 80.9%;
+}
+
+.reference-garden-entry {
+  border-radius: 26px;
+  height: 13.4%;
+  left: 8.7%;
+  position: absolute;
+  top: 84.2%;
+  width: 82.6%;
+  z-index: 1;
+}
+
+.reference-success-garden-entry {
+  border-radius: 26px;
+  height: 13.4%;
+  left: 8.7%;
+  position: absolute;
+  top: 84.2%;
+  width: 82.6%;
+  z-index: 1;
+}
+
+.reference-my-page-card-hit {
+  border-radius: 26px;
+  height: 35.2%;
+  left: 6.2%;
+  position: absolute;
+  top: 35.9%;
+  width: 87.6%;
+  z-index: 1;
+}
+
+.seed-success-action-layer {
+  animation: seedActionOverlayFade 3400ms ease both;
+  border-radius: 40% 40% 30% 30%;
+  height: 40%;
+  left: 7%;
+  mask-image: radial-gradient(ellipse at center, #000 0 58%, rgba(0, 0, 0, 0.88) 68%, transparent 86%);
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 17.4%;
+  width: 86%;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 0 58%, rgba(0, 0, 0, 0.88) 68%, transparent 86%);
+  z-index: 1;
+}
+
+.seed-success-action-video {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 37%;
+  width: 100%;
+}
+
+@keyframes seedActionOverlayFade {
+  0% {
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.96;
+  }
+
+  84% {
+    opacity: 0.96;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seed-success-action-layer {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 .seed-hero,
 .conversation-turn,
 .garden-entry-card,
@@ -946,10 +1278,11 @@ h2 {
   align-items: center;
   display: grid;
   gap: 16px;
-  grid-template-columns: 86px minmax(0, 1fr);
+  grid-template-columns: 1fr;
   overflow: hidden;
-  padding: 18px;
+  padding: 18px 18px 20px;
   position: relative;
+  text-align: center;
 }
 
 .conversation-turns {
@@ -976,13 +1309,15 @@ h2 {
 }
 
 .seed-hero::after {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.62), transparent 68%);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.72), transparent 68%),
+    radial-gradient(circle at 30% 80%, rgba(244, 174, 183, 0.24), transparent 52%);
   content: "";
-  height: 150px;
+  height: 240px;
   position: absolute;
-  right: -50px;
-  top: -60px;
-  width: 150px;
+  right: -80px;
+  top: -70px;
+  width: 240px;
 }
 
 .seed-hero > * {
@@ -990,7 +1325,7 @@ h2 {
   z-index: 1;
 }
 
-.seed-hero span,
+.seed-hero > span,
 .garden-entry-card span,
 .garden-stats span,
 .seed-card__date {
@@ -1019,6 +1354,23 @@ h2 {
 
 .seed-hero p {
   margin-top: 8px;
+}
+
+.seed-hero-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.seed-hero-copy p {
+  color: #5d402f;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.seed-hero-copy small {
+  color: #9b765e;
+  font-size: 0.82rem;
+  line-height: 1.55;
 }
 
 .seed-hero--pink {
@@ -1214,6 +1566,52 @@ h2 {
   color: #49353c;
   line-height: 1.55;
   margin: 5px 0 0;
+}
+
+.reference-seed-detail-panel {
+  background: rgba(255, 252, 247, 0.94);
+  border: 1px solid rgba(232, 204, 179, 0.86);
+  border-radius: 28px 28px 0 0;
+  bottom: 0;
+  box-shadow: 0 -18px 44px rgba(92, 67, 52, 0.18);
+  gap: 10px;
+  left: 0;
+  max-height: 58%;
+  overflow-y: auto;
+  padding: 18px;
+  position: absolute;
+  right: 0;
+  z-index: 3;
+}
+
+.reference-seed-detail-panel h2 {
+  font-size: 1.02rem;
+}
+
+.reference-seed-detail-panel p,
+.reference-seed-detail-panel dd {
+  font-size: 0.86rem;
+}
+
+.reference-seed-detail-panel dl {
+  gap: 8px;
+}
+
+.reference-seed-detail-panel dl div {
+  padding: 10px;
+}
+
+.reference-seed-detail-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.reference-seed-detail-actions button {
+  flex: 1;
+  min-height: 38px;
+  padding: 0.48rem 0.72rem;
 }
 
 @keyframes mobilePanelIn {

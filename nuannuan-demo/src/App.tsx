@@ -8,7 +8,6 @@ function App() {
 
   return (
     <SeedGardenDemo
-      conversation={initialState.conversation}
       initialSeeds={initialState.seeds}
       seedCandidate={initialState.currentSeedCandidate}
     />

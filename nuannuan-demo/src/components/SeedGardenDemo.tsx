@@ -1,15 +1,14 @@
 import { useMemo, useState } from 'react'
 import { buildMemoryGarden, markSeedCandidateNotSaved, plantSeedCandidate } from '../memory/repository'
-import type { MemoryGarden, MemorySeed, MemorySeedCandidate, ThreeRoundConversation } from '../memory/types'
+import type { MemoryGarden, MemorySeed, MemorySeedCandidate } from '../memory/types'
 import { PhoneFrame } from './PhoneFrame'
 
 interface SeedGardenDemoProps {
-  conversation: ThreeRoundConversation
   initialSeeds: MemorySeed[]
   seedCandidate: MemorySeedCandidate
 }
 
-type DemoStep = 'conversation' | 'result' | 'entry' | 'garden'
+type DemoStep = 'result' | 'success' | 'myPage' | 'entry' | 'garden'
 
 const moodLabels: Record<string, string> = {
   anxious: '有点焦虑',
@@ -39,82 +38,133 @@ function labelTags(tags: string[], labels: Record<string, string>): string[] {
   return tags.map((tag) => labels[tag] ?? tag)
 }
 
-function MoodTagPills({ tags }: { tags: string[] }) {
-  return (
-    <div className="seed-pill-row" aria-label="心情标签">
-      {labelTags(tags, moodLabels).map((label) => (
-        <span key={label}>{label}</span>
-      ))}
-    </div>
-  )
-}
-
-function SeedActionBar({ onPlant, onSkip }: { onPlant(): void; onSkip(): void }) {
-  return (
-    <div className="seed-actions">
-      <button type="button" onClick={onPlant}>
-        带去记忆花园
-      </button>
-      <button type="button" className="button-ghost" onClick={onSkip}>
-        先不保存
-      </button>
-    </div>
-  )
-}
-
-function ThreeRoundConversationPreview({
-  conversation,
-  onComplete,
-}: {
-  conversation: ThreeRoundConversation
-  onComplete(): void
-}) {
-  return (
-    <section className="mobile-panel conversation-preview" aria-labelledby="conversation-preview-title">
-      <p className="mobile-eyebrow">三轮后沉淀</p>
-      <h1 id="conversation-preview-title">三轮对话</h1>
-      <p className="seed-helper">这颗小种子不是一句话自动生成的。暖暖先陪你完成三轮对话，再整理成候选小种子。</p>
-      <div className="conversation-turns" aria-label="固定三轮对话">
-        {conversation.turns.map((turn) => (
-          <article key={turn.id} className="conversation-turn">
-            <span>第 {turn.roundIndex} 轮</span>
-            <p className="bubble bubble-user">{turn.userText}</p>
-            <p className="bubble bubble-ai">{turn.aiResponse}</p>
-          </article>
-        ))}
-      </div>
-      <button type="button" className="wide-button" onClick={onComplete}>
-        整理成心情小种子
-      </button>
-    </section>
-  )
-}
-
 function MoodSeedResult({
   seed,
+  onBack,
   onPlant,
   onSkip,
 }: {
   seed: MemorySeedCandidate
+  onBack(): void
   onPlant(): void
   onSkip(): void
 }) {
   return (
-    <section className="mobile-panel seed-result" aria-labelledby="seed-result-title">
-      <p className="mobile-eyebrow">三轮对话后</p>
-      <h1 id="seed-result-title">心情小种子</h1>
-      <p className="seed-helper">暖暖把这三轮对话整理成了一颗心情小种子。它现在还只是候选，等你决定要不要带去记忆花园。</p>
-      <article className={`seed-hero seed-hero--${seed.seedColor}`}>
-        <div className="seed-orb" aria-hidden="true" />
-        <div>
-          <span>刚生成</span>
-          <h2>{seed.title}</h2>
-          <p>{seed.summary}</p>
-        </div>
+    <section className="mobile-panel seed-result reference-seed-result" aria-labelledby="seed-result-title">
+      <img
+        className="reference-seed-result__image"
+        src="/reference-assets/seed-result-reference-211.png"
+        alt=""
+        aria-hidden="true"
+      />
+      <div className="sr-only">
+        <h1 id="seed-result-title">今天的心情，变成了一颗小种子</h1>
+        <p>暖暖帮你把刚刚的感受，轻轻收成了一颗小种子。它还没有种下，可以带它去记忆花园。</p>
+        <p>
+          {seed.title}：{seed.summary}
+        </p>
+        <p>心情标签：{labelTags(seed.moodTags, moodLabels).join('、')}、不想说话</p>
+      </div>
+      <button type="button" className="reference-top-left-hit" onClick={onBack}>
+        <span className="sr-only">返回种子结果页</span>
+      </button>
+      <button type="button" className="reference-primary-hit" onClick={onPlant}>
+        <span className="sr-only">带去记忆花园</span>
+      </button>
+      <button type="button" className="reference-secondary-hit" onClick={onSkip}>
+        <span className="sr-only">先不保存</span>
+      </button>
+      <article className="reference-garden-entry" aria-label="记忆花园入口预览">
+        <span className="sr-only">记忆花园，这里长着你慢慢放下过的小心情。</span>
       </article>
-      <MoodTagPills tags={seed.moodTags} />
-      <p className="seed-helper">你可以把它带去记忆花园，也可以先不保存。决定权一直在你这里。</p>
-      <SeedActionBar onPlant={onPlant} onSkip={onSkip} />
+    </section>
+  )
+}
+
+function SeedPlantSuccess({
+  onBack,
+  onContinue,
+  onReturnHome,
+}: {
+  onBack(): void
+  onContinue(): void
+  onReturnHome(): void
+}) {
+  return (
+    <section className="mobile-panel seed-success reference-seed-result" aria-labelledby="seed-success-title">
+      <img
+        className="reference-seed-result__image"
+        src="/reference-assets/seed-success-reference-212.png"
+        alt=""
+        aria-hidden="true"
+      />
+      <div className="seed-success-action-layer" aria-hidden="true">
+        <video className="seed-success-action-video" autoPlay muted playsInline preload="auto">
+          <source src="/reference-assets/seed-planting-action-overlay-212.m4v" type="video/mp4" />
+        </video>
+      </div>
+      <div className="sr-only">
+        <h1 id="seed-success-title">已经带到小花园啦。</h1>
+        <p>这颗小种子已经被轻轻放入记忆小花园里休息。</p>
+        <p>已同步到「我的」里的记忆小花园。</p>
+      </div>
+      <button type="button" className="reference-top-left-hit" onClick={onBack}>
+        <span className="sr-only">返回种子结果页</span>
+      </button>
+      <button type="button" className="reference-success-primary-hit" onClick={onContinue}>
+        <span className="sr-only">去我的页面看看</span>
+      </button>
+      <button type="button" className="reference-success-secondary-hit" onClick={onReturnHome}>
+        <span className="sr-only">回到首页</span>
+      </button>
+      <article className="reference-success-garden-entry" aria-label="记忆花园入口预览">
+        <span className="sr-only">记忆花园，这里长着你慢慢放下过的小心情。</span>
+      </article>
+    </section>
+  )
+}
+
+function MyPageFirstScreen({
+  actionStatus,
+  onEnterGarden,
+  onOpenTools,
+  onOpenSettings,
+}: {
+  actionStatus?: string
+  onEnterGarden(): void
+  onOpenTools(): void
+  onOpenSettings(): void
+}) {
+  return (
+    <section className="mobile-panel my-page-first reference-seed-result" aria-labelledby="my-page-title">
+      <img
+        className="reference-seed-result__image"
+        src="/reference-assets/my-page-reference-213.png"
+        alt=""
+        aria-hidden="true"
+      />
+      <div className="sr-only">
+        <h1 id="my-page-title">我的页面</h1>
+        <p>暖暖，陪伴你的第23天。</p>
+        <p>12 封存小记，8 治愈场景，36 陪伴时刻。</p>
+        <p>记忆小花园，这里长着你慢慢放下过的小心情。已种下 12 颗，最近一颗：有点累的小黄种子。</p>
+        <p>快捷入口包含消息中心、助眠设置、收藏夹和心情日记。底部导航当前停留在我的。</p>
+      </div>
+      <p className="sr-only" role="status" aria-live="polite">
+        {actionStatus}
+      </p>
+      <button type="button" className="reference-my-page-tools-hit" onClick={onOpenTools}>
+        <span className="sr-only">打开页面工具</span>
+      </button>
+      <button type="button" className="reference-my-page-settings-hit" onClick={onOpenSettings}>
+        <span className="sr-only">打开设置</span>
+      </button>
+      <article className="reference-my-page-card-hit" aria-label="记忆小花园入口预览">
+        <span className="sr-only">记忆小花园，这里长着你慢慢放下过的小心情。</span>
+      </article>
+      <button type="button" className="reference-my-page-primary-hit" onClick={onEnterGarden}>
+        <span className="sr-only">进去看看</span>
+      </button>
     </section>
   )
 }
@@ -162,25 +212,17 @@ function MemoryGardenEntryCard({
   )
 }
 
-function SeedCard({ seed, onSelect }: { seed: MemorySeed; onSelect(seed: MemorySeed): void }) {
+function SeedDetailPanel({
+  seed,
+  onClose,
+  onBack,
+}: {
+  seed: MemorySeed
+  onClose(): void
+  onBack(): void
+}) {
   return (
-    <button
-      type="button"
-      className={`seed-card seed-card--${seed.seedColor}`}
-      onClick={() => onSelect(seed)}
-      aria-label={`查看${seed.title}心情小种子`}
-    >
-      <span className="seed-card__orb" aria-hidden="true" />
-      <span className="seed-card__date">{formatDate(seed.createdAt)}</span>
-      <strong>{seed.title}</strong>
-      <small>{labelTags(seed.moodTags, moodLabels).join(' / ')}</small>
-    </button>
-  )
-}
-
-function SeedDetailPanel({ seed }: { seed: MemorySeed }) {
-  return (
-    <article className="seed-detail-panel" aria-label="小种子详情">
+    <article className="seed-detail-panel reference-seed-detail-panel" aria-label="小种子详情">
       <p className="mobile-eyebrow">小种子详情</p>
       <h2>{seed.title} · 小种子详情</h2>
       <p>{seed.summary}</p>
@@ -202,6 +244,14 @@ function SeedDetailPanel({ seed }: { seed: MemorySeed }) {
           <dd>{labelTags(seed.topicTags, topicLabels).join(' / ')}</dd>
         </div>
       </dl>
+      <div className="reference-seed-detail-actions">
+        <button type="button" className="button-ghost" onClick={onClose}>
+          关闭详情
+        </button>
+        <button type="button" onClick={onBack}>
+          回到我的页面
+        </button>
+      </div>
     </article>
   )
 }
@@ -210,36 +260,67 @@ function SeedGardenView({
   garden,
   selectedSeed,
   onSelectSeed,
+  onClearSeed,
   onBack,
 }: {
   garden: MemoryGarden
   selectedSeed?: MemorySeed
   onSelectSeed(seed: MemorySeed): void
+  onClearSeed(): void
   onBack(): void
 }) {
+  const visibleSeeds = garden.seeds.slice(0, 4)
+
   return (
-    <section className="mobile-panel seed-garden" aria-labelledby="seed-garden-title">
-      <button type="button" className="back-button" onClick={onBack}>
-        回到我的页面
+    <section className="mobile-panel seed-garden reference-seed-result reference-memory-garden" aria-labelledby="seed-garden-title">
+      <img
+        className="reference-seed-result__image"
+        src="/reference-assets/memory-garden-reference-214.png"
+        alt=""
+        aria-hidden="true"
+      />
+      <div className="sr-only">
+        <h1 id="seed-garden-title">记忆小花园</h1>
+        <p>每一颗小种子，都是你慢慢放下过的一天。花园第一层保持小种子列表，主题只在点开小种子后出现。</p>
+        <div>
+          {garden.seeds.map((seed) => (
+            <article key={seed.id}>
+              <h2>{seed.title}</h2>
+              <p>{formatDate(seed.createdAt)}</p>
+              <p>{seed.summary}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <button type="button" className="reference-top-left-hit reference-garden-back-hit" onClick={onBack}>
+        <span className="sr-only">返回我的页面</span>
       </button>
-      <p className="mobile-eyebrow">第一层是小种子</p>
-      <h1 id="seed-garden-title">记忆花园</h1>
-      <p className="seed-helper">不同颜色代表那天心情留下的温度。主题只在点开后作为细节出现。</p>
-      <section className="seed-grid" aria-label="记忆花园第一层">
-        {garden.seeds.map((seed) => (
-          <SeedCard key={seed.id} seed={seed} onSelect={onSelectSeed} />
+      <section aria-label="记忆花园第一层">
+        {visibleSeeds.map((seed, index) => (
+          <button
+            key={seed.id}
+            type="button"
+            className={`reference-garden-seed-hit reference-garden-seed-hit--${index + 1}`}
+            onClick={() => onSelectSeed(seed)}
+            aria-label={`查看${seed.title}心情小种子`}
+          >
+            <span className="sr-only">
+              {seed.title}，{formatDate(seed.createdAt)}，{seed.summary}
+            </span>
+          </button>
         ))}
       </section>
-      {selectedSeed ? <SeedDetailPanel seed={selectedSeed} /> : null}
+      {selectedSeed ? <SeedDetailPanel seed={selectedSeed} onClose={onClearSeed} onBack={onBack} /> : null}
     </section>
   )
 }
 
-export function SeedGardenDemo({ conversation, initialSeeds, seedCandidate }: SeedGardenDemoProps) {
-  const [step, setStep] = useState<DemoStep>('conversation')
+export function SeedGardenDemo({ initialSeeds, seedCandidate }: SeedGardenDemoProps) {
+  const [step, setStep] = useState<DemoStep>('result')
   const [seeds, setSeeds] = useState(initialSeeds)
   const [currentCandidate, setCurrentCandidate] = useState(seedCandidate)
   const [selectedSeedId, setSelectedSeedId] = useState<string>()
+  const [myPageActionStatus, setMyPageActionStatus] = useState<string>()
   const garden = useMemo(() => buildMemoryGarden(seeds), [seeds])
   const currentSeed = seeds.find((seed) => seed.id === seedCandidate.id.replace(/^candidate_/, '')) ?? currentCandidate
   const selectedSeed = garden.seeds.find((seed) => seed.id === selectedSeedId)
@@ -249,7 +330,7 @@ export function SeedGardenDemo({ conversation, initialSeeds, seedCandidate }: Se
     setCurrentCandidate(plantedSeed)
     setSeeds((items) => items.map((item) => (item.id === currentSeed.id ? plantedSeed : item)))
     setSelectedSeedId(undefined)
-    setStep('entry')
+    setStep('success')
   }
 
   function skipCurrentSeed() {
@@ -260,29 +341,67 @@ export function SeedGardenDemo({ conversation, initialSeeds, seedCandidate }: Se
     setStep('entry')
   }
 
+  function returnToResult() {
+    setSelectedSeedId(undefined)
+    setStep('result')
+  }
+
+  function returnToMyPage() {
+    setSelectedSeedId(undefined)
+    setMyPageActionStatus(undefined)
+    setStep('myPage')
+  }
+
+  function handleTopbarBack() {
+    if (step === 'garden') {
+      returnToMyPage()
+      return
+    }
+
+    returnToResult()
+  }
+
   return (
     <main className="demo-stage">
       <header className="demo-copy">
         <p className="eyebrow">Nuannuan Mood Seed Demo</p>
         <h1>心情小种子记忆花园</h1>
-        <p>固定三轮对话后，暖暖才把这段心情整理成候选小种子；用户确认后，它才会进入记忆花园。</p>
+        <p>第一眼先看到今天生成的小种子；用户确认后，它才会进入记忆花园。</p>
       </header>
 
-      <PhoneFrame label="心情小种子记忆花园 Demo">
-        <header className="app-topbar">
-          <div>
-            <span>暖暖</span>
-            <strong>{step === 'conversation' ? 'Three Rounds' : step === 'result' ? 'Mood Seed' : 'Memory Garden'}</strong>
-          </div>
-          <span className="app-status">09:41</span>
-        </header>
-        <main className="app-screen">
-          {step === 'conversation' ? (
-            <ThreeRoundConversationPreview conversation={conversation} onComplete={() => setStep('result')} />
+      <PhoneFrame className={`phone-shell--${step}`} label="心情小种子记忆花园 Demo">
+        {step !== 'result' && step !== 'success' && step !== 'myPage' && step !== 'garden' ? (
+          <header className={`app-topbar app-topbar--${step}`}>
+            <button type="button" className="topbar-back" onClick={handleTopbarBack} aria-label="返回">
+              <span aria-hidden="true">‹</span>
+            </button>
+            <span className="diary-pill" aria-label="心情日记">
+              <span aria-hidden="true">♡</span>
+              心情日记
+            </span>
+          </header>
+        ) : null}
+        <main className={`app-screen app-screen--${step}`}>
+          {step === 'result' ? (
+            <MoodSeedResult
+              seed={currentCandidate}
+              onBack={returnToResult}
+              onPlant={plantCurrentSeed}
+              onSkip={skipCurrentSeed}
+            />
           ) : null}
 
-          {step === 'result' ? (
-            <MoodSeedResult seed={currentCandidate} onPlant={plantCurrentSeed} onSkip={skipCurrentSeed} />
+          {step === 'success' ? (
+            <SeedPlantSuccess onBack={returnToResult} onContinue={returnToMyPage} onReturnHome={returnToResult} />
+          ) : null}
+
+          {step === 'myPage' ? (
+            <MyPageFirstScreen
+              actionStatus={myPageActionStatus}
+              onEnterGarden={() => setStep('garden')}
+              onOpenTools={() => setMyPageActionStatus('页面工具已打开，当前演示保持在我的页面。')}
+              onOpenSettings={() => setMyPageActionStatus('设置已打开，当前演示保持在我的页面。')}
+            />
           ) : null}
 
           {step === 'entry' ? (
@@ -299,14 +418,17 @@ export function SeedGardenDemo({ conversation, initialSeeds, seedCandidate }: Se
               garden={garden}
               selectedSeed={selectedSeed}
               onSelectSeed={(seed) => setSelectedSeedId(seed.id)}
-              onBack={() => setStep('entry')}
+              onClearSeed={() => setSelectedSeedId(undefined)}
+              onBack={returnToMyPage}
             />
           ) : null}
 
-          <aside className="safety-tile" aria-label="安全边界说明">
-            <strong>高风险内容不会进入普通记忆花园</strong>
-            <span>这类内容只连接安全支持路径，不展示原文、标签或细节。</span>
-          </aside>
+          {step !== 'result' && step !== 'success' && step !== 'myPage' && step !== 'garden' ? (
+            <aside className="safety-tile" aria-label="安全边界说明">
+              <strong>高风险内容不会进入普通记忆花园</strong>
+              <span>这类内容只连接安全支持路径，不展示原文、标签或细节。</span>
+            </aside>
+          ) : null}
         </main>
       </PhoneFrame>
     </main>

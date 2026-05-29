@@ -2,12 +2,13 @@ import type { ReactNode } from 'react'
 
 interface PhoneFrameProps {
   children: ReactNode
+  className?: string
   label?: string
 }
 
-export function PhoneFrame({ children, label = '暖暖手机闭环 Demo' }: PhoneFrameProps) {
+export function PhoneFrame({ children, className, label = '暖暖手机闭环 Demo' }: PhoneFrameProps) {
   return (
-    <section className="phone-shell" aria-label={label}>
+    <section className={['phone-shell', className].filter(Boolean).join(' ')} aria-label={label}>
       <div className="phone-hardware">
         <div className="phone-speaker" aria-hidden="true" />
         <div className="phone-screen">{children}</div>
