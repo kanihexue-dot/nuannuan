@@ -22,10 +22,17 @@ class WeekFlowTimelineTests(unittest.TestCase):
 
     def assert_display_week(self, detail_id, display_week, source_week):
         body = self.milestone_markup(detail_id)
-        self.assertIn(f'class="milestone-week"', body)
-        self.assertIn(f'data-display-week="{display_week}"', body)
-        self.assertIn(f'data-source-week="{source_week}"', body)
-        self.assertIn(f">{display_week}<", body)
+        week_match = re.search(
+            rf'<span\b(?=[^>]*class="milestone-week")'
+            rf'(?=[^>]*data-display-week="{re.escape(display_week)}")'
+            rf'(?=[^>]*data-source-week="{re.escape(source_week)}")'
+            rf'[^>]*>\s*{re.escape(display_week)}\s*</span>',
+            body,
+        )
+        self.assertIsNotNone(
+            week_match,
+            f"Missing milestone week badge for {detail_id}: {display_week} / {source_week}",
+        )
 
     def test_each_milestone_uses_expected_display_week(self):
         expected = {
