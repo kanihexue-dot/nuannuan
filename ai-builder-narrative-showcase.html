@@ -466,59 +466,6 @@
       background: var(--mint-soft);
       color: var(--mint);
     }
-    .week-flow-strip {
-      min-width: 1120px;
-      margin: 2px 0 16px;
-      padding: 0 18px;
-    }
-    .week-flow-inner {
-      border: 1px solid rgba(17,24,39,.06);
-      border-radius: 999px;
-      background: rgba(255,255,255,.72);
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 24px rgba(17,24,39,.035);
-    }
-    .week-flow-inner::before {
-      content: "";
-      position: absolute;
-      left: 8%;
-      right: 8%;
-      top: 50%;
-      border-top: 1px solid rgba(99,91,255,.20);
-      transform: translateY(-50%);
-    }
-    .week-flow-step {
-      position: relative;
-      z-index: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 44px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 950;
-      letter-spacing: .01em;
-    }
-    .week-flow-step::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--purple), var(--mint));
-      box-shadow: 0 0 0 5px rgba(99,91,255,.08);
-    }
-    .week-flow-step:not(:last-child)::after {
-      content: "→";
-      color: var(--faint);
-      font-weight: 950;
-      position: absolute;
-      right: -5px;
-    }
     .milestone-node b {
       display: block;
       font-size: 20px;
@@ -1804,18 +1751,9 @@
             </div>
             <div class="milestone-grid">
               <div class="milestone-item"><button class="milestone-node" data-detail="foundation-builder"><span class="milestone-week" data-display-week="Week 1" data-source-week="Week0">Week 1</span><b>LLM / Agent 基础</b><span>理解 LLM 非确定性、Agent 组件和工具调用边界。</span></button></div>
-              <div class="milestone-item"><button class="milestone-node" data-detail="assistant-prototype-builder"><span class="milestone-week" data-display-week="Week 2" data-source-week="Week1">Week 2</span><b>Skill 与助理原型</b><span>把重复任务封装为可调用能力，形成最小助理原型。</span></button></div>
-              <div class="milestone-item"><button class="milestone-node" data-detail="evaluation-builder"><span class="milestone-week" data-display-week="Week 3" data-source-week="Week3">Week 3</span><b>评测体系</b><span>建立 eval set、trace、grader 和回归样本。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="assistant-prototype-builder"><span class="milestone-week" data-display-week="Week 1" data-source-week="Week1">Week 1</span><b>Skill 与助理原型</b><span>把重复任务封装为可调用能力，形成最小助理原型。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="evaluation-builder"><span class="milestone-week" data-display-week="Week 4" data-source-week="Week3">Week 4</span><b>评测体系</b><span>建立 eval set、trace、grader 和回归样本。</span></button></div>
               <div class="milestone-item"><button class="milestone-node" data-detail="stability-builder"><span class="milestone-week" data-display-week="Week 4" data-source-week="Week4">Week 4</span><b>稳定性工程</b><span>把 guardrail、fallback 和失败复盘纳入工程闭环。</span></button></div>
-            </div>
-          </div>
-
-          <div class="week-flow-strip" aria-label="Course progression from Week 1 to Week 4">
-            <div class="week-flow-inner">
-              <span class="week-flow-step">Week 1</span>
-              <span class="week-flow-step">Week 2</span>
-              <span class="week-flow-step">Week 3</span>
-              <span class="week-flow-step">Week 4</span>
             </div>
           </div>
 
