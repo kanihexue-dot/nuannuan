@@ -37,8 +37,8 @@ class WeekFlowTimelineTests(unittest.TestCase):
     def test_each_milestone_uses_expected_display_week(self):
         expected = {
             "foundation-builder": ("Week 1", "Week0"),
-            "assistant-prototype-builder": ("Week 2", "Week1"),
-            "evaluation-builder": ("Week 3", "Week3"),
+            "assistant-prototype-builder": ("Week 1", "Week1"),
+            "evaluation-builder": ("Week 4", "Week3"),
             "stability-builder": ("Week 4", "Week4"),
             "foundation-product": ("Week 2", "Week1"),
             "competitive-product": ("Week 2", "Week1"),
@@ -49,25 +49,10 @@ class WeekFlowTimelineTests(unittest.TestCase):
             with self.subTest(detail_id=detail_id):
                 self.assert_display_week(detail_id, display_week, source_week)
 
-    def test_shared_week_flow_strip_exists_between_tracks(self):
-        self.assertIn('class="week-flow-strip"', self.html)
-        flow_index = self.html.index('class="week-flow-strip"')
-        builder_index = self.html.index('class="capability-timeline"')
-        product_index = self.html.index('class="capability-timeline product"')
-        self.assertGreater(flow_index, builder_index)
-        self.assertLess(flow_index, product_index)
-
-    def test_week_flow_strip_shows_week_1_to_week_4(self):
-        flow_match = re.search(
-            r'<div class="week-flow-strip"[^>]*>(?P<body>.*?)</div>\s*<div class="capability-timeline product"',
-            self.html,
-            re.S,
-        )
-        self.assertIsNotNone(flow_match, "Missing week flow strip before product track")
-        flow_body = flow_match.group("body")
-        for week in ("Week 1", "Week 2", "Week 3", "Week 4"):
-            self.assertIn(week, flow_body)
-        self.assertIn('aria-label="Course progression from Week 1 to Week 4"', flow_match.group(0))
+    def test_shared_week_flow_strip_is_removed(self):
+        self.assertNotIn('class="week-flow-strip"', self.html)
+        self.assertNotIn('class="week-flow-inner"', self.html)
+        self.assertNotIn('class="week-flow-step"', self.html)
 
     def test_timeline_no_longer_uses_numeric_badges_for_milestones(self):
         for detail_id in (
