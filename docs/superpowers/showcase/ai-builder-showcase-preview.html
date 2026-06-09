@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Builder Showcase Map Preview</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #14151c;
+      --muted: #6f7280;
+      --line: #e3e4ed;
+      --paper: #ffffff;
+      --paper-2: #fafaff;
+      --purple: #635bff;
+      --purple-soft: #f0efff;
+      --shadow: 0 24px 80px rgba(31, 35, 68, .10);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(99, 91, 255, .12), transparent 30%),
+        linear-gradient(180deg, #fbfbff 0%, #f6f7fb 100%);
+      color: var(--ink);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      width: min(1120px, calc(100% - 48px));
+      margin: 48px auto;
+    }
+    .hero {
+      margin-bottom: 24px;
+    }
+    .hero p {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.7;
+    }
+    .badge {
+      display: inline-flex;
+      border: 1px solid rgba(99, 91, 255, .22);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      color: var(--purple);
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(36px, 7vw, 72px);
+      line-height: .98;
+      letter-spacing: -.07em;
+    }
+    .workspace {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .84);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+    .node-list,
+    .section-list,
+    .chips {
+      display: grid;
+      gap: 10px;
+    }
+    .track-group {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .track-group:first-child {
+      margin-top: 0;
+    }
+    .track-title {
+      margin: 4px 2px 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+    button {
+      font: inherit;
+    }
+    .node-button,
+    .section-button,
+    .chip {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      color: var(--muted);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease;
+    }
+    .node-button {
+      padding: 15px;
+    }
+    .section-button {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 10px;
+      padding: 14px;
+    }
+    .node-button:hover,
+    .node-button.active,
+    .section-button:hover,
+    .section-button.active,
+    .chip:hover,
+    .chip.active {
+      border-color: rgba(99, 91, 255, .34);
+      background: var(--purple-soft);
+      color: var(--purple);
+      transform: translateY(-1px);
+    }
+    .node-button b,
+    .section-button b {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .index {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-weight: 900;
+      font-size: 13px;
+    }
+    .detail h2 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: -.05em;
+    }
+    .detail-subtitle {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 18px;
+    }
+    .chip {
+      display: inline-flex;
+      width: auto;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 850;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .output-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .output-block {
+      position: relative;
+      overflow: hidden;
+      min-height: 138px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--paper);
+      padding: 16px;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .output-block:hover,
+    .output-block.active {
+      border-color: rgba(99, 91, 255, .34);
+      box-shadow: 0 16px 36px rgba(31, 35, 68, .08);
+      transform: translateY(-1px);
+    }
+    .output-type {
+      display: inline-flex;
+      margin-bottom: 12px;
+      border-radius: 999px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .output-block b {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+    .output-visual {
+      margin-top: 14px;
+      min-height: 40px;
+    }
+    .visual-artifact {
+      border: 1px dashed rgba(99, 91, 255, .35);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(99, 91, 255, .12), rgba(255,255,255,.75));
+      height: 52px;
+    }
+    .visual-process {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+    }
+    .visual-process span {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(99, 91, 255, .22);
+    }
+    .visual-doc {
+      display: grid;
+      gap: 6px;
+    }
+    .visual-doc span {
+      height: 8px;
+      border-radius: 999px;
+      background: #e7e8f2;
+    }
+    .visual-doc span:nth-child(1) {
+      width: 82%;
+    }
+    .visual-doc span:nth-child(2) {
+      width: 62%;
+    }
+    .visual-system {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .visual-system span {
+      height: 24px;
+      border: 1px solid rgba(99, 91, 255, .22);
+      border-radius: 10px;
+      background: var(--paper-2);
+    }
+    .visual-proof {
+      display: flex;
+      gap: 8px;
+      align-items: end;
+    }
+    .visual-proof span {
+      width: 22px;
+      border-radius: 8px 8px 4px 4px;
+      background: rgba(99, 91, 255, .25);
+    }
+    .visual-proof span:nth-child(1) {
+      height: 18px;
+    }
+    .visual-proof span:nth-child(2) {
+      height: 34px;
+    }
+    .visual-proof span:nth-child(3) {
+      height: 46px;
+    }
+    .visual-decision {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+    .visual-decision span:first-child {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-weight: 900;
+    }
+    .visual-decision span:last-child {
+      height: 8px;
+      border-radius: 999px;
+      background: #e7e8f2;
+    }
+    .expanded {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--paper-2);
+      padding: 20px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .expanded b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 18px;
+    }
+    .obsidian-link {
+      display: inline-flex;
+      margin-top: 14px;
+      color: var(--purple);
+      font-weight: 850;
+      text-decoration: none;
+    }
+    .obsidian-link:hover {
+      text-decoration: underline;
+    }
+    .empty {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    @media (max-width: 860px) {
+      .workspace,
+      .content-grid,
+      .output-gallery {
+        grid-template-columns: 1fr;
+      }
+      main {
+        width: min(100% - 28px, 1120px);
+        margin-top: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <span class="badge">Obsidian -> Showcase Map -> HTML</span>
+      <h1>AI Builder 展示映射预览</h1>
+      <p>这个页面只读取 Showcase Map 生成的数据：左侧选择能力节点，右侧按统一目录展开学习输入、项目产出、知识资产和可迁移能力。</p>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel">
+        <h2>能力节点</h2>
+        <div class="node-list" data-node-list></div>
+      </aside>
+
+      <section class="panel detail" data-detail>
+        <p class="empty">正在读取 Showcase Map 数据...</p>
+      </section>
+    </section>
+  </main>
+
+  <script src="./showcase-data.js"></script>
+  <script>
+    const fallbackSections = {
+      learn: {
+        index: "01",
+        title: "学习输入",
+        key: "原始材料 / 基础认知",
+        sourceLayer: "10_Sources",
+        description: "这些是支撑这个能力节点的输入材料和基础概念。"
+      },
+      output: {
+        index: "02",
+        title: "项目产出",
+        key: "可见成果 / 过程产物",
+        sourceLayer: "20_Projects",
+        description: "这些是这个节点里真正被做出来、整理出来或定义出来的成果。"
+      },
+      asset: {
+        index: "03",
+        title: "知识资产",
+        key: "知识资产 / 判断沉淀",
+        sourceLayer: "40_Insights / 50_Playbooks",
+        description: "这些是已经进入知识系统、可以追溯和复用的正式资产。"
+      },
+      transfer: {
+        index: "04",
+        title: "可迁移能力",
+        key: "迁移能力 / 下次复用",
+        sourceLayer: "50_Playbooks",
+        description: "这些是下次做 AI 产品或 Agent 项目时，可以直接迁移使用的能力。"
+      },
+    };
+
+    const state = {
+      activeNodeId: null,
+      activeSection: "learn",
+    };
+
+    function cleanLabel(label) {
+      const match = String(label).match(/^\[\[(.+)\]\]$/);
+      return match ? match[1] : label;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function obsidianLink(label) {
+      const title = cleanLabel(label);
+      if (title === label) return "";
+      const vault = encodeURIComponent("knowledge-vault");
+      const file = encodeURIComponent(title);
+      return `<a class="obsidian-link" href="obsidian://open?vault=${vault}&file=${file}">在 Obsidian 打开：${escapeHtml(title)}</a>`;
+    }
+
+    const outputTypes = {
+      artifact: ["成果实物", '<div class="visual-artifact"></div>'],
+      process: ["过程记录", '<div class="visual-process"><span></span><span></span><span></span></div>'],
+      doc: ["文档结构", '<div class="visual-doc"><span></span><span></span><span></span></div>'],
+      system: ["系统模块", '<div class="visual-system"><span></span><span></span><span></span></div>'],
+      proof: ["验证证据", '<div class="visual-proof"><span></span><span></span><span></span></div>'],
+      decision: ["判断结论", '<div class="visual-decision"><span>✓</span><span></span></div>'],
+    };
+
+    function nodes() {
+      return window.SHOWCASE_MAP_DATA?.nodes || {};
+    }
+
+    function tracks() {
+      const generated = window.SHOWCASE_MAP_DATA?.tracks || [];
+      if (generated.length) return generated;
+      return [{ title: "全部能力节点", nodeIds: Object.keys(nodes()) }];
+    }
+
+    function sections() {
+      const generated = window.SHOWCASE_MAP_DATA?.sections || {};
+      return Object.fromEntries(Object.entries(fallbackSections).map(([key, fallback]) => [
+        key,
+        { ...fallback, ...(generated[key] || {}) }
+      ]));
+    }
+
+    function renderNodeList() {
+      const nodeList = document.querySelector("[data-node-list]");
+      const nodeMap = nodes();
+      const nodeIds = Object.keys(nodeMap);
+      if (!nodeIds.length) {
+        nodeList.innerHTML = '<p class="empty">没有读取到节点。请先运行生成脚本。</p>';
+        return;
+      }
+      if (!state.activeNodeId) state.activeNodeId = nodeIds[0];
+
+      nodeList.innerHTML = tracks().map((track) => `
+        <div class="track-group">
+          <div class="track-title">${escapeHtml(track.title)}</div>
+          ${track.nodeIds.map((nodeId) => {
+            const node = nodeMap[nodeId];
+            if (!node) return "";
+            return `
+              <button class="node-button ${nodeId === state.activeNodeId ? "active" : ""}" data-node-id="${escapeHtml(nodeId)}">
+                <b>${escapeHtml(node.node || "00")} ${escapeHtml(node.title)}</b>
+                <span>${escapeHtml(node.track || "未标注能力线")}</span>
+              </button>
+            `;
+          }).join("")}
+        </div>
+      `).join("");
+
+      nodeList.querySelectorAll("[data-node-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeNodeId = button.dataset.nodeId;
+          state.activeSection = "learn";
+          render();
+        });
+      });
+    }
+
+    function renderSections() {
+      return Object.entries(sections()).map(([section, meta]) => `
+        <button class="section-button ${section === state.activeSection ? "active" : ""}" data-section="${section}">
+          <span class="index">${meta.index}</span>
+          <span><b>${escapeHtml(meta.title)}</b>${escapeHtml(meta.key)}</span>
+        </button>
+      `).join("");
+    }
+
+    function renderEvidenceItems(node, section, items) {
+      if (section !== "output") {
+        return `<div class="chips">
+          ${items.map((label) => `<button class="chip" data-chip="${escapeHtml(label)}">${escapeHtml(cleanLabel(label))}</button>`).join("")}
+        </div>`;
+      }
+
+      return `<div class="output-gallery">
+        ${items.map((label) => {
+          const type = node.evidenceMeta?.output?.[label]?.type || "artifact";
+          const [typeLabel, visual] = outputTypes[type] || outputTypes.artifact;
+          const detail = node.evidenceDetail?.output?.[label] || "";
+          return `
+            <button class="output-block output-${escapeHtml(type)}" data-chip="${escapeHtml(label)}">
+              <span class="output-type">${escapeHtml(typeLabel)}</span>
+              <b>${escapeHtml(cleanLabel(label))}</b>
+              <span>${escapeHtml(detail)}</span>
+              <div class="output-visual">${visual}</div>
+            </button>
+          `;
+        }).join("")}
+      </div>`;
+    }
+
+    function renderDetail() {
+      const detail = document.querySelector("[data-detail]");
+      const node = nodes()[state.activeNodeId];
+      if (!node) {
+        detail.innerHTML = '<p class="empty">请选择一个能力节点。</p>';
+        return;
+      }
+
+      const meta = sections()[state.activeSection];
+      const items = node.evidence?.[state.activeSection] || [];
+      detail.innerHTML = `
+        <h2>${escapeHtml(node.title)}</h2>
+        <p class="detail-subtitle">${escapeHtml(node.track || "")} · ${escapeHtml(node.node || "")}</p>
+        <div class="content-grid">
+          <aside class="section-list">${renderSections()}</aside>
+          <section>
+            <h3>${escapeHtml(meta.title)} · ${escapeHtml(meta.key)}</h3>
+            <p class="detail-subtitle">${escapeHtml(meta.description)}</p>
+            ${renderEvidenceItems(node, state.activeSection, items)}
+            <div class="expanded" data-expanded hidden></div>
+          </section>
+        </div>
+      `;
+
+      detail.querySelectorAll("[data-section]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeSection = button.dataset.section;
+          renderDetail();
+        });
+      });
+
+      detail.querySelectorAll("[data-chip]").forEach((button) => {
+        button.addEventListener("click", () => {
+          detail.querySelectorAll("[data-chip]").forEach((chip) => chip.classList.remove("active"));
+          button.classList.add("active");
+          const label = button.dataset.chip;
+          const mappedDetail = node.evidenceDetail?.[state.activeSection]?.[label] || "这个条目还没有在 Showcase Map 里写展开说明。";
+          const expanded = detail.querySelector("[data-expanded]");
+          expanded.hidden = false;
+          expanded.innerHTML = `<b>${escapeHtml(cleanLabel(label))}</b>${escapeHtml(mappedDetail)}${obsidianLink(label)}`;
+        });
+      });
+    }
+
+    function render() {
+      renderNodeList();
+      renderDetail();
+    }
+
+    render();
+  </script>
+</body>
+</html>
