@@ -58,6 +58,206 @@ id: foundation-builder
             "AI 产品必须围绕概率输出设计验证。",
         )
 
+    def test_parser_reads_langfuse_output_image(self):
+        data = generate_showcase_data.parse_showcase_map(
+            """## 稳定性工程
+
+id: stability-builder
+track: AI Builder 工程能力线
+node: 04
+projectOutput: langfuse
+langfuseImage: diagrams/stability-builder-langfuse.png
+
+### Learning input
+- Trace Logger :: 输入说明。
+
+### Project output
+- 稳定性工程闭环 :: type=system :: 产出说明。
+
+### Knowledge assets
+- [[Guardrail 没有 Fallback 就只是拒绝]] :: 资产说明。
+
+### Transferable capability
+- 降级路径设计 :: 迁移说明。
+"""
+        )
+
+        node = data["nodes"]["stability-builder"]
+        self.assertEqual(node["projectOutput"], "langfuse")
+        self.assertEqual(node["langfuseImage"], "diagrams/stability-builder-langfuse.png")
+
+    def test_parser_reads_demo_output_assets(self):
+        data = generate_showcase_data.parse_showcase_map(
+            """## Product Spec
+
+id: spec-product
+track: AI 产品经理能力线
+node: 03
+projectOutput: demo
+demoImage: diagrams/spec-product-demo.png
+demoVideo: demos/spec-product-demo.mp4
+
+### Learning input
+- AI-Native Product Spec 模板 :: 输入说明。
+
+### Project output
+- AI-Native Product Spec v1 :: type=doc :: 产出说明。
+
+### Knowledge assets
+- [[AI-Native Product Spec 最小结构]] :: 资产说明。
+
+### Transferable capability
+- Spec 结构化表达 :: 迁移说明。
+"""
+        )
+
+        node = data["nodes"]["spec-product"]
+        self.assertEqual(node["projectOutput"], "demo")
+        self.assertEqual(node["demoImage"], "diagrams/spec-product-demo.png")
+        self.assertEqual(node["demoVideo"], "demos/spec-product-demo.mp4")
+
+    def test_parser_reads_dashboard_output_image(self):
+        data = generate_showcase_data.parse_showcase_map(
+            """## 竞品分析
+
+id: competitive-product
+track: AI 产品经理能力线
+node: 02
+projectOutput: dashboard
+dashboardImage: diagrams/competitive-product-report-dashboard.png
+
+### Learning input
+- Week1 竞品调研 :: 输入说明。
+
+### Project output
+- 竞品分析摘要 :: type=doc :: 产出说明。
+
+### Knowledge assets
+- [[AI 产品不是普通功能加 AI 按钮]] :: 资产说明。
+
+### Transferable capability
+- 竞品六维拆解 :: 迁移说明。
+"""
+        )
+
+        node = data["nodes"]["competitive-product"]
+        self.assertEqual(node["projectOutput"], "dashboard")
+        self.assertEqual(node["dashboardImage"], "diagrams/competitive-product-report-dashboard.png")
+
+    def test_parser_reads_research_output_images(self):
+        data = generate_showcase_data.parse_showcase_map(
+            """## AI 产品基础判断
+
+id: foundation-product
+track: AI 产品经理能力线
+node: 01
+projectOutput: research
+researchCompetitive: diagrams/foundation-product-competitive.png
+researchMarket: diagrams/foundation-product-market.png
+
+### Learning input
+- AI Builder Week 1 V0.5 :: 输入说明。
+
+### Project output
+- JTBD 草案 :: type=doc :: 产出说明。
+
+### Knowledge assets
+- [[AI 产品不是普通功能加 AI 按钮]] :: 资产说明。
+
+### Transferable capability
+- JTBD 表达 :: 迁移说明。
+"""
+        )
+
+        node = data["nodes"]["foundation-product"]
+        self.assertEqual(node["projectOutput"], "research")
+        self.assertEqual(node["researchCompetitive"], "diagrams/foundation-product-competitive.png")
+        self.assertEqual(node["researchMarket"], "diagrams/foundation-product-market.png")
+
+    def test_parser_reads_eval_architecture_output(self):
+        data = generate_showcase_data.parse_showcase_map(
+            """## 评测体系
+
+id: evaluation-builder
+track: AI Builder 工程能力线
+node: 03
+projectOutput: eval-architecture
+mindMap: diagrams/evaluation-builder-eval-arch.png
+
+### Learning input
+- AI Builder Week 3 V1.0 :: 输入说明。
+
+### Project output
+- 评测体系 v0 :: type=system :: 产出说明。
+
+### Knowledge assets
+- [[AI 产品评测必须围绕产品承诺]] :: 资产说明。
+
+### Transferable capability
+- Trace Debug :: 迁移说明。
+"""
+        )
+
+        node = data["nodes"]["evaluation-builder"]
+        self.assertEqual(node["projectOutput"], "eval-architecture")
+        self.assertEqual(node["mindMap"], "diagrams/evaluation-builder-eval-arch.png")
+
+    def test_parser_reads_project_output_visual_type(self):
+        data = generate_showcase_data.parse_showcase_map(
+            """## Skill 与助理原型
+
+id: assistant-prototype-builder
+track: AI Builder 工程能力线
+node: 02
+projectOutput: architecture
+mindMap: diagrams/assistant-prototype-builder-agent-arch.png
+
+### Learning input
+- OpenClaw 个人助理 v1 :: 输入说明。
+
+### Project output
+- OpenClaw 助理原型 :: type=artifact :: 产出说明。
+
+### Knowledge assets
+- [[AI Skill 设计最小检查清单]] :: 资产说明。
+
+### Transferable capability
+- 工具边界定义 :: 迁移说明。
+"""
+        )
+
+        node = data["nodes"]["assistant-prototype-builder"]
+        self.assertEqual(node["projectOutput"], "architecture")
+        self.assertEqual(node["mindMap"], "diagrams/assistant-prototype-builder-agent-arch.png")
+
+    def test_parser_reads_reflection_and_mind_map(self):
+        data = generate_showcase_data.parse_showcase_map(
+            """## LLM / Agent 基础
+
+id: foundation-builder
+track: AI Builder 工程能力线
+node: 01
+reflection: Week0 让我确认 Builder 的价值在交付物。
+mindMap: mindmaps/foundation-builder.png
+
+### Learning input
+- Karpathy LLM OS :: 输入说明。
+
+### Project output
+- Agent 组件图 :: type=artifact :: 产出说明。
+
+### Knowledge assets
+- [[LLM 不是确定性函数]] :: 资产说明。
+
+### Transferable capability
+- Agent 复杂度判断 :: 迁移说明。
+"""
+        )
+
+        node = data["nodes"]["foundation-builder"]
+        self.assertEqual(node["reflection"], "Week0 让我确认 Builder 的价值在交付物。")
+        self.assertEqual(node["mindMap"], "mindmaps/foundation-builder.png")
+
     def test_parser_extracts_project_output_type_metadata(self):
         data = generate_showcase_data.parse_showcase_map(
             """## 评测体系
@@ -209,6 +409,14 @@ node: 01
         self.assertEqual(data["nodes"]["foundation-product"]["title"], "AI 产品基础判断")
         self.assertIn("Tiny Core", data["nodes"]["foundation-product"]["evidence"]["learn"])
         self.assertNotIn("LLM 非确定性", data["nodes"]["foundation-product"]["evidence"]["learn"])
+
+    def test_current_showcase_map_excludes_week5_delivery_closure(self):
+        map_path = Path(__file__).resolve().parents[1] / "knowledge-vault" / "90_AI_Drafts" / "AI Builder Showcase Map.draft.md"
+        data = generate_showcase_data.parse_showcase_map(map_path.read_text(encoding="utf-8"))
+
+        self.assertNotIn("delivery-closure", data["nodes"])
+        self.assertNotIn("AI Builder 交付收口层", [track["title"] for track in data["tracks"]])
+
 
     def test_current_showcase_map_covers_all_project_output_types(self):
         map_path = Path(__file__).resolve().parents[1] / "knowledge-vault" / "90_AI_Drafts" / "AI Builder Showcase Map.draft.md"

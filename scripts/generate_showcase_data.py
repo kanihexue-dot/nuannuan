@@ -62,6 +62,15 @@ def parse_showcase_map(text: str) -> dict:
                 "id": None,
                 "track": None,
                 "node": None,
+                "reflection": "",
+                "projectOutput": "mindmap",
+                "mindMap": "",
+                "researchCompetitive": "",
+                "researchMarket": "",
+                "dashboardImage": "",
+                "demoImage": "",
+                "demoVideo": "",
+                "langfuseImage": "",
                 "evidence": {"learn": [], "output": [], "asset": [], "transfer": []},
                 "evidenceDetail": {"learn": {}, "output": {}, "asset": {}, "transfer": {}},
                 "evidenceMeta": {"learn": {}, "output": {}, "asset": {}, "transfer": {}},
@@ -84,6 +93,42 @@ def parse_showcase_map(text: str) -> dict:
 
         if line.startswith("node:"):
             current_node["node"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("reflection:"):
+            current_node["reflection"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("projectOutput:"):
+            current_node["projectOutput"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("mindMap:"):
+            current_node["mindMap"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("researchCompetitive:"):
+            current_node["researchCompetitive"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("researchMarket:"):
+            current_node["researchMarket"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("dashboardImage:"):
+            current_node["dashboardImage"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("demoImage:"):
+            current_node["demoImage"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("demoVideo:"):
+            current_node["demoVideo"] = line.split(":", 1)[1].strip()
+            continue
+
+        if line.startswith("langfuseImage:"):
+            current_node["langfuseImage"] = line.split(":", 1)[1].strip()
             continue
 
         if line.startswith("### "):

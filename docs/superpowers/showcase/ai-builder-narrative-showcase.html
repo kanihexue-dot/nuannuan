@@ -190,113 +190,164 @@
       line-height: 1.62;
       font-size: 14px;
     }
-    .mini-orbit {
-      position: relative;
-      height: 360px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background:
-        radial-gradient(circle at center, rgba(99,91,255,.10), transparent 22%),
-        linear-gradient(180deg, #fff, #fbfbff);
-      overflow: hidden;
+    .evolution-strip {
       margin-top: 14px;
-    }
-    .mini-ring {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 999px;
-      border: 1px dashed rgba(99,91,255,.22);
-    }
-    .mini-ring.one { width: 150px; height: 150px; }
-    .mini-ring.two { width: 245px; height: 245px; border-color: rgba(16,163,127,.20); }
-    .mini-ring.three { width: 320px; height: 320px; border-color: rgba(201,130,29,.18); }
-    .mini-core {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 112px;
-      height: 112px;
-      border-radius: 32px;
-      background: linear-gradient(135deg, var(--purple), #8b7cff);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      box-shadow: 0 22px 54px rgba(99,91,255,.24);
-      z-index: 4;
-      padding: 12px;
-    }
-    .mini-core b {
-      font-size: 18px;
-      line-height: 1.08;
-      letter-spacing: -.04em;
-    }
-    .mini-core span {
-      margin-top: 5px;
-      font-size: 10px;
-      opacity: .82;
-    }
-    .mini-sat {
-      position: absolute;
-      width: 118px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255,255,255,.94);
-      box-shadow: 0 12px 28px rgba(17,24,39,.07);
-      padding: 10px;
-      z-index: 5;
-    }
-    .mini-sat::before {
-      content: "";
-      display: block;
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--purple);
-      box-shadow: 0 0 0 4px rgba(99,91,255,.09);
-      margin-bottom: 7px;
-    }
-    .mini-sat.mint::before { background: var(--mint); box-shadow: 0 0 0 4px rgba(16,163,127,.09); }
-    .mini-sat.amber::before { background: var(--amber); box-shadow: 0 0 0 4px rgba(201,130,29,.1); }
-    .mini-sat.rose::before { background: var(--rose); box-shadow: 0 0 0 4px rgba(212,93,121,.09); }
-    .mini-sat b {
-      display: block;
-      font-size: 12px;
-      letter-spacing: -.03em;
-      margin-bottom: 2px;
-    }
-    .mini-sat span {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      line-height: 1.35;
-    }
-    .ms1 { left: 50%; top: 14px; transform: translateX(-50%); }
-    .ms2 { right: 12px; top: 90px; }
-    .ms3 { right: 18px; bottom: 78px; }
-    .ms4 { left: 50%; bottom: 12px; transform: translateX(-50%); }
-    .ms5 { left: 18px; bottom: 78px; }
-    .ms6 { left: 12px; top: 90px; }
-    .orbit-caption {
-      margin-top: 12px;
       display: grid;
+      gap: 12px;
+    }
+    .evolution-bar {
+      display: grid;
+      gap: 10px;
+    }
+    .evolution-bar-track {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      height: 8px;
+    }
+    .evolution-bar-segment {
+      border-radius: 999px;
+      background: rgba(17,24,39,.08);
+      transition: background .25s ease, box-shadow .25s ease;
+    }
+    .evolution-bar-segment.active {
+      background: linear-gradient(90deg, var(--purple), #8b7cff);
+      box-shadow: 0 0 0 3px rgba(99,91,255,.12);
+    }
+    .evolution-rail {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: center;
+      position: relative;
+      padding: 0 4px;
+    }
+    .evolution-rail::before {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(99,91,255,.22), rgba(16,163,127,.28));
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+    .evolution-dot {
+      justify-self: center;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 2px solid #fff;
+      background: rgba(17,24,39,.16);
+      box-shadow: 0 0 0 1px var(--line);
+      z-index: 1;
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .evolution-dot.active {
+      transform: scale(1.25);
+      background: var(--purple);
+      box-shadow: 0 0 0 4px rgba(99,91,255,.14);
+    }
+    .evolution-cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
     }
-    .orbit-caption div {
+    .evolution-card {
+      appearance: none;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--paper-2);
-      padding: 10px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
+      border-radius: 16px;
+      background: rgba(255,255,255,.92);
+      padding: 12px 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+      font: inherit;
+      color: inherit;
     }
-    .orbit-caption b { color: var(--ink); }
+    .evolution-card:hover {
+      border-color: rgba(99,91,255,.24);
+      background: #fff;
+    }
+    .evolution-card.active {
+      border-color: rgba(99,91,255,.32);
+      background: linear-gradient(180deg, rgba(99,91,255,.07), #fff);
+      box-shadow: 0 12px 28px rgba(99,91,255,.08);
+    }
+    .evolution-card-head {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .evolution-card-index {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: var(--purple);
+    }
+    .evolution-card-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+    .evolution-card-title.is-placeholder {
+      color: var(--muted);
+    }
+    .evolution-node-list {
+      display: grid;
+      gap: 6px;
+    }
+    .evolution-node {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper-2);
+      padding: 8px 9px;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .evolution-node:hover {
+      background: #fff;
+    }
+    .evolution-node.builder:hover { border-color: rgba(99,91,255,.28); }
+    .evolution-node.product:hover { border-color: rgba(16,163,127,.28); }
+    .evolution-node-label {
+      display: block;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .evolution-node.builder .evolution-node-label { color: var(--purple); }
+    .evolution-node.product .evolution-node-label { color: var(--mint); }
+    .evolution-node b {
+      display: block;
+      font-size: 11px;
+      line-height: 1.35;
+      letter-spacing: -.02em;
+    }
+    .evolution-hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    @media (max-width: 980px) {
+      .evolution-cards {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 4px;
+      }
+      .evolution-card {
+        min-width: 168px;
+        scroll-snap-align: start;
+      }
+    }
     .hero-side .side-card {
       min-height: 100%;
     }
@@ -632,9 +683,36 @@
         radial-gradient(circle at 50% 0%, rgba(16,163,127,.12), transparent 34%),
         rgba(255,255,255,.78);
     }
+    .flow-panel-reflection {
+      border: 2px solid rgba(212,93,121,.42);
+      border-radius: 18px;
+      background: rgba(212,93,121,.06);
+      padding: 16px 18px;
+      margin: 0 auto 18px;
+      max-width: 720px;
+    }
+    .flow-panel-reflection b {
+      display: block;
+      font-size: 11px;
+      color: var(--rose);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .flow-panel-reflection p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.68;
+      font-weight: 650;
+    }
+    .flow-panel-reflection.is-empty p {
+      font-weight: 500;
+      color: var(--muted);
+    }
     .flow-panel-title {
       max-width: 720px;
-      margin: 0 auto 22px;
+      margin: 0 auto 18px;
       text-align: left;
     }
     .flow-panel-title h4 {
@@ -642,12 +720,328 @@
       font-size: 28px;
       letter-spacing: -.045em;
     }
-    .flow-panel-title p {
-      max-width: 520px;
-      margin: 8px 0 0;
+    .output-visual-stage {
+      margin-top: 4px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.82);
+      overflow: hidden;
+      min-height: 320px;
+      position: relative;
+    }
+    .output-visual-image {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .output-visual-placeholder {
+      display: none;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .output-visual-stage.is-missing .output-visual-placeholder {
+      display: grid;
+      gap: 8px;
+      place-items: center;
+    }
+    .output-visual-placeholder b {
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+    .output-visual-placeholder span {
+      max-width: 420px;
       color: var(--muted);
       font-size: 13px;
+      line-height: 1.6;
+    }
+    .output-visual-placeholder code {
+      font-size: 12px;
+      color: var(--purple);
+    }
+    .architecture-fallback {
+      display: none;
+      padding: 18px 16px 22px;
+    }
+    .output-visual-stage.is-missing.architecture .architecture-fallback {
+      display: block;
+    }
+    .output-visual-stage.is-missing.architecture .output-visual-placeholder {
+      display: none;
+    }
+    .architecture-fallback svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .research-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 16px;
+    }
+    .research-panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.9);
+      overflow: hidden;
+      min-height: 240px;
+      position: relative;
+    }
+    .research-panel img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .research-panel-fallback {
+      display: none;
+      padding: 18px 16px 20px;
+      min-height: 220px;
+    }
+    .research-panel.is-missing .research-panel-fallback {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .research-panel.is-missing img {
+      display: none;
+    }
+    .research-panel-fallback b {
+      font-size: 16px;
+      letter-spacing: -.03em;
+    }
+    .research-panel-fallback span {
+      color: var(--muted);
+      font-size: 12px;
       line-height: 1.55;
+    }
+    .research-panel-fallback ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .research-panel-fallback code {
+      font-size: 11px;
+      color: #0f8f78;
+    }
+    @media (max-width: 760px) {
+      .research-board { grid-template-columns: 1fr; }
+    }
+    .dashboard-fallback {
+      display: none;
+      padding: 18px 16px 20px;
+    }
+    .output-visual-stage.is-missing.dashboard .dashboard-fallback {
+      display: block;
+    }
+    .output-visual-stage.is-missing.dashboard .output-visual-placeholder {
+      display: none;
+    }
+    .dashboard-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .dashboard-kpi {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 14px;
+      background: var(--mint-soft);
+      padding: 12px 14px;
+    }
+    .dashboard-kpi span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .dashboard-kpi b {
+      font-size: 22px;
+      color: var(--mint);
+      letter-spacing: -.04em;
+    }
+    .dashboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .dashboard-table th,
+    .dashboard-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .dashboard-table th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 11px;
+    }
+    .dashboard-table td b {
+      display: block;
+      margin-bottom: 2px;
+    }
+    @media (max-width: 760px) {
+      .dashboard-kpis { grid-template-columns: 1fr; }
+    }
+    .langfuse-fallback {
+      display: none;
+      padding: 16px;
+    }
+    .output-visual-stage.is-missing.langfuse .langfuse-fallback {
+      display: block;
+    }
+    .output-visual-stage.is-missing.langfuse .output-visual-placeholder {
+      display: none;
+    }
+    .langfuse-shell {
+      border: 1px solid #e5e7ef;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      font-size: 12px;
+    }
+    .langfuse-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #edf0f7;
+      background: #fafbff;
+    }
+    .langfuse-topbar b {
+      color: #111827;
+      font-size: 13px;
+    }
+    .langfuse-topbar span {
+      color: #6b7280;
+      font-size: 11px;
+    }
+    .langfuse-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf0f7;
+    }
+    .langfuse-metric {
+      border: 1px solid #edf0f7;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #fcfdff;
+    }
+    .langfuse-metric span {
+      display: block;
+      color: #6b7280;
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+    .langfuse-metric b {
+      color: #4f46e5;
+      font-size: 16px;
+    }
+    .langfuse-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .langfuse-table th,
+    .langfuse-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #f1f3f9;
+      text-align: left;
+      vertical-align: top;
+    }
+    .langfuse-table th {
+      color: #6b7280;
+      font-size: 10px;
+      font-weight: 600;
+      background: #fafbff;
+    }
+    .langfuse-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .langfuse-pill.pass { background: #e8f8ef; color: #0f8f4d; }
+    .langfuse-pill.fail { background: #fdecec; color: #d14343; }
+    .langfuse-pill.guard { background: #fff4e5; color: #b45309; }
+    @media (max-width: 760px) {
+      .langfuse-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .demo-stage {
+      padding: 16px;
+    }
+    .demo-media {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0f1118;
+      min-height: 280px;
+      position: relative;
+    }
+    .demo-media video,
+    .demo-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .demo-media:has(video) img {
+      display: none;
+    }
+    .demo-fallback {
+      display: none;
+      padding: 28px 22px;
+      color: #f5f7fb;
+      min-height: 280px;
+    }
+    .output-visual-stage.demo.is-missing .demo-fallback {
+      display: grid;
+      gap: 14px;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+    .output-visual-stage.demo.is-missing .demo-media video,
+    .output-visual-stage.demo.is-missing .demo-media img {
+      display: none;
+    }
+    .demo-play {
+      width: 68px;
+      height: 68px;
+      border-radius: 999px;
+      border: 2px solid rgba(16,163,127,.5);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      color: var(--mint);
+      background: rgba(16,163,127,.12);
+    }
+    .demo-fallback b {
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+    .demo-fallback span,
+    .demo-fallback code {
+      color: rgba(245,247,251,.72);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .demo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .demo-tags span {
+      border: 1px solid rgba(16,163,127,.28);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      color: #b7f2df;
+      background: rgba(16,163,127,.12);
     }
     .evidence-flow {
       display: grid;
@@ -1707,26 +2101,52 @@
       <aside class="hero-side">
         <div class="side-card">
           <h2>成果概览</h2>
-          <div class="mini-orbit">
-            <div class="mini-ring one"></div>
-            <div class="mini-ring two"></div>
-            <div class="mini-ring three"></div>
-            <div class="mini-core"><b>项目<br>沉淀</b><span>学习 · 实践</span></div>
-            <div class="mini-sat ms1"><b>双轨学习</b><span>工程线 + 产品线</span></div>
-            <div class="mini-sat ms2 mint"><b>产品判断</b><span>JTBD / Tiny Core</span></div>
-            <div class="mini-sat ms3"><b>工程构建</b><span>LLM / Agent / Skill</span></div>
-            <div class="mini-sat ms4 amber"><b>知识资产</b><span>Source / Insight / Playbook</span></div>
-            <div class="mini-sat ms5 rose"><b>稳定性</b><span>Guardrail / Fallback</span></div>
-            <div class="mini-sat ms6"><b>评测体系</b><span>Eval / Trace / Judge</span></div>
-          </div>
-          <div class="chips">
-            <span class="chip purple">学习旅程</span>
-            <span class="chip mint">节点下拉</span>
-            <span class="chip amber">知识资产</span>
-          </div>
-          <div class="orbit-caption">
-            <div><b>中心：</b>AI Builder 项目沉淀</div>
-            <div><b>外圈：</b>从课程中长出来的能力和知识资产</div>
+          <div class="evolution-strip" data-evolution-strip>
+            <div class="evolution-bar" aria-hidden="true">
+              <div class="evolution-bar-track">
+                <span class="evolution-bar-segment active" data-evolution-segment="0"></span>
+                <span class="evolution-bar-segment" data-evolution-segment="1"></span>
+                <span class="evolution-bar-segment" data-evolution-segment="2"></span>
+                <span class="evolution-bar-segment" data-evolution-segment="3"></span>
+              </div>
+              <div class="evolution-rail">
+                <span class="evolution-dot active" data-evolution-dot="0"></span>
+                <span class="evolution-dot" data-evolution-dot="1"></span>
+                <span class="evolution-dot" data-evolution-dot="2"></span>
+                <span class="evolution-dot" data-evolution-dot="3"></span>
+              </div>
+            </div>
+            <div class="evolution-cards">
+              <article class="evolution-card active" data-evolution-station="0">
+                <div class="evolution-card-head"><span class="evolution-card-index">01</span><b class="evolution-card-title">能力基础</b></div>
+                <div class="evolution-node-list">
+                  <button type="button" class="evolution-node builder" data-open-detail="foundation-builder"><span class="evolution-node-label">工程</span><b>LLM / Agent 基础</b></button>
+                  <button type="button" class="evolution-node product" data-open-detail="foundation-product"><span class="evolution-node-label">产品</span><b>AI 产品基础判断</b></button>
+                </div>
+              </article>
+              <article class="evolution-card" data-evolution-station="1">
+                <div class="evolution-card-head"><span class="evolution-card-index">02</span><b class="evolution-card-title is-placeholder">阶段二</b></div>
+                <div class="evolution-node-list">
+                  <button type="button" class="evolution-node builder" data-open-detail="assistant-prototype-builder"><span class="evolution-node-label">工程</span><b>Skill 与助理原型</b></button>
+                  <button type="button" class="evolution-node product" data-open-detail="competitive-product"><span class="evolution-node-label">产品</span><b>竞品分析</b></button>
+                </div>
+              </article>
+              <article class="evolution-card" data-evolution-station="2">
+                <div class="evolution-card-head"><span class="evolution-card-index">03</span><b class="evolution-card-title is-placeholder">阶段三</b></div>
+                <div class="evolution-node-list">
+                  <button type="button" class="evolution-node builder" data-open-detail="evaluation-builder"><span class="evolution-node-label">工程</span><b>评测体系</b></button>
+                  <button type="button" class="evolution-node product" data-open-detail="spec-product"><span class="evolution-node-label">产品</span><b>Product Spec</b></button>
+                </div>
+              </article>
+              <article class="evolution-card" data-evolution-station="3">
+                <div class="evolution-card-head"><span class="evolution-card-index">04</span><b class="evolution-card-title">测评</b></div>
+                <div class="evolution-node-list">
+                  <button type="button" class="evolution-node builder" data-open-detail="stability-builder"><span class="evolution-node-label">工程</span><b>稳定性工程</b></button>
+                  <button type="button" class="evolution-node product" data-open-detail="evals-product"><span class="evolution-node-label">产品</span><b>Product Evals</b></button>
+                </div>
+              </article>
+            </div>
+            <p class="evolution-hint">从左到右：双轨在同一阶段的节点，最后一站是测评。</p>
           </div>
         </div>
       </aside>
@@ -2172,6 +2592,16 @@
           evidence: node.evidence || existing.evidence || {},
           evidenceDetail: node.evidenceDetail || existing.evidenceDetail || {},
           evidenceMeta: node.evidenceMeta || existing.evidenceMeta || {},
+          reflection: node.reflection || existing.reflection || "",
+          projectOutput: node.projectOutput || existing.projectOutput || "mindmap",
+          mindMap: node.mindMap || existing.mindMap || "",
+          researchCompetitive: node.researchCompetitive || existing.researchCompetitive || "",
+          researchMarket: node.researchMarket || existing.researchMarket || "",
+          dashboardImage: node.dashboardImage || existing.dashboardImage || "",
+          demoImage: node.demoImage || existing.demoImage || "",
+          demoVideo: node.demoVideo || existing.demoVideo || "",
+          langfuseImage: node.langfuseImage || existing.langfuseImage || "",
+          id: node.id || detailId,
           showcaseMapTitle: node.title
         };
       });
@@ -2269,9 +2699,9 @@
       const sections = {
         learn: {
           title: "学习输入",
-          key: "原始材料 / 基础认知",
-          detail: "这些是支撑这个能力节点的输入材料和基础概念。",
-          items: evidence.learn || []
+          key: "判断映射",
+          detail: "每枚标签对应一条从学习材料沉淀出的判断、原则或可迁移方法。",
+          items: [...(evidence.asset || []), ...(evidence.transfer || [])]
         },
         output: {
           title: "项目产出",
@@ -2279,28 +2709,343 @@
           detail: "这些是这个节点里真正被做出来、整理出来或定义出来的成果。",
           items: evidence.output || []
         },
-        insight: {
+        asset: {
           title: "知识资产",
-          key: "知识资产 / 判断沉淀",
-          detail: "这些是已经进入知识系统、可以追溯和复用的正式资产。",
-          items: evidence.asset || []
-        },
-        method: {
-          title: "可迁移能力",
-          key: "迁移能力 / 下次复用",
-          detail: "这些是下次做 AI 产品或 Agent 项目时，可以直接迁移使用的能力。",
-          items: evidence.transfer || []
+          key: "复盘思考",
+          detail: "做完沉淀后，用一句话写下你的复盘与思考。",
+          items: []
         }
       };
       return sections[section] || sections.output;
     }
 
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function reflectionMarkup(stage) {
+      if (!stage.reflection) return "";
+      return `<div class="flow-panel-reflection"><b>沉淀感悟</b><p>${escapeHtml(stage.reflection)}</p></div>`;
+    }
+
+    function evaluationArchitectureFallbackSvg() {
+      return `
+        <svg viewBox="0 0 920 360" role="img" aria-label="评测体系架构图">
+          <defs>
+            <linearGradient id="evalArchFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f7f2ff"/>
+              <stop offset="100%" stop-color="#f2f7ff"/>
+            </linearGradient>
+          </defs>
+          <rect x="12" y="12" width="896" height="336" rx="24" fill="url(#evalArchFill)" stroke="#e7e2f4"/>
+          <g font-family="system-ui, sans-serif" font-size="13" fill="#1f1a2e">
+            <rect x="36" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="95" y="172" text-anchor="middle" font-weight="700">产品契约</text>
+            <text x="95" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">任务 / 成功标准</text>
+            <text x="95" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">失败红线</text>
+            <rect x="176" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="235" y="172" text-anchor="middle" font-weight="700">Eval Set</text>
+            <text x="235" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">正常 / 边界</text>
+            <text x="235" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">对抗样本</text>
+            <rect x="316" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="375" y="172" text-anchor="middle" font-weight="700">Trace</text>
+            <text x="375" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">tool calls</text>
+            <text x="375" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">状态 / 成本</text>
+            <rect x="456" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="515" y="172" text-anchor="middle" font-weight="700">Grader</text>
+            <text x="515" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">LLM Judge</text>
+            <text x="515" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">人工校准</text>
+            <rect x="596" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="655" y="172" text-anchor="middle" font-weight="700">错误分类</text>
+            <text x="655" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">contract / tool</text>
+            <text x="655" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">routing / model</text>
+            <rect x="736" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="795" y="172" text-anchor="middle" font-weight="700">回归治理</text>
+            <text x="795" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">regression set</text>
+            <text x="795" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">Eval Run 对比</text>
+            <path d="M154 180 H176" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M294 180 H316" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M434 180 H456" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M574 180 H596" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M714 180 H736" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M795 218 C795 286 235 286 235 228" fill="none" stroke="#d45d79" stroke-width="2" stroke-dasharray="6 6"/>
+            <text x="515" y="302" text-anchor="middle" fill="#d45d79" font-size="12">失败样本回流 → 修复 → 重跑评测</text>
+          </g>
+        </svg>
+      `;
+    }
+
+    function architectureFallbackSvg() {
+      return `
+        <svg viewBox="0 0 920 360" role="img" aria-label="Agent 调用架构图">
+          <defs>
+            <linearGradient id="archFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f7f2ff"/>
+              <stop offset="100%" stop-color="#eef8ff"/>
+            </linearGradient>
+          </defs>
+          <rect x="12" y="12" width="896" height="336" rx="24" fill="url(#archFill)" stroke="#e7e2f4"/>
+          <g font-family="system-ui, sans-serif" font-size="14" fill="#1f1a2e">
+            <rect x="48" y="148" width="132" height="64" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="114" y="176" text-anchor="middle" font-weight="700">用户请求</text>
+            <text x="114" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">自然语言任务</text>
+            <rect x="232" y="132" width="156" height="96" rx="18" fill="#fff" stroke="#cdb8ff"/>
+            <text x="310" y="168" text-anchor="middle" font-weight="700">OpenClaw 助理</text>
+            <text x="310" y="190" text-anchor="middle" fill="#6f6a82" font-size="12">Persona / 边界</text>
+            <text x="310" y="208" text-anchor="middle" fill="#6f6a82" font-size="12">路由与编排</text>
+            <rect x="440" y="148" width="132" height="64" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="506" y="176" text-anchor="middle" font-weight="700">Skill 调用</text>
+            <text x="506" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">3 个可运行 Skill</text>
+            <rect x="624" y="124" width="120" height="52" rx="14" fill="#fff" stroke="#d8d2ea"/>
+            <text x="684" y="150" text-anchor="middle" font-weight="700">工具 A</text>
+            <text x="684" y="166" text-anchor="middle" fill="#6f6a82" font-size="11">检索 / 整理</text>
+            <rect x="624" y="188" width="120" height="52" rx="14" fill="#fff" stroke="#d8d2ea"/>
+            <text x="684" y="214" text-anchor="middle" font-weight="700">工具 B</text>
+            <text x="684" y="230" text-anchor="middle" fill="#6f6a82" font-size="11">执行 / 记录</text>
+            <rect x="780" y="148" width="112" height="64" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="836" y="176" text-anchor="middle" font-weight="700">结果回传</text>
+            <text x="836" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">可验证输出</text>
+            <path d="M180 180 H232" stroke="#8f7fd6" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M388 180 H440" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M572 180 H624" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M744 150 H780" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M744 214 H780" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M836 212 C836 286 310 286 310 228" fill="none" stroke="#d45d79" stroke-width="2" stroke-dasharray="6 6"/>
+            <text x="560" y="302" text-anchor="middle" fill="#d45d79" font-size="12">Trace / 调用记录 / 失败边界</text>
+          </g>
+        </svg>
+      `;
+    }
+
+    function researchPanelMarkup(title, summary, bullets, imagePath) {
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      return `
+        <div class="research-panel" data-research-panel>
+          <img src="${escapeAttr(src)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('[data-research-panel]').classList.add('is-missing')" />
+          <div class="research-panel-fallback">
+            <b>${escapeHtml(title)}</b>
+            <span>${escapeHtml(summary)}</span>
+            <ul>${bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+            <span>导出展示图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function dashboardFallbackMarkup() {
+      return `
+        <div class="dashboard-kpis">
+          <div class="dashboard-kpi"><span>关键竞品</span><b>4</b></div>
+          <div class="dashboard-kpi"><span>差异化机会</span><b>2</b></div>
+          <div class="dashboard-kpi"><span>风险信号</span><b>3</b></div>
+        </div>
+        <table class="dashboard-table">
+          <thead>
+            <tr><th>竞品</th><th>核心任务</th><th>AI 工作流变化</th><th>失败 / 信任边界</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>竞品 A</b>高赞需求集中</td><td>整理 + 决策辅助</td><td>生成候选，不自动执行</td><td>低置信度回退人工</td></tr>
+            <tr><td><b>竞品 B</b>功能堆叠明显</td><td>多任务入口</td><td>AI 按钮包装</td><td>失败时无解释路径</td></tr>
+            <tr><td><b>通用模型</b>替代方案</td><td>开放式问答</td><td>无任务承诺</td><td>结果不可验证</td></tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    function demoFallbackMarkup(imagePath, videoPath) {
+      return `
+        <div class="demo-play">▶</div>
+        <b>V0.5 Demo 展示</b>
+        <span>放上录屏或截图后，这里会展示你的 Product Spec 对应 demo。</span>
+        <div class="demo-tags">
+          <span>Agent 行为边界</span>
+          <span>Happy Path</span>
+          <span>Eval Set 样例</span>
+        </div>
+        <span>截图放到 <code>${escapeHtml(imagePath)}</code>，录屏放到 <code>${escapeHtml(videoPath)}</code>。</span>
+      `;
+    }
+
+    function demoMarkup(stage) {
+      const nodeId = stage.id || "node";
+      const imagePath = stage.demoImage || `diagrams/${nodeId}-demo.png`;
+      const videoPath = stage.demoVideo || `demos/${nodeId}-demo.mp4`;
+      const imageSrc = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const videoSrc = videoPath.startsWith("http") ? videoPath : `./${videoPath}`;
+      return `
+        <div class="output-visual-stage demo" data-output-visual-stage>
+          <div class="demo-stage">
+            <div class="demo-media">
+              <video controls playsinline preload="metadata" poster="${escapeAttr(imageSrc)}" onerror="this.remove()">
+                <source src="${escapeAttr(videoSrc)}" type="video/mp4" />
+              </video>
+              <img src="${escapeAttr(imageSrc)}" alt="Product Spec Demo 展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+              <div class="demo-fallback">${demoFallbackMarkup(imagePath, videoPath)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function dashboardMarkup(stage) {
+      const imagePath = stage.dashboardImage || `diagrams/${stage.id || "node"}-report-dashboard.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      return `
+        <div class="output-visual-stage dashboard" data-output-visual-stage>
+          <img class="output-visual-image" src="${escapeAttr(src)}" alt="竞品报告数据看板" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          <div class="output-visual-placeholder">
+            <b>竞品报告数据看板</b>
+            <span>导出你的竞品报告看板 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+          <div class="dashboard-fallback">
+            <div class="flow-panel-title" style="margin:0 0 14px;text-align:left;">
+              <h4 style="font-size:22px;">竞品报告数据看板 · 示意</h4>
+            </div>
+            ${dashboardFallbackMarkup()}
+          </div>
+        </div>
+      `;
+    }
+
+    function researchBoardMarkup(stage) {
+      const nodeId = stage.id || "node";
+      const competitivePath = stage.researchCompetitive || `diagrams/${nodeId}-competitive.png`;
+      const marketPath = stage.researchMarket || `diagrams/${nodeId}-market.png`;
+      return `
+        <div class="output-visual-stage research" data-output-visual-stage>
+          <div class="research-board">
+            ${researchPanelMarkup(
+              "竞品调研展示",
+              "用六维拆解看竞品如何定义任务、承诺能力和处理失败。",
+              ["Vision / 团队 / 功能", "需求 / 反馈 / 迭代", "AI 是否改变工作流"],
+              competitivePath
+            )}
+            ${researchPanelMarkup(
+              "市场调研展示",
+              "从用户雇用场景出发，收敛 tiny core 与成功状态。",
+              ["JTBD / 目标用户", "Tiny Core 候选", "成功状态与验证路径"],
+              marketPath
+            )}
+          </div>
+        </div>
+      `;
+    }
+
+    function langfuseFallbackMarkup() {
+      return `
+        <div class="langfuse-shell">
+          <div class="langfuse-topbar">
+            <b>Langfuse · 线上测评</b>
+            <span>stability-builder / regression-run</span>
+          </div>
+          <div class="langfuse-metrics">
+            <div class="langfuse-metric"><span>Traces</span><b>128</b></div>
+            <div class="langfuse-metric"><span>Pass Rate</span><b>86%</b></div>
+            <div class="langfuse-metric"><span>Guardrail Hit</span><b>7</b></div>
+            <div class="langfuse-metric"><span>Fallback</span><b>4</b></div>
+          </div>
+          <table class="langfuse-table">
+            <thead>
+              <tr><th>Trace</th><th>Eval Score</th><th>失败分类</th><th>状态</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>tool-routing-042</td><td>0.92</td><td>—</td><td><span class="langfuse-pill pass">pass</span></td></tr>
+              <tr><td>guardrail-output-017</td><td>0.41</td><td>output</td><td><span class="langfuse-pill guard">guardrail</span></td></tr>
+              <tr><td>fallback-handoff-003</td><td>0.55</td><td>routing</td><td><span class="langfuse-pill fail">fallback</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function langfuseMarkup(stage) {
+      const imagePath = stage.langfuseImage || `diagrams/${stage.id || "node"}-langfuse.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      return `
+        <div class="output-visual-stage langfuse" data-output-visual-stage>
+          <img class="output-visual-image" src="${escapeAttr(src)}" alt="Langfuse 线上测评展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          <div class="output-visual-placeholder">
+            <b>Langfuse 线上测评展示</b>
+            <span>导出 Langfuse 测评截图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+          <div class="langfuse-fallback">
+            <div class="flow-panel-title" style="margin:0 0 12px;text-align:left;">
+              <h4 style="font-size:22px;">Langfuse 线上测评 · 示意</h4>
+            </div>
+            ${langfuseFallbackMarkup()}
+          </div>
+        </div>
+      `;
+    }
+
+    function architectureDiagramMarkup(stage, kind = "agent") {
+      const isEval = kind === "evaluation";
+      const nodeId = stage.id || "node";
+      const imagePath = stage.mindMap || `diagrams/${nodeId}-${isEval ? "eval-arch" : "agent-arch"}.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const title = isEval ? "评测体系架构图" : "Agent 调用架构图";
+      const hint = isEval
+        ? `导出评测体系架构图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可替换内置示意图。`
+        : `导出 Agent 调用架构图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可替换内置示意图。`;
+      const fallback = isEval ? evaluationArchitectureFallbackSvg() : architectureFallbackSvg();
+      return `
+        <div class="output-visual-stage architecture ${isEval ? "eval-architecture" : "agent-architecture"}" data-output-visual-stage>
+          <img class="output-visual-image" src="${escapeAttr(src)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          <div class="output-visual-placeholder">
+            <b>${title}</b>
+            <span>${hint}</span>
+          </div>
+          <div class="architecture-fallback">${fallback}</div>
+        </div>
+      `;
+    }
+
+    function projectOutputMarkup(stage) {
+      const visual = stage.projectOutput || "mindmap";
+      if (visual === "research") {
+        return researchBoardMarkup(stage);
+      }
+      if (visual === "dashboard") {
+        return dashboardMarkup(stage);
+      }
+      if (visual === "demo") {
+        return demoMarkup(stage);
+      }
+      if (visual === "architecture") {
+        return architectureDiagramMarkup(stage, "agent");
+      }
+      if (visual === "eval-architecture") {
+        return architectureDiagramMarkup(stage, "evaluation");
+      }
+      if (visual === "langfuse") {
+        return langfuseMarkup(stage);
+      }
+      const imagePath = stage.mindMap || `mindmaps/${stage.id || "node"}.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      return `
+        <div class="output-visual-stage mindmap" data-output-visual-stage>
+          <img class="output-visual-image" src="${escapeAttr(src)}" alt="Obsidian 知识脑图" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          <div class="output-visual-placeholder">
+            <b>Obsidian 知识脑图</b>
+            <span>从 Obsidian 导出脑图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+        </div>
+      `;
+    }
+
     function flowDetailMarkup(stage, section = "output") {
       const item = flowSection(stage, section);
+      if (section === "asset") {
+        const reflection = reflectionMarkup(stage) || `<div class="flow-panel-reflection is-empty"><b>沉淀感悟</b><p>做完这个节点的沉淀后，用一句话写下你的复盘与思考。</p></div>`;
+        return `${reflection}<div class="chip-detail" data-chip-detail hidden></div>`;
+      }
       const body = section === "output"
-        ? outputGalleryMarkup(stage, item.items || [])
+        ? projectOutputMarkup(stage)
         : `<div class="evidence-chips">${(item.items || []).map((label, index) => `<button class="evidence-chip" data-chip-label="${escapeAttr(label)}" data-chip-section="${section}" data-chip-index="${index}" data-chip-detail-text="${escapeAttr(mappedChipDetail(stage, section, label))}">${cleanEvidenceLabel(label)}</button>`).join("")}</div>`;
-      return `<div class="flow-panel-title"><h4>${item.title} · ${item.key}</h4><p>${item.detail}</p></div>${body}<div class="chip-detail" data-chip-detail hidden></div>`;
+      return `<div class="flow-panel-title"><h4>${item.title} · ${item.key}</h4></div>${body}<div class="chip-detail" data-chip-detail hidden></div>`;
     }
 
     const outputTypes = {
@@ -2351,16 +3096,17 @@
     }
 
     function mappedChipDetail(stage, section, label) {
-      const dataSection = section === "insight" ? "asset" : section === "method" ? "transfer" : section;
-      return stage.evidenceDetail?.[dataSection]?.[label] || "";
+      if (section === "learn" || section === "asset") {
+        return stage.evidenceDetail?.asset?.[label] || stage.evidenceDetail?.transfer?.[label] || "";
+      }
+      return stage.evidenceDetail?.[section]?.[label] || "";
     }
 
     function chipDetailMarkup(label, section, mappedDetail = "") {
       const descriptions = {
-        learn: "这是该能力节点的学习输入，用来说明这个判断来自哪些课程、文章、框架或基础概念。",
+        learn: "这是该判断在本能力节点中的映射说明，说明它如何从学习输入沉淀为可复用认知。",
         output: "这是该能力节点形成的可见产出，用来证明学习已经转化为具体作品或过程成果。",
-        insight: "这是已经沉淀进知识系统的资产，用来支持后续复盘、引用和复用。",
-        method: "这是这个节点可以迁移到下一个 AI 产品或 Agent 项目的能力场景。"
+        asset: "这是已经沉淀进知识系统、可在下次项目中直接复用的判断、方法和地图。"
       };
       return `<b>${cleanEvidenceLabel(label)}</b>${mappedDetail || descriptions[section] || "这是该能力节点下的具体证据项。"}${obsidianOpenMarkup(label)}`;
     }
@@ -2379,10 +3125,9 @@
 
     function flowStepsMarkup(activeSection = "output") {
       const steps = [
-        ["learn", "01", "学习输入", "课程材料 / 外部资料"],
-        ["output", "02", "项目产出", "组件图 / Skill / 评测框架"],
-        ["insight", "03", "知识资产", "Insight / Playbook / Map"],
-        ["method", "04", "可迁移能力", "下次 AI 产品或 Agent 项目可复用"]
+        ["learn", "01", "学习输入", "判断映射"],
+        ["output", "02", "项目产出", "脑图 / 架构图"],
+        ["asset", "03", "知识资产", "复盘思考"]
       ];
       return steps.map(([section, index, title, key], stepIndex) => `
         <button class="flow-step ${section === activeSection ? "active" : ""}" data-flow-section="${section}">
@@ -2444,6 +3189,57 @@
       `;
     }
 
+    const evolutionDetailMap = {
+      "foundation-builder": 0,
+      "foundation-product": 0,
+      "assistant-prototype-builder": 1,
+      "competitive-product": 1,
+      "evaluation-builder": 2,
+      "spec-product": 2,
+      "stability-builder": 3,
+      "evals-product": 3
+    };
+
+    function setEvolutionStation(stationIndex) {
+      const strip = document.querySelector("[data-evolution-strip]");
+      if (!strip) return;
+      strip.querySelectorAll("[data-evolution-station]").forEach((card) => {
+        card.classList.toggle("active", Number(card.dataset.evolutionStation) === stationIndex);
+      });
+      strip.querySelectorAll("[data-evolution-segment]").forEach((segment) => {
+        segment.classList.toggle("active", Number(segment.dataset.evolutionSegment) === stationIndex);
+      });
+      strip.querySelectorAll("[data-evolution-dot]").forEach((dot) => {
+        dot.classList.toggle("active", Number(dot.dataset.evolutionDot) === stationIndex);
+      });
+    }
+
+    function scrollToJourney() {
+      document.getElementById("journey")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function bindEvolutionStrip() {
+      const strip = document.querySelector("[data-evolution-strip]");
+      if (!strip) return;
+
+      strip.querySelectorAll("[data-evolution-station]").forEach((card) => {
+        card.addEventListener("click", (event) => {
+          if (event.target.closest("[data-open-detail]")) return;
+          setEvolutionStation(Number(card.dataset.evolutionStation));
+          scrollToJourney();
+        });
+      });
+
+      strip.querySelectorAll("[data-open-detail]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const detailId = button.dataset.openDetail;
+          setEvolutionStation(evolutionDetailMap[detailId] ?? 0);
+          openDetailWorkspace(detailId);
+        });
+      });
+    }
+
     function closeDetailWorkspace() {
       const timelineCard = document.querySelector(".timeline-card");
       const workspace = document.getElementById("detailWorkspace");
@@ -2467,6 +3263,7 @@
       document.querySelectorAll(".milestone-node").forEach((node) => {
         node.classList.toggle("active", node.dataset.detail === detailId);
       });
+      setEvolutionStation(evolutionDetailMap[detailId] ?? 0);
       workspace.querySelector("[data-close-detail]").addEventListener("click", closeDetailWorkspace);
       workspace.querySelectorAll("[data-switch-detail]").forEach((button) => {
         button.addEventListener("click", () => openDetailWorkspace(button.dataset.switchDetail));
@@ -2488,6 +3285,9 @@
     document.querySelectorAll(".milestone-node").forEach((item) => {
       item.addEventListener("click", () => openDetailWorkspace(item.dataset.detail));
     });
+
+    bindEvolutionStrip();
+    setEvolutionStation(0);
 
     document.querySelectorAll(".asset-link").forEach((item) => {
       item.addEventListener("click", () => {

@@ -11,6 +11,9 @@ purpose: 展示页映射层草稿，用来把 Obsidian 知识资产映射到 HTM
 id: foundation-builder
 track: AI Builder 工程能力线
 node: 01
+reflection: Week0 让我确认：Builder 的价值不是会写代码，而是能把 LLM 的不确定性变成可验证的交付物。
+projectOutput: mindmap
+mindMap: mindmaps/foundation-builder.png
 
 ### Learning input
 - Karpathy LLM OS :: 把 LLM 理解为新的软件运行层，提醒 Builder 关注上下文、工具、权限、验证和人类反馈。
@@ -40,6 +43,9 @@ node: 01
 id: assistant-prototype-builder
 track: AI Builder 工程能力线
 node: 02
+reflection: Week1 让我把重复任务收成 Skill，第一次感到助理不是聊天框，而是可调用的能力入口。
+projectOutput: architecture
+mindMap: diagrams/assistant-prototype-builder-agent-arch.png
 
 ### Learning input
 - AI Builder Week 1 V0.5 :: Week1 要求把想法推进到可评审的 V0.5，并搭出最小助理原型。
@@ -69,6 +75,9 @@ node: 02
 id: evaluation-builder
 track: AI Builder 工程能力线
 node: 03
+reflection: Week3 让我停止靠感觉调 prompt，开始用真实失败和 trace 证明产品有没有变好。
+projectOutput: eval-architecture
+mindMap: diagrams/evaluation-builder-eval-arch.png
 
 ### Learning input
 - AI Builder Week 3 V1.0 :: Week3 主线是从 0 到 1 搭建产品评测体系，停止靠感觉调 prompt。
@@ -98,6 +107,9 @@ node: 03
 id: stability-builder
 track: AI Builder 工程能力线
 node: 04
+reflection: Week4 让我明白：稳定不是不失败，而是失败后知道怎么拦、怎么退、怎么复盘。
+projectOutput: langfuse
+langfuseImage: diagrams/stability-builder-langfuse.png
 
 ### Learning input
 - AI Builder Week 4 V1.5 :: Week4 承接 eval v0，把系统从能跑推进到更稳。
@@ -127,6 +139,10 @@ node: 04
 id: foundation-product
 track: AI 产品经理能力线
 node: 01
+reflection: 产品线起点不是堆功能，而是先回答：用户雇用产品完成什么任务，以及 tiny core 是什么。
+projectOutput: research
+researchCompetitive: diagrams/foundation-product-competitive.png
+researchMarket: diagrams/foundation-product-market.png
 
 ### Learning input
 - AI Builder Week 1 V0.5 :: Week1 从产品判断开始，要求先回答是否需要 AI、AI 改变哪一步和 tiny core 是什么。
@@ -156,6 +172,9 @@ node: 01
 id: competitive-product
 track: AI 产品经理能力线
 node: 02
+reflection: 竞品分析不是功能清单，而是看谁更清楚地处理了任务、不确定性和失败边界。
+projectOutput: dashboard
+dashboardImage: diagrams/competitive-product-report-dashboard.png
 
 ### Learning input
 - Week1 竞品调研 :: 竞品调研关注 Vision、团队、功能、需求、反馈和迭代，而不是只列功能。
@@ -185,6 +204,10 @@ node: 02
 id: spec-product
 track: AI 产品经理能力线
 node: 03
+reflection: Product Spec 的价值是把模糊想法写成可评审、可验证、可进入 V0.5 的规格，而不是漂亮文档。
+projectOutput: demo
+demoImage: diagrams/spec-product-demo.png
+demoVideo: demos/spec-product-demo.mp4
 
 ### Learning input
 - AI-Native Product Spec 模板 :: Week1 要求把模糊想法整理成可评审、可验证、可进入 V0.5 构建的产品规格。
@@ -214,6 +237,9 @@ node: 03
 id: evals-product
 track: AI 产品经理能力线
 node: 04
+reflection: Product Evals 让我把“产品承诺”变成可评测的标准，而不是继续争论模型聪不聪明。
+projectOutput: mindmap
+mindMap: mindmaps/evals-product.png
 
 ### Learning input
 - Product Evals 三步法 :: 用少量标注样本、LLM evaluator 对齐和 eval harness 加快产品反馈循环。
@@ -237,3 +263,4 @@ node: 04
 - 样本设计 :: 用真实任务、边界情况和对抗场景验证产品价值。
 - 失败红线管理 :: 定义不可接受输出和降级路径，避免只看平均体验。
 - 产品反馈循环 :: 用 eval 结果指导产品决策，而不是只生成分数。
+
