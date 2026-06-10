@@ -724,65 +724,23 @@
       border: 1px solid var(--line);
       border-radius: 22px;
       background: rgba(255,255,255,.88);
-      padding: 18px 16px;
+      padding: 16px;
     }
     .knowledge-system-flow h4 {
       margin: 0 0 12px;
       font-size: 16px;
       letter-spacing: -.035em;
     }
-    .knowledge-flow-steps {
+    .knowledge-flow-images {
       display: grid;
-      grid-template-columns: 1fr 1.15fr 2.05fr 1.15fr 1.7fr;
-      gap: 28px;
-      align-items: center;
+      gap: 14px;
     }
-    .knowledge-flow-step {
-      position: relative;
-      display: grid;
-      place-items: center;
-      min-height: 58px;
+    .knowledge-flow-image {
+      display: block;
+      width: 100%;
       border: 1px solid rgba(112,114,125,.2);
-      border-radius: 2px;
-      background: rgba(255,255,255,.92);
-      padding: 9px 12px;
-      text-align: center;
-    }
-    .knowledge-flow-step:not(:last-child)::after {
-      content: "→";
-      position: absolute;
-      right: -24px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #1f2026;
-      font-weight: 900;
-      z-index: 2;
-    }
-    .knowledge-flow-step b {
-      display: block;
-      color: var(--ink);
-      font-size: 13px;
-      letter-spacing: -.025em;
-      line-height: 1.25;
-    }
-    .knowledge-flow-step span {
-      display: block;
-      color: var(--ink);
-      font-size: 12px;
-      line-height: 1.25;
-      margin-top: 2px;
-    }
-    @media (max-width: 980px) {
-      .knowledge-flow-steps {
-        grid-template-columns: 1fr;
-      }
-      .knowledge-flow-step:not(:last-child)::after {
-        content: "↓";
-        right: 50%;
-        top: auto;
-        bottom: -22px;
-        transform: translateX(50%);
-      }
+      border-radius: 12px;
+      background: #f7f5ef;
     }
     .flow-panel-title {
       max-width: 760px;
@@ -2922,23 +2880,12 @@
     }
 
     function knowledgeSystemFlowMarkup() {
-      const steps = [
-        ["00_Inbox", "输入收集"],
-        ["10_Sources", "来源整理"],
-        ["40_Insights / 50_Playbooks", "知识沉淀"],
-        ["60_Maps", "地图连接"],
-        ["70_Showcase / HTML", "展示复用"]
-      ];
       return `
         <div class="knowledge-system-flow">
           <h4>Obsidian 知识系统结构</h4>
-          <div class="knowledge-flow-steps">
-            ${steps.map(([folder, label]) => `
-              <div class="knowledge-flow-step">
-                <b>${folder}</b>
-                <span>${label}</span>
-              </div>
-            `).join("")}
+          <div class="knowledge-flow-images">
+            <img class="knowledge-flow-image" src="diagrams/knowledge-system-traditional.png" alt="传统知识库方式：把资料存起来，等需要时再找">
+            <img class="knowledge-flow-image" src="diagrams/knowledge-system-agent.png" alt="我的 Agent 知识库方式：把资料加工成可复用成果">
           </div>
         </div>
       `;

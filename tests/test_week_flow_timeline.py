@@ -4,12 +4,14 @@ import unittest
 
 
 HTML_PATH = Path("docs/superpowers/showcase/ai-builder-narrative-showcase.html")
+DATA_PATH = Path("docs/superpowers/showcase/showcase-data.js")
 
 
 class WeekFlowTimelineTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.html = HTML_PATH.read_text(encoding="utf-8")
+        cls.data = DATA_PATH.read_text(encoding="utf-8")
 
     def milestone_markup(self, detail_id):
         pattern = (
@@ -122,17 +124,12 @@ class WeekFlowTimelineTests(unittest.TestCase):
         self.assertIn("flow-panel-reflection", branch)
         self.assertIn("knowledgeSystemFlowMarkup()", branch)
         self.assertIn("沉淀感悟", self.html)
+        self.assertIn("把每次知识输入都变成可复用的知识资产", self.data)
         self.assertIn("Obsidian 知识系统结构", self.html)
-        self.assertIn("00_Inbox", self.html)
-        self.assertIn("10_Sources", self.html)
-        self.assertIn("40_Insights / 50_Playbooks", self.html)
-        self.assertIn("60_Maps", self.html)
-        self.assertIn("70_Showcase / HTML", self.html)
-        self.assertIn("输入收集", self.html)
-        self.assertIn("来源整理", self.html)
-        self.assertIn("知识沉淀", self.html)
-        self.assertIn("地图连接", self.html)
-        self.assertIn("展示复用", self.html)
+        self.assertIn("knowledge-system-traditional.png", self.html)
+        self.assertIn("knowledge-system-agent.png", self.html)
+        self.assertIn("传统知识库方式：把资料存起来，等需要时再找", self.html)
+        self.assertIn("我的 Agent 知识库方式：把资料加工成可复用成果", self.html)
         self.assertNotIn("evidence-chips", branch)
 
     def test_learn_panel_uses_judgment_mapping_chips(self):

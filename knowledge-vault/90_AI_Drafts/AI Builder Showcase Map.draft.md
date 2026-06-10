@@ -11,7 +11,7 @@ purpose: 展示页映射层草稿，用来把 Obsidian 知识资产映射到 HTM
 id: foundation-builder
 track: AI Builder 工程能力线
 node: 01
-reflection: Week0 让我确认：Builder 的价值不是会写代码，而是能把 LLM 的不确定性变成可验证的交付物。
+reflection: 把每次知识输入都变成可复用的知识资产
 projectOutput: mindmap
 mindMap: mindmaps/foundation-builder.png
 
