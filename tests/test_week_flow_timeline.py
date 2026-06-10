@@ -77,6 +77,9 @@ class WeekFlowTimelineTests(unittest.TestCase):
     def test_project_output_panel_uses_visual_markup_without_reflection(self):
         self.assertIn("output-visual-stage", self.html)
         self.assertIn("projectOutputMarkup(stage)", self.html)
+        self.assertIn("mindmapAssetMarkup(stage)", self.html)
+        self.assertIn("mindmap-asset", self.html)
+        self.assertIn("Obsidian 图谱截图或录屏", self.html)
         self.assertIn("architecture-fallback", self.html)
         self.assertIn("evaluationArchitectureFallbackSvg", self.html)
         self.assertIn('visual === "eval-architecture"', self.html)
@@ -90,7 +93,7 @@ class WeekFlowTimelineTests(unittest.TestCase):
         self.assertIn("langfuse-fallback", self.html)
         self.assertNotIn("outputGalleryMarkup(stage, item.items", self.html)
         flow_detail = re.search(
-            r"function flowDetailMarkup\(stage, section = \"output\"\) \{"
+            r"function flowDetailMarkup\(stage, section = \"output\", detailId = \"\"\) \{"
             r"(?P<body>.*?)\n    \}",
             self.html,
             re.S,
@@ -102,7 +105,7 @@ class WeekFlowTimelineTests(unittest.TestCase):
 
     def test_asset_panel_only_shows_reflection(self):
         flow_detail = re.search(
-            r"function flowDetailMarkup\(stage, section = \"output\"\) \{"
+            r"function flowDetailMarkup\(stage, section = \"output\", detailId = \"\"\) \{"
             r"(?P<body>.*?)\n    \}",
             self.html,
             re.S,
@@ -117,7 +120,14 @@ class WeekFlowTimelineTests(unittest.TestCase):
         self.assertIsNotNone(asset_branch)
         branch = asset_branch.group("branch")
         self.assertIn("flow-panel-reflection", branch)
+        self.assertIn("knowledgeSystemFlowMarkup()", branch)
         self.assertIn("沉淀感悟", self.html)
+        self.assertIn("Obsidian 知识系统架构", self.html)
+        self.assertIn("输入收集", self.html)
+        self.assertIn("来源整理", self.html)
+        self.assertIn("知识沉淀", self.html)
+        self.assertIn("地图连接", self.html)
+        self.assertIn("展示复用", self.html)
         self.assertNotIn("evidence-chips", branch)
 
     def test_learn_panel_uses_judgment_mapping_chips(self):
@@ -145,13 +155,18 @@ class WeekFlowTimelineTests(unittest.TestCase):
         self.assertIsNotNone(mapped_chip)
         self.assertIn('section === "learn"', mapped_chip.group("body"))
 
-    def test_hero_uses_evolution_strip_instead_of_orbit(self):
+    def test_hero_uses_evolution_spotlight_rail_instead_of_orbit(self):
         self.assertIn("evolution-strip", self.html)
-        self.assertIn("evolution-bar-segment", self.html)
+        self.assertIn("evolution-spotlight", self.html)
+        self.assertIn("evolution-level-rail", self.html)
+        self.assertIn("data-evolution-spotlight-title", self.html)
+        self.assertIn("data-evolution-rail-pointer", self.html)
+        self.assertIn("学习进行到这里", self.html)
         self.assertIn("setEvolutionStation", self.html)
-        self.assertIn("能力基础", self.html)
         self.assertIn("data-open-detail=\"foundation-builder\"", self.html)
         self.assertNotIn("mini-orbit", self.html)
+        self.assertNotIn("evolution-cards", self.html)
+        self.assertNotIn("evolution-progress-meter", self.html)
 
     def test_evidence_directory_uses_three_merged_steps(self):
         flow_match = re.search(
