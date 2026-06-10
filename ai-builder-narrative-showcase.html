@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Builder 双轨学习旅程</title>
+  <!-- showcase-build: 2026-06-10-knowledge-graph-fix -->
   <style>
     :root {
       --bg: #f6f6f2;
@@ -193,160 +194,167 @@
     .evolution-strip {
       margin-top: 14px;
       display: grid;
-      gap: 12px;
+      gap: 18px;
+      padding: 18px 16px 14px;
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(99,91,255,.06), rgba(255,255,255,.94));
     }
-    .evolution-bar {
-      display: grid;
-      gap: 10px;
+    .evolution-spotlight {
+      text-align: center;
+      padding: 8px 6px 4px;
     }
-    .evolution-bar-track {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 6px;
-      height: 8px;
-    }
-    .evolution-bar-segment {
-      border-radius: 999px;
-      background: rgba(17,24,39,.08);
-      transition: background .25s ease, box-shadow .25s ease;
-    }
-    .evolution-bar-segment.active {
-      background: linear-gradient(90deg, var(--purple), #8b7cff);
-      box-shadow: 0 0 0 3px rgba(99,91,255,.12);
-    }
-    .evolution-rail {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      align-items: center;
-      position: relative;
-      padding: 0 4px;
-    }
-    .evolution-rail::before {
-      content: "";
-      position: absolute;
-      left: 12%;
-      right: 12%;
-      top: 50%;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(99,91,255,.22), rgba(16,163,127,.28));
-      transform: translateY(-50%);
-      z-index: 0;
-    }
-    .evolution-dot {
-      justify-self: center;
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      border: 2px solid #fff;
-      background: rgba(17,24,39,.16);
-      box-shadow: 0 0 0 1px var(--line);
-      z-index: 1;
-      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
-    }
-    .evolution-dot.active {
-      transform: scale(1.25);
-      background: var(--purple);
-      box-shadow: 0 0 0 4px rgba(99,91,255,.14);
-    }
-    .evolution-cards {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .evolution-card {
-      appearance: none;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255,255,255,.92);
-      padding: 12px 10px;
-      text-align: left;
-      cursor: pointer;
-      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
-      font: inherit;
-      color: inherit;
-    }
-    .evolution-card:hover {
-      border-color: rgba(99,91,255,.24);
-      background: #fff;
-    }
-    .evolution-card.active {
-      border-color: rgba(99,91,255,.32);
-      background: linear-gradient(180deg, rgba(99,91,255,.07), #fff);
-      box-shadow: 0 12px 28px rgba(99,91,255,.08);
-    }
-    .evolution-card-head {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-    .evolution-card-index {
-      font-size: 10px;
+    .evolution-spotlight-kicker {
+      display: inline-block;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: .08em;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 8px;
+    }
+    .evolution-spotlight-title {
+      margin: 0 0 12px;
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: -.05em;
+      color: var(--ink);
+    }
+    .evolution-spotlight-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(99,91,255,.08);
+      font-size: 12px;
+      font-weight: 800;
       color: var(--purple);
     }
-    .evolution-card-title {
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: -.03em;
+    .evolution-spotlight-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
     }
-    .evolution-card-title.is-placeholder {
-      color: var(--muted);
-    }
-    .evolution-node-list {
-      display: grid;
-      gap: 6px;
-    }
-    .evolution-node {
+    .evolution-spotlight-node {
       appearance: none;
       border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--paper-2);
-      padding: 8px 9px;
-      text-align: left;
-      cursor: pointer;
-      font: inherit;
-      transition: border-color .2s ease, background .2s ease;
-    }
-    .evolution-node:hover {
+      border-radius: 999px;
       background: #fff;
+      padding: 7px 12px;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease;
     }
-    .evolution-node.builder:hover { border-color: rgba(99,91,255,.28); }
-    .evolution-node.product:hover { border-color: rgba(16,163,127,.28); }
-    .evolution-node-label {
-      display: block;
+    .evolution-spotlight-node.builder {
+      color: var(--purple);
+      border-color: rgba(99,91,255,.2);
+    }
+    .evolution-spotlight-node.product {
+      color: var(--mint);
+      border-color: rgba(16,163,127,.22);
+    }
+    .evolution-spotlight-node:hover {
+      box-shadow: 0 8px 18px rgba(17,24,39,.06);
+    }
+    .evolution-spotlight-node small {
       font-size: 9px;
       font-weight: 800;
       letter-spacing: .08em;
-      text-transform: uppercase;
-      margin-bottom: 3px;
+      opacity: .72;
+      margin-right: 4px;
     }
-    .evolution-node.builder .evolution-node-label { color: var(--purple); }
-    .evolution-node.product .evolution-node-label { color: var(--mint); }
-    .evolution-node b {
+    .evolution-level-rail {
+      position: relative;
+      padding-top: 28px;
+    }
+    .evolution-rail-pointer {
+      position: absolute;
+      top: 0;
+      left: 12.5%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      color: var(--rose);
+      white-space: nowrap;
+      transition: left .35s ease;
+    }
+    .evolution-rail-pointer::after {
+      content: "▼";
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .evolution-rail-track {
+      position: relative;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(17,24,39,.08);
+      margin-bottom: 12px;
+    }
+    .evolution-rail-track::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--purple), var(--mint));
+      transform-origin: left center;
+      transform: scaleX(var(--rail-progress, .25));
+      transition: transform .35s ease;
+    }
+    .evolution-rail-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+    }
+    .evolution-rail-step {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      text-align: center;
+      cursor: pointer;
+      font: inherit;
+      color: var(--muted);
+    }
+    .evolution-rail-step b {
       display: block;
       font-size: 11px;
-      line-height: 1.35;
+      font-weight: 800;
       letter-spacing: -.02em;
     }
-    .evolution-hint {
-      margin: 0;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.5;
+    .evolution-rail-step span {
+      display: block;
+      margin-top: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      color: rgba(17,24,39,.28);
+    }
+    .evolution-rail-step.active {
+      color: var(--ink);
+    }
+    .evolution-rail-step.active span {
+      color: var(--purple);
+    }
+    .evolution-rail-step.active b {
+      font-size: 12px;
     }
     @media (max-width: 980px) {
-      .evolution-cards {
+      .evolution-spotlight-title { font-size: 28px; }
+      .evolution-rail-steps {
         display: flex;
         overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        padding-bottom: 4px;
+        gap: 16px;
+        padding-bottom: 2px;
       }
-      .evolution-card {
-        min-width: 168px;
-        scroll-snap-align: start;
-      }
+      .evolution-rail-step { min-width: 72px; }
     }
     .hero-side .side-card {
       min-height: 100%;
@@ -685,11 +693,11 @@
     }
     .flow-panel-reflection {
       border: 2px solid rgba(212,93,121,.42);
-      border-radius: 18px;
+      border-radius: 22px;
       background: rgba(212,93,121,.06);
-      padding: 16px 18px;
+      padding: 18px;
       margin: 0 auto 18px;
-      max-width: 720px;
+      max-width: 760px;
     }
     .flow-panel-reflection b {
       display: block;
@@ -710,8 +718,90 @@
       font-weight: 500;
       color: var(--muted);
     }
+    .knowledge-system-flow {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(99,91,255,.08), transparent 38%),
+        rgba(255,255,255,.86);
+      padding: 18px;
+    }
+    .knowledge-system-flow h4 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+    .knowledge-system-flow p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .knowledge-flow-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+    .knowledge-flow-step {
+      position: relative;
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 16px;
+      background: rgba(255,255,255,.78);
+      padding: 12px 10px;
+      min-height: 106px;
+    }
+    .knowledge-flow-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--faint);
+      font-weight: 900;
+      z-index: 2;
+    }
+    .knowledge-flow-step small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .knowledge-flow-step b {
+      display: block;
+      font-size: 13px;
+      letter-spacing: -.025em;
+      margin-bottom: 5px;
+    }
+    .knowledge-flow-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    @media (max-width: 980px) {
+      .knowledge-flow-steps {
+        grid-template-columns: 1fr;
+      }
+      .knowledge-flow-step:not(:last-child)::after {
+        content: "↓";
+        right: 50%;
+        top: auto;
+        bottom: -16px;
+        transform: translateX(50%);
+      }
+    }
     .flow-panel-title {
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto 18px;
       text-align: left;
     }
@@ -720,8 +810,17 @@
       font-size: 28px;
       letter-spacing: -.045em;
     }
+    .flow-panel-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      max-width: 640px;
+    }
     .output-visual-stage {
-      margin-top: 4px;
+      width: 100%;
+      max-width: 760px;
+      margin: 4px auto 0;
       border: 1px solid var(--line);
       border-radius: 22px;
       background: rgba(255,255,255,.82);
@@ -733,6 +832,46 @@
       display: block;
       width: 100%;
       height: auto;
+    }
+    .output-visual-stage.mindmap-asset {
+      display: grid;
+      place-items: center;
+      min-height: 360px;
+      background: #fff;
+    }
+    .output-visual-stage.mindmap-asset .output-visual-image,
+    .output-visual-stage.mindmap-asset video {
+      width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+    }
+    .mindmap-obsidian-link {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(99,91,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      color: var(--purple);
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 8px 22px rgba(17,24,39,.08);
+      backdrop-filter: blur(8px);
+    }
+    .mindmap-obsidian-link:hover {
+      border-color: rgba(99,91,255,.36);
+      background: #fff;
+      transform: translateY(-1px);
+    }
+    .output-visual-stage.mindmap-asset.is-missing .output-visual-image,
+    .output-visual-stage.mindmap-asset.is-missing video {
+      display: none;
     }
     .output-visual-placeholder {
       display: none;
@@ -757,6 +896,99 @@
     .output-visual-placeholder code {
       font-size: 12px;
       color: var(--purple);
+    }
+    .knowledge-graph-stage {
+      min-height: 340px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(99,91,255,.08), transparent 58%),
+        rgba(255,255,255,.9);
+    }
+    .knowledge-graph-play {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,.92);
+      color: var(--purple);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .knowledge-graph-play:hover {
+      transform: translateY(-1px);
+      border-color: rgba(99,91,255,.35);
+      box-shadow: 0 8px 20px rgba(99,91,255,.14);
+    }
+    .knowledge-graph-play.is-playing {
+      border-color: rgba(16,163,127,.4);
+      color: var(--mint);
+    }
+    .knowledge-graph-play svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+    .knowledge-graph-svg {
+      display: block;
+      width: 100%;
+      height: 320px;
+    }
+    .knowledge-graph-meta {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+    .knowledge-graph-hint {
+      position: absolute;
+      right: 58px;
+      top: 18px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .kg-link {
+      stroke: rgba(112,114,125,.28);
+      stroke-width: .85;
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    .kg-link.is-visible { opacity: .82; }
+    .kg-node-group {
+      opacity: 0;
+      transform-origin: center;
+      transition: opacity .25s ease;
+    }
+    .kg-node-group.is-visible {
+      opacity: 1;
+    }
+    .kg-node-circle {
+      stroke: rgba(255,255,255,.92);
+      stroke-width: 1.6px;
+      filter: drop-shadow(0 2px 4px rgba(17,24,39,.16));
+    }
+    .kg-node-circle.center { fill: var(--purple); }
+    .kg-node-circle.learn { fill: #4f8ff7; }
+    .kg-node-circle.output { fill: #e8b339; }
+    .kg-node-circle.asset { fill: #e85d6f; }
+    .kg-node-circle.transfer { fill: #4fbf8b; }
+    .kg-node-label {
+      font-size: 8px;
+      font-weight: 650;
+      fill: rgba(21,22,26,.52);
+      text-anchor: middle;
+      pointer-events: none;
     }
     .architecture-fallback {
       display: none;
@@ -2102,51 +2334,25 @@
         <div class="side-card">
           <h2>成果概览</h2>
           <div class="evolution-strip" data-evolution-strip>
-            <div class="evolution-bar" aria-hidden="true">
-              <div class="evolution-bar-track">
-                <span class="evolution-bar-segment active" data-evolution-segment="0"></span>
-                <span class="evolution-bar-segment" data-evolution-segment="1"></span>
-                <span class="evolution-bar-segment" data-evolution-segment="2"></span>
-                <span class="evolution-bar-segment" data-evolution-segment="3"></span>
-              </div>
-              <div class="evolution-rail">
-                <span class="evolution-dot active" data-evolution-dot="0"></span>
-                <span class="evolution-dot" data-evolution-dot="1"></span>
-                <span class="evolution-dot" data-evolution-dot="2"></span>
-                <span class="evolution-dot" data-evolution-dot="3"></span>
+            <div class="evolution-spotlight">
+              <span class="evolution-spotlight-kicker">学习进行到这里</span>
+              <div class="evolution-spotlight-meta" data-evolution-spotlight-meta>第 1 / 4 阶段</div>
+              <h3 class="evolution-spotlight-title" data-evolution-spotlight-title>能力基础</h3>
+              <div class="evolution-spotlight-nodes">
+                <button type="button" class="evolution-spotlight-node builder" data-evolution-spotlight-builder data-open-detail="foundation-builder"><small>工程</small>LLM / Agent 基础</button>
+                <button type="button" class="evolution-spotlight-node product" data-evolution-spotlight-product data-open-detail="foundation-product"><small>产品</small>AI 产品基础判断</button>
               </div>
             </div>
-            <div class="evolution-cards">
-              <article class="evolution-card active" data-evolution-station="0">
-                <div class="evolution-card-head"><span class="evolution-card-index">01</span><b class="evolution-card-title">能力基础</b></div>
-                <div class="evolution-node-list">
-                  <button type="button" class="evolution-node builder" data-open-detail="foundation-builder"><span class="evolution-node-label">工程</span><b>LLM / Agent 基础</b></button>
-                  <button type="button" class="evolution-node product" data-open-detail="foundation-product"><span class="evolution-node-label">产品</span><b>AI 产品基础判断</b></button>
-                </div>
-              </article>
-              <article class="evolution-card" data-evolution-station="1">
-                <div class="evolution-card-head"><span class="evolution-card-index">02</span><b class="evolution-card-title is-placeholder">阶段二</b></div>
-                <div class="evolution-node-list">
-                  <button type="button" class="evolution-node builder" data-open-detail="assistant-prototype-builder"><span class="evolution-node-label">工程</span><b>Skill 与助理原型</b></button>
-                  <button type="button" class="evolution-node product" data-open-detail="competitive-product"><span class="evolution-node-label">产品</span><b>竞品分析</b></button>
-                </div>
-              </article>
-              <article class="evolution-card" data-evolution-station="2">
-                <div class="evolution-card-head"><span class="evolution-card-index">03</span><b class="evolution-card-title is-placeholder">阶段三</b></div>
-                <div class="evolution-node-list">
-                  <button type="button" class="evolution-node builder" data-open-detail="evaluation-builder"><span class="evolution-node-label">工程</span><b>评测体系</b></button>
-                  <button type="button" class="evolution-node product" data-open-detail="spec-product"><span class="evolution-node-label">产品</span><b>Product Spec</b></button>
-                </div>
-              </article>
-              <article class="evolution-card" data-evolution-station="3">
-                <div class="evolution-card-head"><span class="evolution-card-index">04</span><b class="evolution-card-title">测评</b></div>
-                <div class="evolution-node-list">
-                  <button type="button" class="evolution-node builder" data-open-detail="stability-builder"><span class="evolution-node-label">工程</span><b>稳定性工程</b></button>
-                  <button type="button" class="evolution-node product" data-open-detail="evals-product"><span class="evolution-node-label">产品</span><b>Product Evals</b></button>
-                </div>
-              </article>
+            <div class="evolution-level-rail" aria-label="四阶段进化轨">
+              <div class="evolution-rail-pointer" data-evolution-rail-pointer>当前位置</div>
+              <div class="evolution-rail-track" data-evolution-rail-track></div>
+              <div class="evolution-rail-steps">
+                <button type="button" class="evolution-rail-step active" data-evolution-station="0"><b>能力基础</b><span>01</span></button>
+                <button type="button" class="evolution-rail-step" data-evolution-station="1"><b>阶段二</b><span>02</span></button>
+                <button type="button" class="evolution-rail-step" data-evolution-station="2"><b>阶段三</b><span>03</span></button>
+                <button type="button" class="evolution-rail-step" data-evolution-station="3"><b>测评</b><span>04</span></button>
+              </div>
             </div>
-            <p class="evolution-hint">从左到右：双轨在同一阶段的节点，最后一站是测评。</p>
           </div>
         </div>
       </aside>
@@ -2316,7 +2522,7 @@
     </footer>
   </main>
 
-  <script src="./showcase-data.js"></script>
+  <script src="./showcase-data.js?v=20260610-kg"></script>
   <script>
     const notes = {
       "llm-nondeterministic": {
@@ -2706,7 +2912,7 @@
         output: {
           title: "项目产出",
           key: "可见成果 / 过程产物",
-          detail: "这些是这个节点里真正被做出来、整理出来或定义出来的成果。",
+          detail: "把 AI Native 学习过程整理成可连接、可复用的知识网络。",
           items: evidence.output || []
         },
         asset: {
@@ -2729,6 +2935,31 @@
     function reflectionMarkup(stage) {
       if (!stage.reflection) return "";
       return `<div class="flow-panel-reflection"><b>沉淀感悟</b><p>${escapeHtml(stage.reflection)}</p></div>`;
+    }
+
+    function knowledgeSystemFlowMarkup() {
+      const steps = [
+        ["01", "输入收集", "课程材料、截图、文章、项目记录先进入 Inbox。"],
+        ["02", "来源整理", "用 Sources 保留出处和原始语境。"],
+        ["03", "知识沉淀", "沉淀为 Insight 和 Playbook。"],
+        ["04", "地图连接", "通过 Map 与双链形成知识网络。"],
+        ["05", "展示复用", "服务 Showcase 和后续项目。"]
+      ];
+      return `
+        <div class="knowledge-system-flow">
+          <h4>Obsidian 知识系统架构</h4>
+          <p>从输入到复用，展示这套知识系统如何把学习材料转成可连接、可复用的知识资产。</p>
+          <div class="knowledge-flow-steps">
+            ${steps.map(([index, title, desc]) => `
+              <div class="knowledge-flow-step">
+                <small>${index}</small>
+                <b>${title}</b>
+                <span>${desc}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
     }
 
     function evaluationArchitectureFallbackSvg() {
@@ -3023,29 +3254,339 @@
       if (visual === "langfuse") {
         return langfuseMarkup(stage);
       }
+      return mindmapAssetMarkup(stage);
+    }
+
+    function mindmapAssetMarkup(stage) {
       const imagePath = stage.mindMap || `mindmaps/${stage.id || "node"}.png`;
       const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const obsidianGraphHref = "obsidian://open?vault=knowledge-vault";
+      const isVideo = /\.(mp4|webm|mov)$/i.test(imagePath);
+      const media = isVideo
+        ? `<video class="output-visual-image" src="${escapeAttr(src)}" autoplay muted loop playsinline controls onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')"></video>`
+        : `<img class="output-visual-image" src="${escapeAttr(src)}" alt="Obsidian 知识脑图" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />`;
+
       return `
-        <div class="output-visual-stage mindmap" data-output-visual-stage>
-          <img class="output-visual-image" src="${escapeAttr(src)}" alt="Obsidian 知识脑图" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+        <div class="output-visual-stage mindmap mindmap-asset" data-output-visual-stage>
+          <a class="mindmap-obsidian-link" href="${escapeAttr(obsidianGraphHref)}" title="打开 Obsidian 后可进入关系图谱视图">在 Obsidian 打开脑图</a>
+          ${media}
           <div class="output-visual-placeholder">
             <b>Obsidian 知识脑图</b>
-            <span>从 Obsidian 导出脑图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+            <span>把 Obsidian 图谱截图或录屏放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
           </div>
         </div>
       `;
     }
 
-    function flowDetailMarkup(stage, section = "output") {
+    function mindmapGraphMarkup(stage, detailId = "") {
+      const nodeKey = detailId || stage.id || "";
+      return `
+        <div class="output-visual-stage mindmap knowledge-graph-stage" data-output-visual-stage data-knowledge-graph data-node-id="${escapeAttr(nodeKey)}">
+          <button type="button" class="knowledge-graph-play" data-knowledge-graph-play title="知识生长时间轴" aria-label="播放知识节点生长动画">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l1.2 3.6L17 8l-3.6 1.2L12 13l-1.2-3.8L7 8l3.8-1.4L12 3z"/>
+              <path d="M5 14l.8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8L5 14z"/>
+              <path d="M18 15l.7 2L21 18l-2 .7L18 21l-.7-2.3L15 18l2.3-.8L18 15z"/>
+            </svg>
+          </button>
+          <span class="knowledge-graph-hint">知识生长 · 点 ✨ 重播</span>
+          <svg class="knowledge-graph-svg" data-knowledge-graph-svg viewBox="0 0 640 320" role="img" aria-label="知识节点关系图"></svg>
+          <div class="knowledge-graph-meta"><span data-knowledge-graph-count>0</span> / <span data-knowledge-graph-total>0</span> 节点</div>
+        </div>
+      `;
+    }
+
+    function truncateGraphLabel(label, max = 10) {
+      const text = String(label || "").trim();
+      return text.length <= max ? text : `${text.slice(0, max)}…`;
+    }
+
+    function buildKnowledgeGraphTimeline(stage) {
+      const events = [];
+      let linkIndex = 0;
+      const pushLink = (from, to) => {
+        events.push({ type: "link", id: `link-${linkIndex += 1}`, from, to });
+      };
+
+      const center = {
+        id: "center",
+        label: stage.title || "项目沉淀",
+        group: "center"
+      };
+      events.push({ type: "node", ...center });
+
+      (stage.evidence?.learn || []).forEach((label, index) => {
+        const id = `learn-${index}`;
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "learn" });
+        pushLink("center", id);
+      });
+
+      const learnIds = (stage.evidence?.learn || []).map((_, index) => `learn-${index}`);
+      (stage.evidence?.output || []).forEach((label, index) => {
+        const id = `output-${index}`;
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "output" });
+        pushLink(learnIds[index % Math.max(learnIds.length, 1)] || "center", id);
+      });
+
+      const assetIds = [];
+      (stage.evidence?.asset || []).forEach((label, index) => {
+        const id = `asset-${index}`;
+        assetIds.push(id);
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "asset" });
+        pushLink("center", id);
+        if (learnIds.length) {
+          pushLink(learnIds[index % learnIds.length], id);
+        }
+      });
+
+      (stage.evidence?.transfer || []).forEach((label, index) => {
+        const id = `transfer-${index}`;
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "transfer" });
+        pushLink(
+          assetIds[index % Math.max(assetIds.length, 1)] || learnIds[index % Math.max(learnIds.length, 1)] || "center",
+          id
+        );
+      });
+
+      const outputIds = (stage.evidence?.output || []).map((_, index) => `output-${index}`);
+      assetIds.forEach((assetId, index) => {
+        if (outputIds.length) pushLink(outputIds[index % outputIds.length], assetId);
+      });
+      learnIds.forEach((learnId, index) => {
+        if (outputIds.length) pushLink(learnId, outputIds[(index + 1) % outputIds.length]);
+      });
+
+      return events;
+    }
+
+    function seededGraphValue(key) {
+      let hash = 2166136261;
+      String(key).split("").forEach((char) => {
+        hash ^= char.charCodeAt(0);
+        hash = Math.imul(hash, 16777619);
+      });
+      return ((hash >>> 0) % 1000) / 1000;
+    }
+
+    function layoutKnowledgeGraphNodes(nodes, width, height) {
+      const cx = width / 2;
+      const cy = height / 2;
+      const groupBias = {
+        learn: { x: -48, y: -34 },
+        output: { x: 42, y: -24 },
+        asset: { x: 46, y: 44 },
+        transfer: { x: -46, y: 44 }
+      };
+
+      nodes.forEach((node, index) => {
+        if (node.group === "center") {
+          node.x = cx;
+          node.y = cy;
+          node.startX = cx;
+          node.startY = cy;
+          return;
+        }
+
+        const randomA = seededGraphValue(`${node.id}-angle`);
+        const randomB = seededGraphValue(`${node.id}-radius`);
+        const randomC = seededGraphValue(`${node.id}-jitter`);
+        const angle = randomA * Math.PI * 2;
+        const radius = 58 + randomB * 104;
+        const bias = groupBias[node.group] || { x: 0, y: 0 };
+        node.x = Math.max(40, Math.min(width - 40, cx + bias.x + Math.cos(angle) * radius));
+        node.y = Math.max(36, Math.min(height - 36, cy + bias.y + Math.sin(angle) * radius * .72 + (randomC - .5) * 24));
+        node.startX = cx + (randomC - .5) * 12;
+        node.startY = cy + (randomA - .5) * 12;
+        node.floatPhase = randomA * Math.PI * 2;
+        node.floatAmp = 1.2 + randomB * 2.4;
+        node.revealOrder = index;
+      });
+    }
+
+    function renderKnowledgeGraphSvg(svg, stage) {
+      const events = buildKnowledgeGraphTimeline(stage);
+      const nodes = events.filter((event) => event.type === "node").map((event) => ({ ...event }));
+      layoutKnowledgeGraphNodes(nodes, 640, 320);
+      const nodeMap = Object.fromEntries(nodes.map((node) => [node.id, node]));
+      const links = events
+        .filter((event) => event.type === "link")
+        .filter((link) => nodeMap[link.from] && nodeMap[link.to]);
+
+      const nodeRadius = {
+        center: 9,
+        learn: 6,
+        output: 6,
+        asset: 6.5,
+        transfer: 6
+      };
+
+      svg.innerHTML = `
+        <g class="kg-links">
+          ${links.map((link) => {
+            const from = nodeMap[link.from];
+            const to = nodeMap[link.to];
+            return `<line class="kg-link" data-kg-link="${link.id}" x1="${from.x}" y1="${from.y}" x2="${from.x}" y2="${from.y}" data-x1="${from.x}" data-y1="${from.y}" data-x2="${to.x}" data-y2="${to.y}"></line>`;
+          }).join("")}
+        </g>
+        <g class="kg-nodes">
+          ${nodes.map((node) => {
+            const r = nodeRadius[node.group] || 10;
+            return `
+              <g class="kg-node-group is-hidden" data-kg-node="${node.id}" data-x="${node.x}" data-y="${node.y}" data-start-x="${node.startX}" data-start-y="${node.startY}" data-phase="${node.floatPhase || 0}" data-amp="${node.floatAmp || 0}" transform="translate(${node.startX} ${node.startY})">
+                <circle class="kg-node-circle ${node.group}" r="${r}" cx="0" cy="0"></circle>
+                <text class="kg-node-label" x="0" y="${r + 14}">
+                  <title>${escapeHtml(node.label)}</title>
+                  ${node.group === "center" || node.group === "asset" ? escapeHtml(truncateGraphLabel(node.label, node.group === "center" ? 8 : 7)) : ""}
+                </text>
+              </g>
+            `;
+          }).join("")}
+        </g>
+      `;
+
+      return { events, nodeTotal: nodes.length };
+    }
+
+    function animateGraphNode(nodeEl, duration = 620) {
+      const startX = Number(nodeEl.dataset.startX || nodeEl.dataset.x || 0);
+      const startY = Number(nodeEl.dataset.startY || nodeEl.dataset.y || 0);
+      const endX = Number(nodeEl.dataset.x || startX);
+      const endY = Number(nodeEl.dataset.y || startY);
+      const phase = Number(nodeEl.dataset.phase || 0);
+      const amp = Number(nodeEl.dataset.amp || 0);
+      const start = performance.now();
+
+      const tick = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        const drift = Math.sin(t * Math.PI + phase) * amp;
+        const x = startX + (endX - startX) * ease + drift;
+        const y = startY + (endY - startY) * ease + Math.cos(t * Math.PI + phase) * amp * .6;
+        nodeEl.setAttribute("transform", `translate(${x} ${y})`);
+        if (t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          nodeEl.setAttribute("transform", `translate(${endX} ${endY})`);
+        }
+      };
+
+      requestAnimationFrame(tick);
+    }
+
+    function animateGraphLink(linkEl, duration = 360) {
+      const x1 = Number(linkEl.dataset.x1 || 0);
+      const y1 = Number(linkEl.dataset.y1 || 0);
+      const x2 = Number(linkEl.dataset.x2 || x1);
+      const y2 = Number(linkEl.dataset.y2 || y1);
+      const start = performance.now();
+
+      const tick = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 2);
+        linkEl.setAttribute("x1", String(x1));
+        linkEl.setAttribute("y1", String(y1));
+        linkEl.setAttribute("x2", String(x1 + (x2 - x1) * ease));
+        linkEl.setAttribute("y2", String(y1 + (y2 - y1) * ease));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    }
+
+    function playKnowledgeGraphTimelapse(container, stage) {
+      const svg = container.querySelector("[data-knowledge-graph-svg]");
+      const playButton = container.querySelector("[data-knowledge-graph-play]");
+      const countEl = container.querySelector("[data-knowledge-graph-count]");
+      const totalEl = container.querySelector("[data-knowledge-graph-total]");
+      if (!svg || !playButton) return;
+
+      if (container._kgTimer) {
+        clearTimeout(container._kgTimer);
+        container._kgTimer = null;
+      }
+
+      const { events, nodeTotal } = renderKnowledgeGraphSvg(svg, stage);
+      totalEl.textContent = String(nodeTotal);
+      countEl.textContent = "0";
+      playButton.classList.add("is-playing");
+
+      let nodeCount = 0;
+      let index = 0;
+
+      const revealNext = () => {
+        if (index >= events.length) {
+          playButton.classList.remove("is-playing");
+          container._kgTimer = null;
+          return;
+        }
+
+        const event = events[index];
+        index += 1;
+
+        if (event.type === "node") {
+          const nodeEl = svg.querySelector(`[data-kg-node="${event.id}"]`);
+          if (nodeEl) {
+            nodeEl.classList.remove("is-hidden");
+            requestAnimationFrame(() => {
+              nodeEl.classList.add("is-visible");
+              animateGraphNode(nodeEl);
+            });
+          }
+          nodeCount += 1;
+          countEl.textContent = String(nodeCount);
+        }
+
+        if (event.type === "link") {
+          const linkEl = svg.querySelector(`[data-kg-link="${event.id}"]`);
+          if (linkEl) {
+            linkEl.classList.add("is-visible");
+            animateGraphLink(linkEl);
+          }
+        }
+
+        const delay = event.type === "node" ? 145 : 70;
+        container._kgTimer = setTimeout(revealNext, delay);
+      };
+
+      revealNext();
+    }
+
+    function initKnowledgeGraphTimelapse(container) {
+      const nodeId = container.dataset.nodeId;
+      const stage = details[nodeId];
+      if (!stage) return;
+
+      const playButton = container.querySelector("[data-knowledge-graph-play]");
+      const svg = container.querySelector("[data-knowledge-graph-svg]");
+      const totalEl = container.querySelector("[data-knowledge-graph-total]");
+      if (!playButton || !svg || !totalEl) return;
+      if (container.dataset.kgBound === "1") return;
+      container.dataset.kgBound = "1";
+
+      const start = () => playKnowledgeGraphTimelapse(container, stage);
+      playButton.addEventListener("click", start);
+
+      const { nodeTotal } = renderKnowledgeGraphSvg(svg, stage);
+      totalEl.textContent = String(nodeTotal);
+      window.setTimeout(start, 420);
+    }
+
+    function bindMindmapGraph(scope) {
+      scope?.querySelectorAll("[data-knowledge-graph]").forEach((container) => {
+        initKnowledgeGraphTimelapse(container);
+      });
+    }
+
+    function flowDetailMarkup(stage, section = "output", detailId = "") {
       const item = flowSection(stage, section);
       if (section === "asset") {
         const reflection = reflectionMarkup(stage) || `<div class="flow-panel-reflection is-empty"><b>沉淀感悟</b><p>做完这个节点的沉淀后，用一句话写下你的复盘与思考。</p></div>`;
-        return `${reflection}<div class="chip-detail" data-chip-detail hidden></div>`;
+        return `${reflection}${knowledgeSystemFlowMarkup()}<div class="chip-detail" data-chip-detail hidden></div>`;
       }
       const body = section === "output"
-        ? projectOutputMarkup(stage)
+        ? projectOutputMarkup({ ...stage, id: stage.id || detailId, detailId: detailId || stage.id })
         : `<div class="evidence-chips">${(item.items || []).map((label, index) => `<button class="evidence-chip" data-chip-label="${escapeAttr(label)}" data-chip-section="${section}" data-chip-index="${index}" data-chip-detail-text="${escapeAttr(mappedChipDetail(stage, section, label))}">${cleanEvidenceLabel(label)}</button>`).join("")}</div>`;
-      return `<div class="flow-panel-title"><h4>${item.title} · ${item.key}</h4></div>${body}<div class="chip-detail" data-chip-detail hidden></div>`;
+      return `<div class="flow-panel-title"><h4>${item.title} · ${item.key}</h4><p class="flow-panel-subtitle">${escapeHtml(item.detail)}</p></div>${body}<div class="chip-detail" data-chip-detail hidden></div>`;
     }
 
     const outputTypes = {
@@ -3150,10 +3691,10 @@
       `;
     }
 
-    function evidenceDetailPanelMarkup(stage) {
+    function evidenceDetailPanelMarkup(stage, detailId) {
       return `
         <aside class="evidence-flow-panel">
-          <div class="flow-detail" data-flow-detail>${flowDetailMarkup(stage, "output")}</div>
+          <div class="flow-detail" data-flow-detail>${flowDetailMarkup(stage, "output", detailId)}</div>
           <details class="detail-sources">
             <summary>相关来源与知识卡</summary>
             <div class="source-links">${sourceLinksMarkup(stage.notes || [])}</div>
@@ -3184,7 +3725,7 @@
         <div class="detail-switcher">${switcherMarkup(detailId)}</div>
         <div class="detail-main">
           ${evidenceDirectoryMarkup()}
-          ${evidenceDetailPanelMarkup(stage)}
+          ${evidenceDetailPanelMarkup(stage, detailId)}
         </div>
       `;
     }
@@ -3200,17 +3741,58 @@
       "evals-product": 3
     };
 
+    const evolutionStations = [
+      {
+        title: "能力基础",
+        builder: { id: "foundation-builder", label: "LLM / Agent 基础" },
+        product: { id: "foundation-product", label: "AI 产品基础判断" }
+      },
+      {
+        title: "阶段二",
+        builder: { id: "assistant-prototype-builder", label: "Skill 与助理原型" },
+        product: { id: "competitive-product", label: "竞品分析" }
+      },
+      {
+        title: "阶段三",
+        builder: { id: "evaluation-builder", label: "评测体系" },
+        product: { id: "spec-product", label: "Product Spec" }
+      },
+      {
+        title: "测评",
+        builder: { id: "stability-builder", label: "稳定性工程" },
+        product: { id: "evals-product", label: "Product Evals" }
+      }
+    ];
+    const evolutionRailStops = [12.5, 37.5, 62.5, 87.5];
+
     function setEvolutionStation(stationIndex) {
       const strip = document.querySelector("[data-evolution-strip]");
       if (!strip) return;
-      strip.querySelectorAll("[data-evolution-station]").forEach((card) => {
-        card.classList.toggle("active", Number(card.dataset.evolutionStation) === stationIndex);
-      });
-      strip.querySelectorAll("[data-evolution-segment]").forEach((segment) => {
-        segment.classList.toggle("active", Number(segment.dataset.evolutionSegment) === stationIndex);
-      });
-      strip.querySelectorAll("[data-evolution-dot]").forEach((dot) => {
-        dot.classList.toggle("active", Number(dot.dataset.evolutionDot) === stationIndex);
+      const safeIndex = Math.max(0, Math.min(3, stationIndex));
+      const station = evolutionStations[safeIndex];
+      const title = strip.querySelector("[data-evolution-spotlight-title]");
+      const meta = strip.querySelector("[data-evolution-spotlight-meta]");
+      const builder = strip.querySelector("[data-evolution-spotlight-builder]");
+      const product = strip.querySelector("[data-evolution-spotlight-product]");
+      const pointer = strip.querySelector("[data-evolution-rail-pointer]");
+      const track = strip.querySelector("[data-evolution-rail-track]");
+
+      if (title) title.textContent = station.title;
+      if (meta) meta.textContent = `第 ${safeIndex + 1} / 4 阶段`;
+      if (builder) {
+        builder.dataset.openDetail = station.builder.id;
+        builder.innerHTML = `<small>工程</small>${station.builder.label}`;
+      }
+      if (product) {
+        product.dataset.openDetail = station.product.id;
+        product.innerHTML = `<small>产品</small>${station.product.label}`;
+      }
+      if (pointer) pointer.style.left = `${evolutionRailStops[safeIndex]}%`;
+      if (track) track.style.setProperty("--rail-progress", String((safeIndex + 1) / 4));
+
+      strip.querySelectorAll("[data-evolution-station]").forEach((step) => {
+        const index = Number(step.dataset.evolutionStation);
+        step.classList.toggle("active", index === safeIndex);
       });
     }
 
@@ -3222,21 +3804,20 @@
       const strip = document.querySelector("[data-evolution-strip]");
       if (!strip) return;
 
-      strip.querySelectorAll("[data-evolution-station]").forEach((card) => {
-        card.addEventListener("click", (event) => {
-          if (event.target.closest("[data-open-detail]")) return;
-          setEvolutionStation(Number(card.dataset.evolutionStation));
-          scrollToJourney();
-        });
-      });
-
-      strip.querySelectorAll("[data-open-detail]").forEach((button) => {
-        button.addEventListener("click", (event) => {
+      strip.addEventListener("click", (event) => {
+        const nodeLink = event.target.closest("[data-open-detail]");
+        if (nodeLink && strip.contains(nodeLink)) {
           event.stopPropagation();
-          const detailId = button.dataset.openDetail;
+          const detailId = nodeLink.dataset.openDetail;
           setEvolutionStation(evolutionDetailMap[detailId] ?? 0);
           openDetailWorkspace(detailId);
-        });
+          return;
+        }
+        const railStep = event.target.closest("[data-evolution-station]");
+        if (railStep && strip.contains(railStep)) {
+          setEvolutionStation(Number(railStep.dataset.evolutionStation));
+          scrollToJourney();
+        }
       });
     }
 
@@ -3272,11 +3853,15 @@
         step.addEventListener("click", () => {
           workspace.querySelectorAll("[data-flow-section]").forEach((item) => item.classList.remove("active"));
           step.classList.add("active");
-          workspace.querySelector("[data-flow-detail]").innerHTML = flowDetailMarkup(stage, step.dataset.flowSection);
-          bindChipInteractions(workspace.querySelector("[data-flow-detail]"));
+          workspace.querySelector("[data-flow-detail]").innerHTML = flowDetailMarkup(stage, step.dataset.flowSection, detailId);
+          const flowDetail = workspace.querySelector("[data-flow-detail]");
+          bindChipInteractions(flowDetail);
+          bindMindmapGraph(flowDetail);
         });
       });
-      bindChipInteractions(workspace.querySelector("[data-flow-detail]"));
+      const flowDetail = workspace.querySelector("[data-flow-detail]");
+      bindChipInteractions(flowDetail);
+      bindMindmapGraph(flowDetail);
       requestAnimationFrame(() => {
         workspace.scrollIntoView({ behavior: "smooth", block: "start" });
       });
