@@ -122,6 +122,7 @@ class WeekFlowTimelineTests(unittest.TestCase):
         self.assertIn("flow-panel-reflection", branch)
         self.assertIn("knowledgeSystemFlowMarkup()", branch)
         self.assertIn("沉淀感悟", self.html)
+        self.assertIn("Obsidian 知识系统结构", self.html)
         self.assertIn("00_Inbox", self.html)
         self.assertIn("10_Sources", self.html)
         self.assertIn("40_Insights / 50_Playbooks", self.html)
