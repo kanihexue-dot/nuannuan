@@ -138,6 +138,24 @@ window.SHOWCASE_MAP_DATA = {
       "reflection": "Week1 让我把重复任务收成 Skill，第一次感到助理不是聊天框，而是可调用的能力入口。",
       "projectOutput": "architecture",
       "mindMap": "diagrams/assistant-prototype-builder-agent-arch.png",
+      "architectureOverview": "diagrams/assistant-arch-overview.png",
+      "architectureGallery": [
+        {
+          "path": "diagrams/assistant-arch-purple.png",
+          "title": "测评 Agent 架构图",
+          "tone": "purple"
+        },
+        {
+          "path": "diagrams/assistant-arch-green.png",
+          "title": "产品设计 Agent 架构图",
+          "tone": "green"
+        },
+        {
+          "path": "diagrams/assistant-arch-eval.png",
+          "title": "竞品调研 Agent 架构图",
+          "tone": "eval"
+        }
+      ],
       "researchCompetitive": "",
       "researchMarket": "",
       "dashboardImage": "",
@@ -159,7 +177,7 @@ window.SHOWCASE_MAP_DATA = {
         ],
         "asset": [
           "[[AI Skill 设计最小检查清单]]",
-          "[[AI-Native Product Spec 最小结构]]",
+          "[[AI 原生产品说明书最小结构]]",
           "[[AI Builder 的学习以交付物为准]]"
         ],
         "transfer": [
@@ -184,7 +202,7 @@ window.SHOWCASE_MAP_DATA = {
         },
         "asset": {
           "[[AI Skill 设计最小检查清单]]": "为 Skill 设计提供可复用检查项，避免工具定义含糊。",
-          "[[AI-Native Product Spec 最小结构]]": "把助理原型放进产品规格中，连接 JTBD、行为边界和 eval set。",
+          "[[AI 原生产品说明书最小结构]]": "把助理原型放进产品说明书中，连接 JTBD、行为边界和 eval set。",
           "[[AI Builder 的学习以交付物为准]]": "强化 Builder 学习必须留下可运行产物和调用记录。"
         },
         "transfer": {
@@ -389,6 +407,28 @@ window.SHOWCASE_MAP_DATA = {
       "node": "01",
       "reflection": "产品线起点不是堆功能，而是先回答：用户雇用产品完成什么任务，以及 tiny core 是什么。",
       "projectOutput": "research",
+      "productJudgmentInsights": [
+        {
+          "label": "AI 必要性",
+          "title": "先判断 AI 是否真的改变工作流",
+          "detail": "AI Native 不是普通功能加 AI 按钮，而是让原本需要理解、生成、判断或协作的任务发生质变；如果规则、表单、搜索就能解决，就不应强行 AI 化。"
+        },
+        {
+          "label": "Tiny Core",
+          "title": "把 V0.5 压缩到一个不可替代的核心体验",
+          "detail": "早期不追求功能完整，而是找到用户愿意反复使用的最小闭环：输入什么、AI 改变哪一步、用户拿到什么结果、失败时如何兜底。"
+        },
+        {
+          "label": "用户任务",
+          "title": "从 JTBD 写产品，而不是从功能清单写产品",
+          "detail": "用户不是在雇用一个按钮，而是在雇用产品完成某个具体工作。产品判断要说清目标用户、触发场景、成功状态和不做什么。"
+        },
+        {
+          "label": "产品承诺",
+          "title": "每个 AI 承诺都要能被验证",
+          "detail": "AI 产品的价值不能只停留在“更智能”的口号里，必须落到可观察的成功标准、失败红线、评测样本和人工确认路径。"
+        }
+      ],
       "mindMap": "",
       "researchCompetitive": "diagrams/foundation-product-competitive.png",
       "researchMarket": "diagrams/foundation-product-market.png",
@@ -411,7 +451,7 @@ window.SHOWCASE_MAP_DATA = {
         ],
         "asset": [
           "[[AI 产品不是普通功能加 AI 按钮]]",
-          "[[AI-Native Product Spec 最小结构]]",
+          "[[AI 原生产品说明书最小结构]]",
           "[[AI 产品人的稀缺价值是决定做什么]]"
         ],
         "transfer": [
@@ -436,7 +476,7 @@ window.SHOWCASE_MAP_DATA = {
         },
         "asset": {
           "[[AI 产品不是普通功能加 AI 按钮]]": "支撑产品判断的核心洞察：先判断 AI 是否真的改变任务和工作流。",
-          "[[AI-Native Product Spec 最小结构]]": "提供从方向到 V0.5 产品规格的最小结构。",
+          "[[AI 原生产品说明书最小结构]]": "提供从方向到 V0.5 产品说明书的最小结构。",
           "[[AI 产品人的稀缺价值是决定做什么]]": "强化 AI 时代产品人的价值在判断方向、设计工作流和选择验证路径。"
         },
         "transfer": {
@@ -473,6 +513,28 @@ window.SHOWCASE_MAP_DATA = {
       "node": "02",
       "reflection": "竞品分析不是功能清单，而是看谁更清楚地处理了任务、不确定性和失败边界。",
       "projectOutput": "dashboard",
+      "competitiveInsights": [
+        {
+          "label": "定位边界",
+          "title": "不是 AI 心理医生，而是日常情绪安全承接空间",
+          "detail": "目标用户是 12-16 岁初中生，核心痛点不是没人聊天，而是情绪强烈但表达通道失效。产品应聚焦低压力表达、私密空间、非语言情绪投放和风险转接。"
+        },
+        {
+          "label": "App 阵营",
+          "title": "moo 日记赢在低摩擦入口",
+          "detail": "在 App 端横向评测中，moo 日记平均分 3.58，高于心岛日记 2.42，并在 12/12 维度领先。关键不是更会聊天，而是让用户在 10 秒内完成情绪安置。"
+        },
+        {
+          "label": "LLM 阵营",
+          "title": "MiniMax / 星野赢在共情温度，CharacterGLM 赢在安全边界",
+          "detail": "MiniMax / 星野综合表现更强，尤其在陪伴克制、结束语、非语言表达上更自然；CharacterGLM 在隐私安全上更稳。但两者在危机干预温和度上都有明显迭代空间。"
+        },
+        {
+          "label": "破局机会",
+          "title": "形态 App 化 + 内核 LLM 化 + 双轨 Agent",
+          "detail": "最优解不是纯聊天框，也不是传统日记，而是用视觉化 Mood Tracker 完成低压破冰，再用朋友式共情 Agent 承接情绪，用后台哨兵 Agent 处理风险和合规。"
+        }
+      ],
       "mindMap": "",
       "researchCompetitive": "",
       "researchMarket": "",
@@ -494,7 +556,7 @@ window.SHOWCASE_MAP_DATA = {
           "风险对比"
         ],
         "asset": [
-          "[[AI-Native Product Spec 最小结构]]",
+          "[[AI 原生产品说明书最小结构]]",
           "[[AI 产品不是普通功能加 AI 按钮]]",
           "[[AI 产品人的稀缺价值是决定做什么]]"
         ],
@@ -519,7 +581,7 @@ window.SHOWCASE_MAP_DATA = {
           "风险对比": "比较竞品如何处理失败、验证、人工确认和用户控制。"
         },
         "asset": {
-          "[[AI-Native Product Spec 最小结构]]": "竞品分析是 Product Spec 的第一步，但服务于后续 JTBD 和验证策略。",
+          "[[AI 原生产品说明书最小结构]]": "竞品分析是 产品说明书的第一步，但服务于后续 JTBD 和验证策略。",
           "[[AI 产品不是普通功能加 AI 按钮]]": "用来判断竞品是否真的改变工作流，而不是包装普通功能。",
           "[[AI 产品人的稀缺价值是决定做什么]]": "支撑从竞品信息中做方向判断，而不是做功能搬运。"
         },
@@ -551,11 +613,11 @@ window.SHOWCASE_MAP_DATA = {
       }
     },
     "spec-product": {
-      "title": "Product Spec",
+      "title": "产品说明书",
       "id": "spec-product",
       "track": "AI 产品经理能力线",
       "node": "03",
-      "reflection": "Product Spec 的价值是把模糊想法写成可评审、可验证、可进入 V0.5 的规格，而不是漂亮文档。",
+      "reflection": "产品说明书的价值是把模糊想法写成可评审、可验证、可进入 V0.5 的规格，而不是漂亮文档。",
       "projectOutput": "demo",
       "mindMap": "",
       "researchCompetitive": "",
@@ -566,20 +628,20 @@ window.SHOWCASE_MAP_DATA = {
       "langfuseImage": "",
       "evidence": {
         "learn": [
-          "AI-Native Product Spec 模板",
+          "AI 原生产品说明书模板",
           "Agent 行为定义",
           "Eval Set 初稿",
           "V0.5 验证策略"
         ],
         "output": [
-          "AI-Native Product Spec v1",
+          "AI 原生产品说明书 v1",
           "Agent 行为边界",
           "最小 Eval Set",
           "未解问题清单"
         ],
         "asset": [
-          "[[AI-Native Product Spec 最小结构]]",
-          "[[Product Evals 三步法]]",
+          "[[AI 原生产品说明书最小结构]]",
+          "[[产品评测三步法]]",
           "[[Research Preview 是降低承诺的验证策略]]"
         ],
         "transfer": [
@@ -591,20 +653,20 @@ window.SHOWCASE_MAP_DATA = {
       },
       "evidenceDetail": {
         "learn": {
-          "AI-Native Product Spec 模板": "Week1 要求把模糊想法整理成可评审、可验证、可进入 V0.5 构建的产品规格。",
+          "AI 原生产品说明书模板": "Week1 要求把模糊想法整理成可评审、可验证、可进入 V0.5 构建的产品说明书。",
           "Agent 行为定义": "Spec 需要写 Persona、Tools、允许边界和禁止边界，不能只写“帮用户完成任务”。",
           "Eval Set 初稿": "Week1 不追求复杂技术评测，但要能验证产品价值。",
           "V0.5 验证策略": "说明哪几个 case 能证明这个 AI 产品有价值，失败时如何降级。"
         },
         "output": {
-          "AI-Native Product Spec v1": "把竞品、JTBD、成功状态、Agent 行为、Eval Set 和验证策略组织成一份规格。",
+          "AI 原生产品说明书 v1": "把竞品、JTBD、成功状态、Agent 行为、Eval Set 和验证策略组织成一份规格。",
           "Agent 行为边界": "明确助理能做什么、不能做什么、何时需要人工确认。",
           "最小 Eval Set": "覆盖正常、边界、对抗样本，服务于产品价值验证。",
           "未解问题清单": "保留不确定性和下一步验证点，避免把 spec 写成假确定。"
         },
         "asset": {
-          "[[AI-Native Product Spec 最小结构]]": "将 Week1 产品判断沉淀为可执行规格模板。",
-          "[[Product Evals 三步法]]": "连接 Week1 的轻量验证和后续 Week3 的正式评测体系。",
+          "[[AI 原生产品说明书最小结构]]": "将 Week1 产品判断沉淀为可执行规格模板。",
+          "[[产品评测三步法]]": "连接 Week1 的轻量验证和后续 Week3 的正式评测体系。",
           "[[Research Preview 是降低承诺的验证策略]]": "支撑早期发布策略：降低承诺，获取真实反馈。"
         },
         "transfer": {
@@ -617,7 +679,7 @@ window.SHOWCASE_MAP_DATA = {
       "evidenceMeta": {
         "learn": {},
         "output": {
-          "AI-Native Product Spec v1": {
+          "AI 原生产品说明书 v1": {
             "type": "doc"
           },
           "Agent 行为边界": {
@@ -635,11 +697,11 @@ window.SHOWCASE_MAP_DATA = {
       }
     },
     "evals-product": {
-      "title": "Product Evals",
+      "title": "产品评测",
       "id": "evals-product",
       "track": "AI 产品经理能力线",
       "node": "04",
-      "reflection": "Product Evals 让我把“产品承诺”变成可评测的标准，而不是继续争论模型聪不聪明。",
+      "reflection": "产品评测让我把“产品承诺”变成可评测的标准，而不是继续争论模型聪不聪明。",
       "projectOutput": "mindmap",
       "mindMap": "mindmaps/evals-product.png",
       "researchCompetitive": "",
@@ -650,7 +712,7 @@ window.SHOWCASE_MAP_DATA = {
       "langfuseImage": "",
       "evidence": {
         "learn": [
-          "Product Evals 三步法",
+          "产品评测三步法",
           "AI Builder Week 3 V1.0",
           "产品契约",
           "场景样本"
@@ -659,11 +721,11 @@ window.SHOWCASE_MAP_DATA = {
           "产品承诺验证",
           "场景样本库",
           "失败红线定义",
-          "Product Eval v0"
+          "产品评测 v0"
         ],
         "asset": [
           "[[AI 产品评测必须围绕产品承诺]]",
-          "[[Product Evals 三步法]]",
+          "[[产品评测三步法]]",
           "[[AI 产品 Eval v0 五层搭建法]]"
         ],
         "transfer": [
@@ -675,7 +737,7 @@ window.SHOWCASE_MAP_DATA = {
       },
       "evidenceDetail": {
         "learn": {
-          "Product Evals 三步法": "用少量标注样本、LLM evaluator 对齐和 eval harness 加快产品反馈循环。",
+          "产品评测三步法": "用少量标注样本、LLM evaluator 对齐和 eval harness 加快产品反馈循环。",
           "AI Builder Week 3 V1.0": "Week3 将 Week1 的轻量 eval 扩展成正式评测体系。",
           "产品契约": "评测要围绕产品承诺、成功标准和失败红线展开。",
           "场景样本": "正常、边界、对抗样本代表真实用户任务，而不是通用 benchmark。"
@@ -684,12 +746,12 @@ window.SHOWCASE_MAP_DATA = {
           "产品承诺验证": "把“产品说能完成什么”转成可评测的任务、标准和红线。",
           "场景样本库": "建立正常、边界、对抗样本，覆盖用户真实任务。",
           "失败红线定义": "明确哪些输出不可接受，哪些场景必须降级或转人工。",
-          "Product Eval v0": "用轻量 eval harness 比较配置变化、提示词变化和产品路径变化。"
+          "产品评测 v0": "用轻量 eval harness 比较配置变化、提示词变化和产品路径变化。"
         },
         "asset": {
           "[[AI 产品评测必须围绕产品承诺]]": "评测对象是产品对用户的承诺，不是通用模型榜单。",
-          "[[Product Evals 三步法]]": "提供早期产品 eval 的可执行步骤。",
-          "[[AI 产品 Eval v0 五层搭建法]]": "将 Product Eval 扩展为完整评测体系。"
+          "[[产品评测三步法]]": "提供早期产品 eval 的可执行步骤。",
+          "[[AI 产品 Eval v0 五层搭建法]]": "将 产品评测扩展为完整评测体系。"
         },
         "transfer": {
           "承诺到指标": "把产品承诺翻译成可观察、可判断、可复盘的评测标准。",
@@ -710,7 +772,7 @@ window.SHOWCASE_MAP_DATA = {
           "失败红线定义": {
             "type": "decision"
           },
-          "Product Eval v0": {
+          "产品评测 v0": {
             "type": "system"
           }
         },
