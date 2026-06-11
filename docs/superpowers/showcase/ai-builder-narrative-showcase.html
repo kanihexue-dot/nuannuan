@@ -1389,6 +1389,71 @@
       padding: 14px;
       overflow: hidden;
     }
+    .eval-flow-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .eval-flow-step {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 18px;
+      background: rgba(255,255,255,.88);
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+    .eval-flow-step strong {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .eval-flow-step b {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -.03em;
+      line-height: 1.35;
+    }
+    .eval-flow-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .eval-flow-step em {
+      display: block;
+      color: var(--purple);
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+    .eval-flow-visual {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .eval-flow-visual summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 10px;
+      list-style: none;
+    }
+    .eval-flow-visual summary::-webkit-details-marker {
+      display: none;
+    }
     .eval-flow-visual img,
     .langfuse-dataset-visual img {
       width: 100%;
@@ -2817,7 +2882,8 @@
 
     @media (max-width: 1050px) {
       .hero, .asset-grid, .system-map, .mindset-grid, .summit-insight, .radar-grid, .detail-main, .output-gallery, .storyboard-grid { grid-template-columns: 1fr; }
-      .evolve-flow { grid-template-columns: 1fr; }
+      .evolve-flow,
+      .eval-flow-steps { grid-template-columns: 1fr; }
       .evolve-step:not(:last-child)::after {
         content: "↓";
         right: auto;
@@ -2832,7 +2898,7 @@
       .app { width: min(100% - 28px, 1280px); }
       .topbar { position: static; align-items: flex-start; flex-direction: column; }
       .hero-main { padding: 28px; min-height: auto; }
-      .stat-grid, .stage-grid, .knowledge-cards, .note-preview-grid, .mindset-compare, .summit-concepts { grid-template-columns: 1fr; }
+      .stat-grid, .stage-grid, .knowledge-cards, .note-preview-grid, .mindset-compare, .summit-concepts, .eval-flow-steps { grid-template-columns: 1fr; }
       h1 { font-size: 44px; }
       .timeline-grid { min-width: 920px; }
     }
@@ -3760,19 +3826,37 @@
     function evalDesignFlowMarkup(stage) {
       const imagePath = stage.evalDesignFlowImage || "diagrams/eval-design-flow.png";
       const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const steps = [
+        ["1", "测评素材", "黄金测评集 + Bad Case 池", "输入测试题：稳定考卷负责回归，新错题负责补洞。"],
+        ["2", "Grader 打分", "按测评标准自动判断好坏", "输出分数和原因：Grader 不是凭感觉，而是按尺子判。"],
+        ["3", "结果判断", "看通过率与失败项", "失败才进入分析：先筛出问题，不把所有样本都人工翻一遍。"],
+        ["4", "归因分析", "判断问题来自哪里", "决定改哪里：样本、标准、Prompt 还是模型。"],
+        ["5", "回流更新", "补样本 / 改标准 / 调 Prompt", "更新后重新跑 Eval：把修复结果沉淀回下一轮回归。"]
+      ];
       return `
         <div class="output-visual-stage eval-design-flow">
           <div class="evolve-shell">
             <div class="evolve-head">
               <div>
                 <h4>Eval 设计简版流程</h4>
-                <p>核心是：拿样本测，用标准判，改后归因并回流。黄金测评集是稳定考卷，Bad Case 是新发现的错题，归因分析决定该补样本、改标准还是调 Prompt / 模型。</p>
+                <p>核心是：拿样本测，用标准判，改后归因并回流。下面按 5 步说明整个评测闭环怎么跑起来。</p>
               </div>
               <span class="chip purple">Eval Flow</span>
             </div>
-            <div class="eval-flow-visual">
-              <img src="${escapeAttr(src)}" alt="Eval 设计简版流程" loading="lazy" />
+            <div class="eval-flow-steps">
+              ${steps.map(([index, title, detail, bridge]) => `
+                <article class="eval-flow-step">
+                  <strong>${escapeHtml(index)}</strong>
+                  <b>${escapeHtml(title)}</b>
+                  <span>${escapeHtml(detail)}</span>
+                  <em>${escapeHtml(bridge)}</em>
+                </article>
+              `).join("")}
             </div>
+            <details class="eval-flow-visual">
+              <summary>展开查看流程原图</summary>
+              <img src="${escapeAttr(src)}" alt="Eval 设计简版流程" loading="lazy" />
+            </details>
           </div>
         </div>
       `;
