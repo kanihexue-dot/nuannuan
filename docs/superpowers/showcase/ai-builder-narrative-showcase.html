@@ -1396,12 +1396,25 @@
       display: block;
       object-fit: contain;
     }
+    .langfuse-dataset-kicker {
+      display: inline-flex;
+      margin-bottom: 8px;
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
     .langfuse-dataset-visual {
       border: 1px solid rgba(16,163,127,.16);
       border-radius: 22px;
       background: linear-gradient(180deg, #fff, #fbfffc);
-      padding: 14px;
-      overflow: hidden;
+      padding: 10px;
+      overflow: auto;
+    }
+    .langfuse-dataset-visual a {
+      display: block;
+      line-height: 0;
     }
     .storyboard-shell,
     .evolve-shell {
@@ -3887,20 +3900,23 @@
     function langfuseMarkup(stage) {
       const imagePath = stage.langfuseImage || `diagrams/${stage.id || "node"}-langfuse.png`;
       const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
-      const datasetName = stage.langfuseDatasetName || "Langfuse 回归数据集";
-      const summary = stage.langfuseDatasetSummary || "用数据集沉淀输入、预期输出和元数据，把失败样本变成可重复回归的稳定性资产。";
+      const datasetName = stage.langfuseDatasetName || "nuannuan-scene-v21-50-回归";
+      const summary = stage.langfuseDatasetSummary || "在 Langfuse 沉淀 50 条场景回归样本，用输入、预期输出和元数据支撑 trace → eval → fix 的稳定性闭环。";
       return `
         <div class="output-visual-stage langfuse langfuse-dataset" data-output-visual-stage>
           <div class="evolve-shell">
             <div class="evolve-head">
               <div>
-                <h4>Langfuse 回归数据集 · ${escapeHtml(datasetName)}</h4>
+                <span class="langfuse-dataset-kicker">Langfuse 回归数据集</span>
+                <h4>${escapeHtml(datasetName)}</h4>
                 <p>${escapeHtml(summary)}</p>
               </div>
               <span class="chip mint">Regression Set</span>
             </div>
             <div class="langfuse-dataset-visual">
-              <img src="${escapeAttr(src)}" alt="Langfuse 回归数据集展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+              <a href="${escapeAttr(src)}" target="_blank" rel="noopener noreferrer" title="点击查看原图">
+                <img src="${escapeAttr(src)}" alt="Langfuse 回归数据集展示" loading="eager" decoding="sync" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+              </a>
             </div>
           </div>
           <div class="output-visual-placeholder">
