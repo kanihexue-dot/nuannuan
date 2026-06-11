@@ -1403,7 +1403,7 @@
       display: grid;
       gap: 8px;
       align-content: start;
-      min-height: 188px;
+      min-height: 0;
     }
     .eval-flow-step strong {
       display: inline-flex;
@@ -3857,38 +3857,28 @@
       const steps = [
         [
           "1",
-          "拿样本测 · 测评素材",
-          "准备两类样本：黄金测评集做稳定回归，Bad Case 池收录新发现错题。",
-          "每次改动后，都先用固定考卷验证有没有退化，再把真实失败补进样本库。",
-          "产出：一份可持续复用的测试题集合。"
+          "测评素材 — 黄金测评集 + Bad Case 池",
+          "输入测试题：稳定考卷负责回归，新错题负责补洞。"
         ],
         [
           "2",
-          "用标准判 · Grader 打分",
-          "把输入、预期输出和评分维度交给 Grader，按测评标准自动判好坏。",
-          "测评标准是 Grader 的判分尺子，不只给分数，还要说明为什么失败。",
-          "产出：分数、通过/失败结论和失败原因。"
+          "Grader 打分 — 按测评标准自动判断好坏",
+          "输出分数和原因：Grader 不是凭感觉，而是按尺子判。"
         ],
         [
           "3",
-          "先看结果 · 结果判断",
-          "汇总通过率，列出失败样本，区分偶发失误和稳定复现的问题。",
-          "通过的样本先不深挖，把排查精力集中在真正需要处理的失败项。",
-          "产出：失败清单和优先处理顺序。"
+          "结果判断 — 看通过率与失败项",
+          "失败才进入分析：先筛出问题，不把所有样本都人工翻一遍。"
         ],
         [
           "4",
-          "改前先归因 · 归因分析",
-          "逐条回看失败样本，判断根因落在样本、标准、Prompt 还是模型。",
-          "先想清楚该改哪里，再动手改，避免 Prompt、标准和样本来回乱动。",
-          "产出：明确的修复方向，而不是模糊地继续调。"
+          "归因分析 — 判断问题来自哪里",
+          "决定改哪里：样本、标准、Prompt 还是模型。"
         ],
         [
           "5",
-          "改后并回流 · 回流更新",
-          "按归因结果补样本、改标准，或调整 Prompt / 模型，并更新回归集。",
-          "修完后重新跑 Eval，确认通过率提升，再把结果沉淀到下一轮回归。",
-          "产出：更新后的样本、标准和系统版本。"
+          "回流更新 — 补样本 / 改标准 / 调 Prompt",
+          "更新后重新跑 Eval：把修复结果沉淀回下一轮回归。"
         ]
       ];
       return `
@@ -3897,22 +3887,15 @@
             <div class="evolve-head">
               <div>
                 <h4>Eval 设计简版流程</h4>
-                <div class="eval-flow-intro">
-                  <p>核心是：拿样本测，用标准判，改后归因并回流。</p>
-                  <p>黄金测评集是稳定考卷，Bad Case 是新发现的错题；测评标准是 Grader 的判分尺子；归因分析决定该补样本、改标准，还是调 Prompt / 模型。</p>
-                </div>
               </div>
               <span class="chip purple">Eval Flow</span>
             </div>
             <div class="eval-flow-steps">
-              ${steps.map(([index, title, detail, bridge, output]) => `
+              ${steps.map(([index, title, bridge]) => `
                 <article class="eval-flow-step">
                   <strong>${escapeHtml(index)}</strong>
                   <b>${escapeHtml(title)}</b>
-                  <span>${escapeHtml(detail)}</span>
                   <em>${escapeHtml(bridge)}</em>
-                  <span class="eval-flow-label">产出</span>
-                  <span>${escapeHtml(output)}</span>
                 </article>
               `).join("")}
             </div>
