@@ -22,6 +22,10 @@ Then open:
 
 `http://127.0.0.1:8001/docs/superpowers/showcase/ai-builder-showcase-preview.html`
 
+Online preview (GitHub Pages):
+
+`https://kanihexue-dot.github.io/nuannuan/ai-builder-narrative-showcase.html`
+
 ## Canonical Layer Mapping
 
 | Showcase section | Primary Obsidian layer | Supplemental layer |
