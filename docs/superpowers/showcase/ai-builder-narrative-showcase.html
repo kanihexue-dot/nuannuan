@@ -1423,18 +1423,11 @@
       letter-spacing: -.03em;
       line-height: 1.35;
     }
-    .eval-flow-step span,
-    .eval-flow-step em {
+    .eval-flow-step .eval-flow-subtitle {
       display: block;
       color: var(--muted);
       font-size: 12px;
       line-height: 1.58;
-    }
-    .eval-flow-step em {
-      color: var(--purple);
-      font-size: 11px;
-      font-style: normal;
-      font-weight: 850;
     }
     .eval-flow-step .eval-flow-label {
       color: var(--faint);
@@ -2538,6 +2531,41 @@
       font-size: 12px;
       font-weight: 850;
     }
+    .asset-type-breakdown {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .asset-type-item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper-2);
+      padding: 8px 10px;
+    }
+    .asset-type-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .asset-type-head b {
+      font-size: 12px;
+      letter-spacing: -.02em;
+    }
+    .asset-type-head span {
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .asset-type-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
 
     .system-map {
       display: grid;
@@ -2910,6 +2938,7 @@
 
     @media (max-width: 1050px) {
       .hero, .asset-grid, .system-map, .mindset-grid, .summit-insight, .radar-grid, .detail-main, .output-gallery, .storyboard-grid { grid-template-columns: 1fr; }
+      .asset-type-breakdown { grid-template-columns: 1fr; }
       .evolve-flow,
       .eval-flow-steps { grid-template-columns: 1fr; }
       .evolve-step:not(:last-child)::after {
@@ -3042,45 +3071,46 @@
       </div>
       <div class="asset-grid">
         <article class="asset-card asset-card-metrics">
-          <span class="chip purple">Knowledge</span>
+          <span class="chip purple">知识库</span>
           <h3>知识资产</h3>
-          <p>按知识库文件口径统计：Insight 判断卡 + Playbook 方法论，都是下次项目可以复用的资产。</p>
+          <p>按知识库文件口径统计：判断卡 + 方法论，都是下次项目可以复用的资产。</p>
           <div class="asset-stat-hero">
             <b>21</b>
-            <span>Reusable knowledge assets</span>
+            <span>可复用知识资产</span>
           </div>
           <div class="asset-split">
-            <div class="asset-split-item"><b>12</b><span>Insight 判断卡</span></div>
-            <div class="asset-split-item"><b>9</b><span>Playbook 方法论</span></div>
+            <div class="asset-split-item"><b>12</b><span>判断卡</span></div>
+            <div class="asset-split-item"><b>9</b><span>方法论</span></div>
           </div>
           <div class="asset-category-list">
             <span>AI 原生产品说明书最小结构</span>
             <span>产品评测三步法</span>
-            <span>Guardrail 与 Fallback 最小闭环</span>
+            <span>护栏与降级最小闭环</span>
           </div>
         </article>
         <article class="asset-card asset-card-metrics ability">
-          <span class="chip mint">Agent / Skill</span>
+          <span class="chip mint">智能体 / 技能</span>
           <h3>能力资产</h3>
-          <p>3 套 Agent 协作架构 + 66 个可运行 Skill，覆盖测评、产品设计与竞品调研。</p>
+          <p>4 套智能体协作架构 + 16 个可运行技能，覆盖测评、产品设计、竞品调研等场景。</p>
           <div class="asset-metric-grid">
             <div class="asset-metric">
-              <b>3</b>
-              <span>Agent 架构</span>
+              <b>4</b>
+              <span>智能体架构</span>
             </div>
             <div class="asset-metric">
-              <b>66</b>
-              <span>可运行 Skill</span>
+              <b>16</b>
+              <span>可运行技能</span>
             </div>
           </div>
           <div class="asset-category-list">
-            <span>测评 Agent 架构图</span>
-            <span>产品设计 Agent 架构图</span>
-            <span>竞品调研 Agent 架构图</span>
+            <span>测评智能体架构图</span>
+            <span>产品设计智能体架构图</span>
+            <span>竞品调研智能体架构图</span>
+            <span>智能体协作总览</span>
           </div>
         </article>
         <article class="asset-card asset-card-metrics project">
-          <span class="chip amber">Project</span>
+          <span class="chip amber">项目</span>
           <h3>项目资产</h3>
           <p>双轨 8 个能力节点共 32 项可见产出，工程线与产品线各 16 项。</p>
           <div class="asset-stat-hero">
@@ -3091,11 +3121,23 @@
             <div class="asset-split-item"><b>16</b><span>工程线</span></div>
             <div class="asset-split-item"><b>16</b><span>产品线</span></div>
           </div>
-          <div class="asset-tag-row">
-            <span>Doc 10</span>
-            <span>Decision 6</span>
-            <span>System 5</span>
-            <span>其他 11</span>
+          <div class="asset-type-breakdown">
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>文档结构</b><span>10 项</span></div>
+              <p class="asset-type-note">产品说明书、评测集、竞品摘要、场景样本库</p>
+            </div>
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>判断结论</b><span>6 项</span></div>
+              <p class="asset-type-note">完成线、架构取舍、核心体验、失败红线</p>
+            </div>
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>系统模块</b><span>5 项</span></div>
+              <p class="asset-type-note">评测体系、稳定性闭环、护栏、产品评测</p>
+            </div>
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>实物 / 过程 / 验证</b><span>11 项</span></div>
+              <p class="asset-type-note">组件图、可运行技能、评测运行、演示复盘</p>
+            </div>
           </div>
         </article>
       </div>
@@ -3886,23 +3928,22 @@
           <div class="evolve-shell">
             <div class="evolve-head">
               <div>
-                <h4>Eval 设计简版流程</h4>
+                <h4>评测设计简版流程</h4>
               </div>
-              <span class="chip purple">Eval Flow</span>
+              <span class="chip purple">评测流程</span>
             </div>
             <div class="eval-flow-steps">
-              ${steps.map(([index, title, bridge]) => `
+              ${steps.map(([index, title, subtitle]) => `
                 <article class="eval-flow-step">
                   <strong>${escapeHtml(index)}</strong>
                   <b>${escapeHtml(title)}</b>
-                  <em>${escapeHtml(bridge)}</em>
+                  <span class="eval-flow-subtitle">${escapeHtml(subtitle)}</span>
                 </article>
               `).join("")}
             </div>
-            <details class="eval-flow-visual">
-              <summary>展开查看流程原图</summary>
-              <img src="${escapeAttr(src)}" alt="Eval 设计简版流程" loading="lazy" />
-            </details>
+            <div class="eval-flow-visual">
+              <img src="${escapeAttr(src)}" alt="评测设计简版流程" loading="lazy" />
+            </div>
           </div>
         </div>
       `;
@@ -4081,7 +4122,7 @@
           : "";
         return `
           <div class="output-visual-stage architecture agent-architecture" data-output-visual-stage>
-            ${overviewSrc ? `<div class="architecture-overview-wrap"><img class="architecture-overview" src="${escapeAttr(overviewSrc)}" alt="3 个工作流 Agent 协作图" loading="lazy" /></div>` : ""}
+            ${overviewSrc ? `<div class="architecture-overview-wrap"><img class="architecture-overview" src="${escapeAttr(overviewSrc)}" alt="4 套智能体协作总览" loading="lazy" /></div>` : ""}
             <div class="architecture-gallery-stack">
               ${gallery.map((item, index) => {
                 const entry = typeof item === "string" ? { path: item } : (item || {});
