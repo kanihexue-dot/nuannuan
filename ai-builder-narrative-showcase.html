@@ -742,6 +742,36 @@
       border-radius: 12px;
       background: #f7f5ef;
     }
+    .competitive-radar-flow {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.9);
+      padding: 16px;
+    }
+    .competitive-radar-flow h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+    .competitive-radar-flow p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .competitive-radar-images {
+      display: grid;
+      gap: 14px;
+    }
+    .competitive-radar-images img {
+      display: block;
+      width: 100%;
+      border: 1px solid rgba(112,114,125,.18);
+      border-radius: 14px;
+      background: #fff;
+    }
     .flow-panel-title {
       max-width: 760px;
       margin: 0 auto 18px;
@@ -947,6 +977,78 @@
       width: 100%;
       height: auto;
     }
+    .architecture-overview-wrap {
+      padding: 16px 16px 0;
+    }
+    .architecture-overview {
+      width: 100%;
+      display: block;
+      border: 1px solid rgba(112,114,125,.18);
+      border-radius: 16px;
+      background: #fff;
+    }
+    .architecture-gallery-stack {
+      padding: 0 16px 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .architecture-gallery {
+      display: grid;
+      gap: 14px;
+      padding: 8px 2px 2px;
+    }
+    .architecture-gallery-accordion {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.9);
+      overflow: hidden;
+    }
+    .architecture-gallery-accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .architecture-gallery-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+    .architecture-gallery-accordion summary::after {
+      content: "展开";
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .architecture-gallery-accordion[open] summary::after {
+      content: "收起";
+    }
+    .architecture-gallery-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .architecture-gallery-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: saturate(.62) brightness(1.16) contrast(.86);
+    }
+    .architecture-gallery-card.tone-purple img {
+      filter: hue-rotate(-6deg) saturate(.55) brightness(1.2) contrast(.84);
+    }
+    .architecture-gallery-card.tone-green img {
+      filter: hue-rotate(-2deg) saturate(.58) brightness(1.18) contrast(.84);
+    }
+    .architecture-gallery-card.tone-eval img {
+      filter: hue-rotate(6deg) saturate(.56) brightness(1.18) contrast(.84);
+    }
     .research-board {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -999,8 +1101,65 @@
       font-size: 11px;
       color: #0f8f78;
     }
+    .insight-brief {
+      padding: 16px;
+    }
+    .insight-brief-head {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(99,91,255,.08), rgba(16,163,127,.06), #fff);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .insight-brief-head h5 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -.045em;
+    }
+    .insight-brief-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .insight-brief-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .insight-brief-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      padding: 16px;
+      min-height: 164px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+    .insight-brief-card .label {
+      width: fit-content;
+      border-radius: 999px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 850;
+    }
+    .insight-brief-card b {
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: -.035em;
+    }
+    .insight-brief-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
     @media (max-width: 760px) {
       .research-board { grid-template-columns: 1fr; }
+      .insight-brief-grid { grid-template-columns: 1fr; }
     }
     .dashboard-fallback {
       display: none;
@@ -1216,6 +1375,142 @@
       font-size: 11px;
       color: #b7f2df;
       background: rgba(16,163,127,.12);
+    }
+    .product-storyboard,
+    .product-evolve {
+      padding: 18px;
+    }
+    .storyboard-shell,
+    .evolve-shell {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(16,163,127,.10), transparent 34%),
+        linear-gradient(180deg, #fff, #fbfffc);
+      padding: 22px;
+    }
+    .storyboard-head,
+    .evolve-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .storyboard-head h4,
+    .evolve-head h4 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -.045em;
+    }
+    .storyboard-head p,
+    .evolve-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+      max-width: 640px;
+    }
+    .storyboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .story-card {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 20px;
+      background: rgba(255,255,255,.82);
+      padding: 16px;
+      min-height: 390px;
+      display: grid;
+      align-content: space-between;
+      gap: 14px;
+      box-shadow: 0 12px 26px rgba(16,163,127,.045);
+    }
+    .story-visual {
+      height: 270px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,244,229,.86), rgba(245,255,251,.92));
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--mint);
+      font-size: 28px;
+      font-weight: 950;
+    }
+    .story-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: top center;
+      display: block;
+    }
+    .story-card small {
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .story-card b {
+      display: block;
+      margin: 5px 0 6px;
+      font-size: 17px;
+      letter-spacing: -.035em;
+    }
+    .story-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.58;
+    }
+    .evolve-flow {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+    .evolve-step {
+      position: relative;
+      border: 1px solid rgba(16,163,127,.18);
+      border-radius: 18px;
+      background: rgba(255,255,255,.86);
+      padding: 14px 12px;
+      min-height: 126px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+    .evolve-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--mint);
+      font-weight: 950;
+      z-index: 2;
+    }
+    .evolve-step strong {
+      color: var(--mint);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .evolve-step b {
+      font-size: 14px;
+      letter-spacing: -.025em;
+    }
+    .evolve-step span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.48;
+    }
+    .evolve-step.is-risk {
+      border-color: rgba(211,93,121,.24);
+      background: linear-gradient(180deg, rgba(211,93,121,.08), rgba(255,255,255,.86));
+    }
+    .evolve-step.is-risk strong {
+      color: #d45d79;
     }
     .evidence-flow {
       display: grid;
@@ -2030,6 +2325,90 @@
       background: linear-gradient(180deg, #fff, #fbfbff);
       box-shadow: 0 10px 24px rgba(99,91,255,.07);
     }
+    .asset-card-metrics {
+      display: grid;
+      align-content: start;
+    }
+    .asset-stat-hero {
+      border: 1px solid rgba(99,91,255,.16);
+      border-radius: 20px;
+      background: var(--purple-soft);
+      padding: 18px;
+      margin: 10px 0 14px;
+    }
+    .asset-stat-hero b,
+    .asset-metric b {
+      display: block;
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: -.06em;
+    }
+    .asset-stat-hero span,
+    .asset-metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .asset-category-list,
+    .asset-metric-grid {
+      display: grid;
+      gap: 8px;
+    }
+    .asset-category-list span,
+    .asset-metric {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper-2);
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .asset-metric-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .asset-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .asset-split-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper-2);
+      padding: 10px 12px;
+    }
+    .asset-split-item b {
+      display: block;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .asset-split-item span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .asset-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .asset-tag-row span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper-2);
+      padding: 7px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
 
     .system-map {
       display: grid;
@@ -2060,6 +2439,166 @@
       padding: 24px;
       min-height: 460px;
       margin-bottom: 16px;
+    }
+    .mindset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .mindset-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.84);
+      padding: 18px;
+    }
+    .mindset-card h4 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+    .mindset-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .mindset-before,
+    .mindset-after {
+      border-radius: 16px;
+      padding: 13px;
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .mindset-before {
+      background: var(--paper-2);
+      color: var(--muted);
+    }
+    .mindset-after {
+      background: var(--mint-soft);
+      color: var(--ink);
+      border: 1px solid rgba(16,163,127,.16);
+    }
+    .mindset-before b,
+    .mindset-after b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 12px;
+    }
+    .mindset-matrix {
+      display: grid;
+      gap: 10px;
+    }
+    .mindset-matrix-head,
+    .mindset-matrix-row {
+      display: grid;
+      grid-template-columns: .85fr 1fr 1fr;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .mindset-matrix-head {
+      color: var(--faint);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .mindset-matrix-head span {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.72);
+      padding: 10px 12px;
+    }
+    .mindset-matrix-head .before-col {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border-color: rgba(99,91,255,.16);
+    }
+    .mindset-matrix-head .after-col {
+      background: var(--mint-soft);
+      color: var(--mint);
+      border-color: rgba(16,163,127,.16);
+    }
+    .mindset-dimension,
+    .mindset-cell {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.84);
+      padding: 14px;
+      line-height: 1.55;
+    }
+    .mindset-dimension {
+      display: grid;
+      align-content: center;
+      font-weight: 950;
+      letter-spacing: -.03em;
+    }
+    .mindset-cell.before {
+      background: var(--purple-soft);
+      color: var(--muted);
+      border-color: rgba(99,91,255,.14);
+    }
+    .mindset-cell.after {
+      background: var(--mint-soft);
+      color: var(--ink);
+      border-color: rgba(16,163,127,.16);
+    }
+    .summit-insight {
+      margin-top: 16px;
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(246,246,255,.88));
+      padding: 18px;
+      display: grid;
+      grid-template-columns: .9fr 1.4fr;
+      gap: 14px;
+    }
+    .summit-copy {
+      border-radius: 20px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      padding: 18px;
+    }
+    .summit-copy .eyebrow {
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .summit-copy h4 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: -.05em;
+    }
+    .summit-copy p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+    .summit-concepts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .summit-concept {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.84);
+      padding: 14px;
+    }
+    .summit-concept b {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      letter-spacing: -.03em;
+    }
+    .summit-concept span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
     }
     .placeholder-head {
       display: flex;
@@ -2232,14 +2771,23 @@
     }
 
     @media (max-width: 1050px) {
-      .hero, .asset-grid, .system-map, .radar-grid, .detail-main, .output-gallery { grid-template-columns: 1fr; }
+      .hero, .asset-grid, .system-map, .mindset-grid, .summit-insight, .radar-grid, .detail-main, .output-gallery, .storyboard-grid { grid-template-columns: 1fr; }
+      .evolve-flow { grid-template-columns: 1fr; }
+      .evolve-step:not(:last-child)::after {
+        content: "↓";
+        right: auto;
+        top: auto;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
       .nav { justify-content: flex-start; }
     }
     @media (max-width: 720px) {
       .app { width: min(100% - 28px, 1280px); }
       .topbar { position: static; align-items: flex-start; flex-direction: column; }
       .hero-main { padding: 28px; min-height: auto; }
-      .stat-grid, .stage-grid, .knowledge-cards, .note-preview-grid { grid-template-columns: 1fr; }
+      .stat-grid, .stage-grid, .knowledge-cards, .note-preview-grid, .mindset-compare, .summit-concepts { grid-template-columns: 1fr; }
       h1 { font-size: 44px; }
       .timeline-grid { min-width: 920px; }
     }
@@ -2258,6 +2806,7 @@
       <nav class="nav">
         <a href="#journey">学习旅程</a>
         <a href="#assets">知识资产</a>
+        <a href="#mindset">思维变化</a>
       </nav>
     </header>
 
@@ -2336,8 +2885,8 @@
             <div class="milestone-grid">
               <div class="milestone-item"><button class="milestone-node" data-detail="foundation-product"><span class="milestone-week" data-display-week="Week 2" data-source-week="Week1">Week 2</span><b>AI 产品基础判断</b><span>判断是否需要 AI、Tiny Core、JTBD 与成功状态。</span></button></div>
               <div class="milestone-item"><button class="milestone-node" data-detail="competitive-product"><span class="milestone-week" data-display-week="Week 2" data-source-week="Week1">Week 2</span><b>竞品分析</b><span>拆解竞品的目标用户、交互路径、差异化和风险边界。</span></button></div>
-              <div class="milestone-item"><button class="milestone-node" data-detail="spec-product"><span class="milestone-week" data-display-week="Week 3" data-source-week="Week3">Week 3</span><b>Product Spec</b><span>把方向整理成 Agent 行为、Eval Set 和验证策略。</span></button></div>
-              <div class="milestone-item"><button class="milestone-node" data-detail="evals-product"><span class="milestone-week" data-display-week="Week 3" data-source-week="Week3">Week 3</span><b>Product Evals</b><span>围绕产品承诺设计成功标准、失败红线和场景样本。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="spec-product"><span class="milestone-week" data-display-week="Week 3" data-source-week="Week3">Week 3</span><b>产品说明书</b><span>把方向整理成 Agent 行为、Eval Set 和验证策略。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="evals-product"><span class="milestone-week" data-display-week="Week 3" data-source-week="Week3">Week 3</span><b>产品评测</b><span>围绕产品承诺设计成功标准、失败红线和场景样本。</span></button></div>
             </div>
           </div>
         </div>
@@ -2353,95 +2902,142 @@
         </div>
       </div>
       <div class="asset-grid">
-        <article class="asset-card">
-          <span class="chip purple">Insight</span>
-          <h3>核心判断</h3>
-          <p>把课程和外部资料里的关键判断提炼成可复用原则。</p>
-          <div class="asset-note-list">
-            <div class="asset-note-item"><button class="asset-link" data-note="llm-nondeterministic">LLM 不是确定性函数</button></div>
-            <div class="asset-note-item"><button class="asset-link" data-note="agent-not-single-turn">Agent 不是单次问答</button></div>
-            <div class="asset-note-item"><button class="asset-link" data-note="builder-deliverable">AI Builder 的学习以交付物为准</button></div>
-          </div>
-        </article>
-        <article class="asset-card">
-          <span class="chip mint">Playbook</span>
-          <h3>可复用方法</h3>
-          <p>把抽象判断转成下次做项目可以直接调用的步骤。</p>
-          <div class="asset-note-list">
-            <div class="asset-note-item"><button class="asset-link" data-note="reading-four-step">AI 学习材料四步阅读法</button></div>
-            <div class="asset-note-item"><button class="asset-link" data-note="skill-checklist">AI Skill 设计最小检查清单</button></div>
-            <div class="asset-note-item"><button class="asset-link" data-note="week0-source">底层认知 Source Note</button></div>
-          </div>
-        </article>
-        <article class="asset-card">
-          <span class="chip amber">Source / Map</span>
+        <article class="asset-card asset-card-metrics">
+          <span class="chip purple">Knowledge</span>
           <h3>知识资产</h3>
-          <p>保留材料来源和知识地图，避免展示页变成没有出处的漂亮结论。</p>
-          <div class="asset-note-list">
-            <div class="asset-note-item"><button class="asset-link" data-note="week0-source">底层认知阶段 Source Note</button></div>
-            <div class="asset-note-item"><button class="asset-link" data-note="builder-map">AI Builder 基础能力地图</button></div>
-            <div class="asset-note-item"><button class="asset-link" data-note="llm-nondeterministic">LLM 不是确定性函数</button></div>
+          <p>按知识库文件口径统计：Insight 判断卡 + Playbook 方法论，都是下次项目可以复用的资产。</p>
+          <div class="asset-stat-hero">
+            <b>21</b>
+            <span>Reusable knowledge assets</span>
+          </div>
+          <div class="asset-split">
+            <div class="asset-split-item"><b>12</b><span>Insight 判断卡</span></div>
+            <div class="asset-split-item"><b>9</b><span>Playbook 方法论</span></div>
+          </div>
+          <div class="asset-category-list">
+            <span>AI 原生产品说明书最小结构</span>
+            <span>产品评测三步法</span>
+            <span>Guardrail 与 Fallback 最小闭环</span>
+          </div>
+        </article>
+        <article class="asset-card asset-card-metrics ability">
+          <span class="chip mint">Agent / Skill</span>
+          <h3>能力资产</h3>
+          <p>3 套 Agent 协作架构 + 66 个可运行 Skill，覆盖测评、产品设计与竞品调研。</p>
+          <div class="asset-metric-grid">
+            <div class="asset-metric">
+              <b>3</b>
+              <span>Agent 架构</span>
+            </div>
+            <div class="asset-metric">
+              <b>66</b>
+              <span>可运行 Skill</span>
+            </div>
+          </div>
+          <div class="asset-category-list">
+            <span>测评 Agent 架构图</span>
+            <span>产品设计 Agent 架构图</span>
+            <span>竞品调研 Agent 架构图</span>
+          </div>
+        </article>
+        <article class="asset-card asset-card-metrics project">
+          <span class="chip amber">Project</span>
+          <h3>项目资产</h3>
+          <p>双轨 8 个能力节点共 32 项可见产出，工程线与产品线各 16 项。</p>
+          <div class="asset-stat-hero">
+            <b>32</b>
+            <span>项目产出</span>
+          </div>
+          <div class="asset-split">
+            <div class="asset-split-item"><b>16</b><span>工程线</span></div>
+            <div class="asset-split-item"><b>16</b><span>产品线</span></div>
+          </div>
+          <div class="asset-tag-row">
+            <span>Doc 10</span>
+            <span>Decision 6</span>
+            <span>System 5</span>
+            <span>其他 11</span>
           </div>
         </article>
       </div>
     </section>
 
-    <section id="system">
-      <div class="section-title">
-        <div>
-          <h2>知识系统说明</h2>
-          <p>最后说明架构边界：Obsidian 是正式知识工作台，网页只是成果展示层。展示页不创造新结论，只调用正式沉淀的知识资产。</p>
-        </div>
-      </div>
-      <div class="system-map">
-        <article class="map-card">
-          <span class="chip amber">Input</span>
-          <h3>输入层</h3>
-          <p>课程文档、视频字幕、文章、项目记录先进入 Inbox 和 Source，不直接变成结论。</p>
-        </article>
-        <article class="map-card center">
-          <span class="chip purple">Process</span>
-          <h3>处理层</h3>
-          <p>通过 SourceFrame、分类门、dry-run、manifest 和 operation log，把材料变成可追溯的知识资产。</p>
-        </article>
-        <article class="map-card">
-          <span class="chip mint">Output</span>
-          <h3>展示层</h3>
-          <p>网页只展示 Source、Insight、Playbook、Map 的结果，不污染正式知识层。</p>
-        </article>
-      </div>
-
+    <section id="mindset">
       <div class="architecture-placeholder">
         <div class="placeholder-head">
           <div>
-            <h3>系统架构图预留区</h3>
-            <p>这里后续直接放一张完整架构图或流程图，用图来解释知识库从输入、处理、沉淀到展示的整体链路。</p>
+            <h3>思维变化区</h3>
+            <p>这里展示的是学习和项目推进过程中，判断方式如何从“做功能”转向“定义承诺、验证质量、沉淀方法”。</p>
           </div>
-          <span class="chip purple">Diagram Placeholder</span>
+          <span class="chip purple">Mindset Shift</span>
         </div>
-        <div class="diagram-dropzone">
-          <div class="dropzone-inner">
-            <div class="dropzone-icon">图</div>
-            <b>架构图 / 流程图占位</b>
-            <span>后续可直接替换为一张完整图片、SVG 或 Mermaid 渲染图。这里不再拆成三栏说明，避免提前限制你的架构表达。</span>
+        <div class="mindset-matrix">
+          <div class="mindset-matrix-head">
+            <span>变化维度</span>
+            <span class="before-col">学习前</span>
+            <span class="after-col">学习后</span>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从功能清单到产品承诺</div>
+            <div class="mindset-cell before">先想要加什么功能、页面和按钮。</div>
+            <div class="mindset-cell after">先定义用户任务、成功状态和 AI 应该承担的承诺边界。</div>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从 Prompt 到 Agent 行为</div>
+            <div class="mindset-cell before">把 AI 当成一次性问答工具。</div>
+            <div class="mindset-cell after">拆成目标理解、工具调用、状态追踪、失败兜底和结果整合。</div>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从主观满意到 Eval 标准</div>
+            <div class="mindset-cell before">靠“看起来不错”判断结果。</div>
+            <div class="mindset-cell after">围绕产品承诺设计场景样本、通过标准和失败红线。</div>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从资料收集到知识资产</div>
+            <div class="mindset-cell before">把材料存在文件夹里，复用时重新翻找。</div>
+            <div class="mindset-cell after">把 Source、Insight、Playbook 和 Map 沉淀成下次项目可调用的资产。</div>
           </div>
         </div>
-        <div class="diagram-caption">建议图注：从课程材料输入，到 SourceFrame 处理、分类门审核、知识资产沉淀，再到网页展示层。</div>
+        <div class="summit-insight">
+          <div class="summit-copy">
+            <div class="eyebrow">AI Summit Input</div>
+            <h4>AI 峰会带来的概念补充</h4>
+            <p>峰会让我把课堂里的方法论放到更大的产业语境里看：AI 不只是模型能力变强，而是从模型、Agent、应用场景到安全治理，一起改变产品如何被定义、验证和交付。</p>
+          </div>
+          <div class="summit-concepts">
+            <div class="summit-concept">
+              <b>模型能力不是终点</b>
+              <span>大模型能力提升只是基础，真正的产品价值来自能否稳定解决具体用户任务。</span>
+            </div>
+            <div class="summit-concept">
+              <b>Agent 是新的工作流组织方式</b>
+              <span>从单次问答转向目标拆解、工具调用、状态管理和多步骤协作。</span>
+            </div>
+            <div class="summit-concept">
+              <b>AI 应用要回到真实场景</b>
+              <span>判断一个 AI 产品，不只看炫技效果，更要看它是否进入真实流程并形成可复用能力。</span>
+            </div>
+            <div class="summit-concept">
+              <b>安全与评测是上线前提</b>
+              <span>AI 产品需要明确边界、失败红线和持续 eval，才能从 demo 走向可信使用。</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="radar-placeholder">
         <div class="radar-grid">
           <div class="radar-copy">
-            <h3>能力雷达对比预留区</h3>
-            <p>这里后续展示学习 AI Builder 项目前后的能力变化。建议比较产品判断、工程构建、评测体系、稳定性设计、知识沉淀五个维度。</p>
+            <h3>思维方式雷达</h3>
+            <p>这里展示学习前后判断方式的变化：从点状功能思维，转向任务承诺、Agent 协作、Eval 验证、稳定性设计和知识复用。</p>
             <div class="radar-legend"><span class="legend-dot">学习前</span><span class="legend-dot after">学习后</span></div>
           </div>
           <div class="radar-stage">
-            <span class="radar-label rl1">产品判断</span>
-            <span class="radar-label rl2">工程构建</span>
-            <span class="radar-label rl3">评测体系</span>
+            <span class="radar-label rl1">任务承诺</span>
+            <span class="radar-label rl2">Agent 协作</span>
+            <span class="radar-label rl3">Eval 验证</span>
             <span class="radar-label rl4">稳定性设计</span>
-            <span class="radar-label rl5">知识沉淀</span>
+            <span class="radar-label rl5">知识复用</span>
             <svg class="radar-svg" viewBox="0 0 320 320" aria-hidden="true">
               <polygon points="160,30 284,120 236,270 84,270 36,120" fill="none" stroke="#e4e5eb" stroke-width="2"/>
               <polygon points="160,70 246,132 214,236 106,236 74,132" fill="none" stroke="#e4e5eb" stroke-width="2"/>
@@ -2460,7 +3056,7 @@
     </section>
 
     <footer class="footer">
-      这版页面的目标是让查看者先理解“项目学习旅程”，再看到“阶段成果”，最后明白“这些成果如何进入知识系统”。视觉上保留工作台感，叙事上服务于一条清楚的项目成果主线。
+      这版页面的目标是让查看者先理解“项目学习旅程”，再看到“阶段成果”，最后看到“思维方式如何发生变化”。视觉上保留工作台感，叙事上服务于一条清楚的项目成果主线。
     </footer>
   </main>
 
@@ -2555,7 +3151,7 @@
         blockB: "关键洞察",
         contentB: "交付物意识、Agent 基础、LLM 非确定性、AI 产品判断。",
         blockC: "Playbooks",
-        contentC: "AI 学习材料四步阅读法、AI Skill 设计最小检查清单、Product Evals 三步法。",
+        contentC: "AI 学习材料四步阅读法、AI Skill 设计最小检查清单、产品评测三步法。",
         source: "Knowledge Vault Map"
       }
     };
@@ -2624,21 +3220,21 @@
       "spec-product": {
         stage: "direction",
         title: "定义最小方向 · JTBD 与 Tiny Core",
-        desc: "产品线聚焦用户任务和最小核心，把 AI 产品方向写成可验证的产品规格。",
+        desc: "产品线聚焦用户任务和最小核心，把 AI 产品方向写成可验证的产品说明书。",
         tag: "产品线",
-        learn: "JTBD、Tiny Core、AI-Native Product Spec，以及如何把竞品洞察转成自己的最小核心。",
-        output: "定义产品规格结构，明确要验证的核心用户任务。",
-        assets: "后续接入定义最小方向阶段的 JTBD、Tiny Core 和 AI 产品规格知识卡。",
+        learn: "JTBD、Tiny Core、AI 原生产品说明书，以及如何把竞品洞察转成自己的最小核心。",
+        output: "定义产品说明书结构，明确要验证的核心用户任务。",
+        assets: "后续接入定义最小方向阶段的 JTBD、Tiny Core 和 AI 产品说明书知识卡。",
         notes: ["builder-map"],
         insightTitle: "AI 产品不是普通功能加 AI 按钮",
         insightDesc: "真正的 AI-Native 产品要重设任务路径、反馈机制和失败处理。",
         methodTitle: "先缩小 Tiny Core",
         methodDesc: "先验证最小关键任务，再扩大功能范围。",
         evidence: {
-          learn: ["JTBD", "Tiny Core", "AI-Native Product Spec", "核心任务验证"],
-          output: ["产品规格结构", "核心用户任务", "最小验证方向", "产品承诺草案"],
+          learn: ["JTBD", "Tiny Core", "AI 原生产品说明书", "核心任务验证"],
+          output: ["产品说明书结构", "核心用户任务", "最小验证方向", "产品承诺草案"],
           asset: ["[[AI Builder 基础能力地图]]"],
-          transfer: ["需求收敛", "MVP 定义", "AI 产品规格", "验证优先级"]
+          transfer: ["需求收敛", "MVP 定义", "AI 产品说明书", "验证优先级"]
         }
       },
       "competitive-product": {
@@ -2676,19 +3272,19 @@
         methodDesc: "先记录输入、输出、工具调用和失败原因，才知道该修哪里。",
         evidence: {
           learn: ["eval set", "trace logger", "grader", "回归样本"],
-          output: ["评测体系五层框架", "Product Eval v0", "LLM Judge 原则", "失败样本记录"],
+          output: ["评测体系五层框架", "产品评测 v0", "LLM Judge 原则", "失败样本记录"],
           asset: ["[[LLM 不是确定性函数]]"],
           transfer: ["测试样本设计", "Trace Debug", "回归验证", "Judge 校准"]
         }
       },
       "evals-product": {
         stage: "validation",
-        title: "构建验证闭环 · Product Evals",
+        title: "构建验证闭环 · 产品评测",
         desc: "产品线把评测对象从模型能力转回产品承诺，判断用户任务是否真的被完成。",
         tag: "产品线",
         learn: "产品契约、成功标准、失败红线、场景样本。",
         output: "拆出正常、边界、对抗样本，并建立产品评测三步法。",
-        assets: "后续接入构建验证闭环阶段的 Product Evals 知识卡。",
+        assets: "后续接入构建验证闭环阶段的产品评测知识卡。",
         notes: ["builder-map"],
         insightTitle: "产品评测必须围绕产品承诺",
         insightDesc: "不要围绕通用模型榜单评测，要围绕产品对用户的承诺评测。",
@@ -2743,6 +3339,10 @@
           reflection: node.reflection || existing.reflection || "",
           projectOutput: node.projectOutput || existing.projectOutput || "mindmap",
           mindMap: node.mindMap || existing.mindMap || "",
+          architectureOverview: node.architectureOverview || existing.architectureOverview || "",
+          architectureGallery: node.architectureGallery || existing.architectureGallery || [],
+          productJudgmentInsights: node.productJudgmentInsights || existing.productJudgmentInsights || [],
+          competitiveInsights: node.competitiveInsights || existing.competitiveInsights || [],
           researchCompetitive: node.researchCompetitive || existing.researchCompetitive || "",
           researchMarket: node.researchMarket || existing.researchMarket || "",
           dashboardImage: node.dashboardImage || existing.dashboardImage || "",
@@ -3015,11 +3615,36 @@
       `;
     }
 
+    function insightBriefMarkup(stage, options = {}) {
+      const insights = options.items || [];
+      const title = options.title || "核心洞察";
+      const summary = options.summary || "把长报告压缩成可展示、可复用的判断卡片。";
+      return `
+        <div class="output-visual-stage insight-brief-stage" data-output-visual-stage>
+          <div class="insight-brief">
+            <div class="insight-brief-head">
+              <h5>${escapeHtml(title)}</h5>
+              <p>${escapeHtml(summary)}</p>
+            </div>
+            <div class="insight-brief-grid">
+              ${insights.map((item) => `
+                <article class="insight-brief-card">
+                  <span class="label">${escapeHtml(item.label || "Insight")}</span>
+                  <b>${escapeHtml(item.title || "")}</b>
+                  <p>${escapeHtml(item.detail || "")}</p>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function demoFallbackMarkup(imagePath, videoPath) {
       return `
         <div class="demo-play">▶</div>
         <b>V0.5 Demo 展示</b>
-        <span>放上录屏或截图后，这里会展示你的 Product Spec 对应 demo。</span>
+        <span>放上录屏或截图后，这里会展示你的产品说明书对应 demo。</span>
         <div class="demo-tags">
           <span>Agent 行为边界</span>
           <span>Happy Path</span>
@@ -3042,7 +3667,7 @@
               <video controls playsinline preload="metadata" poster="${escapeAttr(imageSrc)}" onerror="this.remove()">
                 <source src="${escapeAttr(videoSrc)}" type="video/mp4" />
               </video>
-              <img src="${escapeAttr(imageSrc)}" alt="Product Spec Demo 展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+              <img src="${escapeAttr(imageSrc)}" alt="产品说明书 Demo 展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
               <div class="demo-fallback">${demoFallbackMarkup(imagePath, videoPath)}</div>
             </div>
           </div>
@@ -3050,7 +3675,82 @@
       `;
     }
 
+    function productSpecStoryboardMarkup() {
+      const cards = [
+        ["01", "想说但没人接", "学习、人际、家庭压力来了，用户只是想找一个不会说教的地方。", "diagrams/nuannuan-tradeoff-01.png"],
+        ["02", "低摩擦开口", "用心情标签或一句短输入开始，不要求用户先组织完整表达。", "diagrams/nuannuan-tradeoff-02.png"],
+        ["03", "AI 朋友式承接", "短句共情、轻追问，不诊断、不扮演心理医生、不机械敷衍。", "diagrams/nuannuan-tradeoff-03.png"],
+        ["04", "安全分流与沉淀", "普通情绪继续陪伴；高风险触发红线兜底，可选择保存为心情小种子。", "diagrams/nuannuan-tradeoff-04.png"]
+      ];
+      return `
+        <div class="output-visual-stage product-storyboard">
+          <div class="storyboard-shell">
+            <div class="storyboard-head">
+              <div>
+                <h4>产品说明书 · 暖暖用户情绪旅程</h4>
+                <p>抓取 PRD 中「方案核心决策」和「Demo 方案实现」的主链路：从想倾诉，到低门槛开口，再到 AI 即时承接和安全沉淀。</p>
+              </div>
+              <span class="chip mint">产品设计</span>
+            </div>
+            <div class="storyboard-grid">
+              ${cards.map(([index, title, detail, visual]) => `
+                <article class="story-card">
+                  <div class="story-visual"><img src="${escapeAttr(visual)}" alt="${escapeAttr(title)}" loading="lazy" /></div>
+                  <div>
+                    <small>${escapeHtml(index)}</small>
+                    <b>${escapeHtml(title)}</b>
+                    <span>${escapeHtml(detail)}</span>
+                  </div>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function productEvolveFlowMarkup() {
+      const steps = [
+        ["Promise", "产品承诺", "低压力表达、即时情绪承接、安全转接"],
+        ["Eval", "自动化测评", "50 条高频学生吐槽测试集，Rubric 跑分"],
+        ["Rubric", "发布门槛", "回复不过长、不爹味、不敷衍，跑分 >90%"],
+        ["Guardrails", "安全护栏", "输入与输出双向过滤，高风险毫秒级拦截"],
+        ["Trace", "链路追踪", "记录输入、判断、输出和拦截链路"],
+        ["Fix", "样本回流", "异常回复回到 Eval 和 Guardrails 修正规则"],
+        ["Evolve", "下一轮迭代", "效果可验证、关系可沉淀、安全可规模化"]
+      ];
+      return `
+        <div class="output-visual-stage product-evolve">
+          <div class="evolve-shell">
+            <div class="evolve-head">
+              <div>
+                <h4>产品迭代闭环</h4>
+                <p>只保留 PRD「质量与风险防控」里的闭环：事前定义、事中拦截、事后追踪，再回到下一轮产品迭代。</p>
+              </div>
+              <span class="chip mint">Flowchart</span>
+            </div>
+            <div class="evolve-flow">
+              ${steps.map(([label, title, detail]) => `
+                <article class="evolve-step ${label === "Guardrails" ? "is-risk" : ""}">
+                  <strong>${escapeHtml(label)}</strong>
+                  <b>${escapeHtml(title)}</b>
+                  <span>${escapeHtml(detail)}</span>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function dashboardMarkup(stage) {
+      if (Array.isArray(stage.competitiveInsights) && stage.competitiveInsights.length) {
+        return insightBriefMarkup(stage, {
+          title: "竞品洞察 · 情绪陪伴产品机会",
+          summary: "从消费级 AI 情绪陪伴调研中提炼出最能支撑产品方向判断的结论。",
+          items: stage.competitiveInsights
+        });
+      }
       const imagePath = stage.dashboardImage || `diagrams/${stage.id || "node"}-report-dashboard.png`;
       const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
       return `
@@ -3071,6 +3771,13 @@
     }
 
     function researchBoardMarkup(stage) {
+      if (Array.isArray(stage.productJudgmentInsights) && stage.productJudgmentInsights.length) {
+        return insightBriefMarkup(stage, {
+          title: "AI 产品基础判断 · AI Native 思考框架",
+          summary: "没有对应贴图时，用判断框架展示产品思考能力：先判断 AI 必要性，再收敛 tiny core，最后把承诺变成可验证标准。",
+          items: stage.productJudgmentInsights
+        });
+      }
       const nodeId = stage.id || "node";
       const competitivePath = stage.researchCompetitive || `diagrams/${nodeId}-competitive.png`;
       const marketPath = stage.researchMarket || `diagrams/${nodeId}-market.png`;
@@ -3151,6 +3858,37 @@
         ? `导出评测体系架构图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可替换内置示意图。`
         : `导出 Agent 调用架构图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可替换内置示意图。`;
       const fallback = isEval ? evaluationArchitectureFallbackSvg() : architectureFallbackSvg();
+      const overviewPath = stage.architectureOverview || "";
+      const gallery = Array.isArray(stage.architectureGallery) ? stage.architectureGallery : [];
+      if (!isEval && gallery.length) {
+        const overviewSrc = overviewPath
+          ? (overviewPath.startsWith("http") ? overviewPath : `./${overviewPath}`)
+          : "";
+        return `
+          <div class="output-visual-stage architecture agent-architecture" data-output-visual-stage>
+            ${overviewSrc ? `<div class="architecture-overview-wrap"><img class="architecture-overview" src="${escapeAttr(overviewSrc)}" alt="3 个工作流 Agent 协作图" loading="lazy" /></div>` : ""}
+            <div class="architecture-gallery-stack">
+              ${gallery.map((item, index) => {
+                const entry = typeof item === "string" ? { path: item } : (item || {});
+                const image = entry.path || "";
+                const imageSrc = image.startsWith("http") ? image : `./${image}`;
+                const tone = (entry.tone || "").toLowerCase();
+                const titleText = entry.title || `架构图 ${index + 1}`;
+                return `
+                  <details class="architecture-gallery-accordion">
+                    <summary>${escapeHtml(titleText)}</summary>
+                    <div class="architecture-gallery">
+                      <div class="architecture-gallery-card ${tone ? `tone-${escapeAttr(tone)}` : ""}">
+                        <img src="${escapeAttr(imageSrc)}" alt="${escapeAttr(titleText)}" loading="lazy" />
+                      </div>
+                    </div>
+                  </details>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }
       return `
         <div class="output-visual-stage architecture ${isEval ? "eval-architecture" : "agent-architecture"}" data-output-visual-stage>
           <img class="output-visual-image" src="${escapeAttr(src)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
@@ -3164,6 +3902,12 @@
     }
 
     function projectOutputMarkup(stage) {
+      if ((stage.id || stage.detailId) === "spec-product") {
+        return productSpecStoryboardMarkup();
+      }
+      if ((stage.id || stage.detailId) === "evals-product") {
+        return productEvolveFlowMarkup();
+      }
       const visual = stage.projectOutput || "mindmap";
       if (visual === "research") {
         return researchBoardMarkup(stage);
@@ -3506,11 +4250,27 @@
       });
     }
 
+    function competitiveRadarFlowMarkup() {
+      return `
+        <div class="competitive-radar-flow">
+          <h4>竞品雷达图</h4>
+          <p>把竞品报告中的能力雷达放入「竞品分析」节点，用来展示不同产品在用户陪伴、表达承接、风险边界与 AI 能力上的差异。</p>
+          <div class="competitive-radar-images">
+            <img src="./diagrams/competitive-report/report-image-08.png" alt="消费级 AI 情绪陪伴 App 竞品雷达图" loading="lazy" />
+            <img src="./diagrams/competitive-report/report-image-10.png" alt="LLM 情绪陪伴产品能力雷达图" loading="lazy" />
+          </div>
+        </div>
+      `;
+    }
+
     function flowDetailMarkup(stage, section = "output", detailId = "") {
       const item = flowSection(stage, section);
       if (section === "asset") {
         const reflection = reflectionMarkup(stage) || `<div class="flow-panel-reflection is-empty"><b>沉淀感悟</b><p>做完这个节点的沉淀后，用一句话写下你的复盘与思考。</p></div>`;
-        return `${reflection}${knowledgeSystemFlowMarkup()}<div class="chip-detail" data-chip-detail hidden></div>`;
+        const assetVisual = (detailId || stage.id) === "competitive-product"
+          ? competitiveRadarFlowMarkup()
+          : knowledgeSystemFlowMarkup();
+        return `${reflection}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
       }
       const body = section === "output"
         ? projectOutputMarkup({ ...stage, id: stage.id || detailId, detailId: detailId || stage.id })
@@ -3684,12 +4444,12 @@
       {
         title: "阶段三",
         builder: { id: "evaluation-builder", label: "评测体系" },
-        product: { id: "spec-product", label: "Product Spec" }
+        product: { id: "spec-product", label: "产品说明书" }
       },
       {
         title: "测评",
         builder: { id: "stability-builder", label: "稳定性工程" },
-        product: { id: "evals-product", label: "Product Evals" }
+        product: { id: "evals-product", label: "产品评测" }
       }
     ];
     const evolutionRailStops = [12.5, 37.5, 62.5, 87.5];
@@ -3802,6 +4562,18 @@
 
     bindEvolutionStrip();
     setEvolutionStation(0);
+    function applyInitialWorkspaceFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const detailId = params.get("detail");
+      const section = params.get("section");
+      if (!detailId || !details[detailId]) return;
+      openDetailWorkspace(detailId);
+      if (!section || !["learn", "output", "asset"].includes(section)) return;
+      const workspace = document.getElementById("detailWorkspace");
+      const target = workspace?.querySelector(`[data-flow-section="${section}"]`);
+      target?.click();
+    }
+    applyInitialWorkspaceFromUrl();
 
     document.querySelectorAll(".asset-link").forEach((item) => {
       item.addEventListener("click", () => {
