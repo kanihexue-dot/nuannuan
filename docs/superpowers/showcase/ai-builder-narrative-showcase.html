@@ -1377,8 +1377,31 @@
       background: rgba(16,163,127,.12);
     }
     .product-storyboard,
-    .product-evolve {
+    .product-evolve,
+    .eval-design-flow,
+    .langfuse-dataset {
       padding: 18px;
+    }
+    .eval-flow-visual {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .eval-flow-visual img,
+    .langfuse-dataset-visual img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+    .langfuse-dataset-visual {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #fbfffc);
+      padding: 14px;
+      overflow: hidden;
     }
     .storyboard-shell,
     .evolve-shell {
@@ -2491,7 +2514,7 @@
     .mindset-matrix-head,
     .mindset-matrix-row {
       display: grid;
-      grid-template-columns: .85fr 1fr 1fr;
+      grid-template-columns: .78fr .72fr 1.3fr;
       gap: 10px;
       align-items: stretch;
     }
@@ -2509,14 +2532,18 @@
       padding: 10px 12px;
     }
     .mindset-matrix-head .before-col {
-      background: var(--purple-soft);
-      color: var(--purple);
-      border-color: rgba(99,91,255,.16);
+      background: rgba(246,246,251,.72);
+      color: var(--faint);
+      border-color: rgba(228,229,235,.95);
+      font-weight: 700;
+      opacity: .78;
     }
     .mindset-matrix-head .after-col {
       background: var(--mint-soft);
       color: var(--mint);
-      border-color: rgba(16,163,127,.16);
+      border-color: rgba(16,163,127,.28);
+      font-weight: 950;
+      box-shadow: 0 8px 20px rgba(16,163,127,.08);
     }
     .mindset-dimension,
     .mindset-cell {
@@ -2533,14 +2560,19 @@
       letter-spacing: -.03em;
     }
     .mindset-cell.before {
-      background: var(--purple-soft);
-      color: var(--muted);
-      border-color: rgba(99,91,255,.14);
+      background: rgba(246,246,251,.68);
+      color: var(--faint);
+      border-color: rgba(228,229,235,.92);
+      font-size: 12px;
+      opacity: .76;
     }
     .mindset-cell.after {
-      background: var(--mint-soft);
+      background: linear-gradient(180deg, rgba(232,251,245,.96), rgba(220,247,238,.9));
       color: var(--ink);
-      border-color: rgba(16,163,127,.16);
+      border-color: rgba(16,163,127,.28);
+      font-size: 14px;
+      font-weight: 650;
+      box-shadow: 0 10px 24px rgba(16,163,127,.1);
     }
     .summit-insight {
       margin-top: 16px;
@@ -2978,6 +3010,11 @@
             <span class="after-col">学习后</span>
           </div>
           <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从资料收集到知识资产</div>
+            <div class="mindset-cell before">把材料存在文件夹里，复用时重新翻找。</div>
+            <div class="mindset-cell after">把 Source、Insight、Playbook 和 Map 沉淀成下次项目可调用的资产。</div>
+          </div>
+          <div class="mindset-matrix-row">
             <div class="mindset-dimension">从功能清单到产品承诺</div>
             <div class="mindset-cell before">先想要加什么功能、页面和按钮。</div>
             <div class="mindset-cell after">先定义用户任务、成功状态和 AI 应该承担的承诺边界。</div>
@@ -2991,11 +3028,6 @@
             <div class="mindset-dimension">从主观满意到 Eval 标准</div>
             <div class="mindset-cell before">靠“看起来不错”判断结果。</div>
             <div class="mindset-cell after">围绕产品承诺设计场景样本、通过标准和失败红线。</div>
-          </div>
-          <div class="mindset-matrix-row">
-            <div class="mindset-dimension">从资料收集到知识资产</div>
-            <div class="mindset-cell before">把材料存在文件夹里，复用时重新翻找。</div>
-            <div class="mindset-cell after">把 Source、Insight、Playbook 和 Map 沉淀成下次项目可调用的资产。</div>
           </div>
         </div>
         <div class="summit-insight">
@@ -3349,6 +3381,9 @@
           demoImage: node.demoImage || existing.demoImage || "",
           demoVideo: node.demoVideo || existing.demoVideo || "",
           langfuseImage: node.langfuseImage || existing.langfuseImage || "",
+          evalDesignFlowImage: node.evalDesignFlowImage || existing.evalDesignFlowImage || "",
+          langfuseDatasetName: node.langfuseDatasetName || existing.langfuseDatasetName || "",
+          langfuseDatasetSummary: node.langfuseDatasetSummary || existing.langfuseDatasetSummary || "",
           id: node.id || detailId,
           showcaseMapTitle: node.title
         };
@@ -3709,6 +3744,27 @@
       `;
     }
 
+    function evalDesignFlowMarkup(stage) {
+      const imagePath = stage.evalDesignFlowImage || "diagrams/eval-design-flow.png";
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      return `
+        <div class="output-visual-stage eval-design-flow">
+          <div class="evolve-shell">
+            <div class="evolve-head">
+              <div>
+                <h4>Eval 设计简版流程</h4>
+                <p>核心是：拿样本测，用标准判，改后归因并回流。黄金测评集是稳定考卷，Bad Case 是新发现的错题，归因分析决定该补样本、改标准还是调 Prompt / 模型。</p>
+              </div>
+              <span class="chip purple">Eval Flow</span>
+            </div>
+            <div class="eval-flow-visual">
+              <img src="${escapeAttr(src)}" alt="Eval 设计简版流程" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function productEvolveFlowMarkup() {
       const steps = [
         ["Promise", "产品承诺", "低压力表达、即时情绪承接、安全转接"],
@@ -3831,16 +3887,29 @@
     function langfuseMarkup(stage) {
       const imagePath = stage.langfuseImage || `diagrams/${stage.id || "node"}-langfuse.png`;
       const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const datasetName = stage.langfuseDatasetName || "Langfuse 回归数据集";
+      const summary = stage.langfuseDatasetSummary || "用数据集沉淀输入、预期输出和元数据，把失败样本变成可重复回归的稳定性资产。";
       return `
-        <div class="output-visual-stage langfuse" data-output-visual-stage>
-          <img class="output-visual-image" src="${escapeAttr(src)}" alt="Langfuse 线上测评展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+        <div class="output-visual-stage langfuse langfuse-dataset" data-output-visual-stage>
+          <div class="evolve-shell">
+            <div class="evolve-head">
+              <div>
+                <h4>Langfuse 回归数据集 · ${escapeHtml(datasetName)}</h4>
+                <p>${escapeHtml(summary)}</p>
+              </div>
+              <span class="chip mint">Regression Set</span>
+            </div>
+            <div class="langfuse-dataset-visual">
+              <img src="${escapeAttr(src)}" alt="Langfuse 回归数据集展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+            </div>
+          </div>
           <div class="output-visual-placeholder">
-            <b>Langfuse 线上测评展示</b>
-            <span>导出 Langfuse 测评截图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+            <b>Langfuse 回归数据集展示</b>
+            <span>导出 Langfuse 数据集截图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
           </div>
           <div class="langfuse-fallback">
             <div class="flow-panel-title" style="margin:0 0 12px;text-align:left;">
-              <h4 style="font-size:22px;">Langfuse 线上测评 · 示意</h4>
+              <h4 style="font-size:22px;">Langfuse 回归数据集 · 示意</h4>
             </div>
             ${langfuseFallbackMarkup()}
           </div>
@@ -3908,6 +3977,9 @@
       if ((stage.id || stage.detailId) === "evals-product") {
         return productEvolveFlowMarkup();
       }
+      if ((stage.id || stage.detailId) === "evaluation-builder") {
+        return evalDesignFlowMarkup(stage);
+      }
       const visual = stage.projectOutput || "mindmap";
       if (visual === "research") {
         return researchBoardMarkup(stage);
@@ -3923,6 +3995,9 @@
       }
       if (visual === "eval-architecture") {
         return architectureDiagramMarkup(stage, "evaluation");
+      }
+      if (visual === "eval-flow") {
+        return evalDesignFlowMarkup(stage);
       }
       if (visual === "langfuse") {
         return langfuseMarkup(stage);

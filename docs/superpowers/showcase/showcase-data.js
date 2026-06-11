@@ -238,7 +238,8 @@ window.SHOWCASE_MAP_DATA = {
       "track": "AI Builder 工程能力线",
       "node": "03",
       "reflection": "Week3 让我停止靠感觉调 prompt，开始用真实失败和 trace 证明产品有没有变好。",
-      "projectOutput": "eval-architecture",
+      "projectOutput": "eval-flow",
+      "evalDesignFlowImage": "diagrams/eval-design-flow.png",
       "mindMap": "diagrams/evaluation-builder-eval-arch.png",
       "researchCompetitive": "",
       "researchMarket": "",
@@ -330,6 +331,8 @@ window.SHOWCASE_MAP_DATA = {
       "demoImage": "",
       "demoVideo": "",
       "langfuseImage": "diagrams/stability-builder-langfuse.png",
+      "langfuseDatasetName": "nuannuan-scene-v21-50-回归",
+      "langfuseDatasetSummary": "在 Langfuse 沉淀 50 条场景回归样本，用输入、预期输出和元数据支撑 trace → eval → fix 的稳定性闭环。",
       "evidence": {
         "learn": [
           "AI Builder Week 4 V1.5",
