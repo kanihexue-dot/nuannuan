@@ -1436,6 +1436,27 @@
       font-weight: 850;
       line-height: 1.45;
     }
+    .eval-flow-intro {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(99,91,255,.12);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(246,246,255,.88));
+    }
+    .eval-flow-intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .eval-flow-intro p:first-child {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
     .eval-flow-visual {
       border: 1px solid rgba(99,91,255,.14);
       border-radius: 22px;
@@ -3827,11 +3848,11 @@
       const imagePath = stage.evalDesignFlowImage || "diagrams/eval-design-flow.png";
       const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
       const steps = [
-        ["1", "测评素材", "黄金测评集 + Bad Case 池", "输入测试题：稳定考卷负责回归，新错题负责补洞。"],
-        ["2", "Grader 打分", "按测评标准自动判断好坏", "输出分数和原因：Grader 不是凭感觉，而是按尺子判。"],
-        ["3", "结果判断", "看通过率与失败项", "失败才进入分析：先筛出问题，不把所有样本都人工翻一遍。"],
-        ["4", "归因分析", "判断问题来自哪里", "决定改哪里：样本、标准、Prompt 还是模型。"],
-        ["5", "回流更新", "补样本 / 改标准 / 调 Prompt", "更新后重新跑 Eval：把修复结果沉淀回下一轮回归。"]
+        ["1", "拿样本测 · 测评素材", "黄金测评集 + Bad Case 池", "稳定考卷负责回归验证，新错题负责持续补洞。"],
+        ["2", "用标准判 · Grader 打分", "按测评标准自动判断好坏", "测评标准是 Grader 的判分尺子，输出分数和失败原因。"],
+        ["3", "先看结果 · 结果判断", "统计通过率，筛出失败项", "通过的样本先放过，只有失败项才进入分析。"],
+        ["4", "改前先归因 · 归因分析", "判断问题来自哪里", "归因分析决定该补样本、改标准，还是调 Prompt / 模型。"],
+        ["5", "改后并回流 · 回流更新", "补样本 / 改标准 / 调 Prompt", "修完后重新跑 Eval，把结果沉淀回下一轮回归。"]
       ];
       return `
         <div class="output-visual-stage eval-design-flow">
@@ -3839,7 +3860,10 @@
             <div class="evolve-head">
               <div>
                 <h4>Eval 设计简版流程</h4>
-                <p>核心是：拿样本测，用标准判，改后归因并回流。下面按 5 步说明整个评测闭环怎么跑起来。</p>
+                <div class="eval-flow-intro">
+                  <p>核心是：拿样本测，用标准判，改后归因并回流。</p>
+                  <p>黄金测评集是稳定考卷，Bad Case 是新发现的错题；测评标准是 Grader 的判分尺子；归因分析决定该补样本、改标准，还是调 Prompt / 模型。</p>
+                </div>
               </div>
               <span class="chip purple">Eval Flow</span>
             </div>
