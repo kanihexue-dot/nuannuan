@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>成果概览对比</title>
+  <style>
+    :root {
+      --bg: #0f1014;
+      --paper: #fff;
+      --ink: #15161a;
+      --muted: #70727d;
+      --line: #e4e5eb;
+      --purple: #635bff;
+      --mint: #10a37f;
+      --rose: #d45d79;
+      --curtain: #1a1b22;
+      --font: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      overflow: hidden;
+    }
+    .deck {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      gap: 12px;
+    }
+    .scheme-tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .scheme-tab {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.55);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .scheme-tab.active {
+      color: #fff;
+      border-color: rgba(99,91,255,.5);
+      background: rgba(99,91,255,.22);
+    }
+    .scheme-tab.is-live {
+      box-shadow: inset 0 0 0 1px rgba(16,163,127,.45);
+    }
+    .top a {
+      color: rgba(255,255,255,.5);
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .top a:hover { color: #fff; }
+
+    .stage {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 0%, rgba(99,91,255,.14), transparent 42%), #12131a;
+    }
+
+    .viewport {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      padding: 24px 32px 72px;
+    }
+
+    .curtain-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0);
+      transition: transform .65s cubic-bezier(.4, 0, .2, 1);
+      pointer-events: none;
+    }
+    .stage:not(.open) .curtain-overlay { pointer-events: auto; }
+    .stage.open .curtain-overlay { transform: translateY(-100%); }
+
+    .curtain-rod {
+      flex: none;
+      height: 10px;
+      background: linear-gradient(180deg, #e8c86a, #9a7b1a);
+      box-shadow: 0 4px 12px rgba(0,0,0,.35);
+    }
+
+    .curtain-stack {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .curtain-fold {
+      flex: 1;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 28%, rgba(0,0,0,.18)),
+        repeating-linear-gradient(90deg,
+          #5c0818 0px, #8f1838 12px, #4a0612 24px, #9a1838 36px, #6b0f24 48px);
+      border-bottom: 1px solid rgba(0,0,0,.22);
+      box-shadow: inset 0 -10px 20px rgba(0,0,0,.15);
+    }
+    .curtain-fold:nth-child(2) { filter: brightness(1.04); }
+    .curtain-fold:nth-child(3) { filter: brightness(.96); }
+
+    .curtain-handle {
+      position: absolute;
+      left: 50%;
+      bottom: 18%;
+      transform: translateX(-50%);
+      border: none;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.85);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: opacity .2s;
+    }
+    .stage.open .curtain-handle {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .panel {
+      width: min(920px, 100%);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: 0 40px 100px rgba(0,0,0,.45);
+      padding: 28px 32px 32px;
+    }
+    .panel-tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      color: var(--purple);
+      margin-bottom: 4px;
+    }
+    .panel-tag.live { color: var(--mint); }
+    .panel h2 {
+      margin: 0 0 20px;
+      font-size: 22px;
+      letter-spacing: -.03em;
+    }
+
+    /* demos */
+    .demo-a { height: 300px; position: relative; }
+    .mini-orbit {
+      height: 100%;
+      border-radius: 20px;
+      background: radial-gradient(circle at center, rgba(99,91,255,.1), transparent 24%), #fbfbff;
+      position: relative;
+    }
+    .mini-core {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+      width: 96px; height: 96px; border-radius: 24px;
+      background: linear-gradient(135deg, var(--purple), #8b7cff);
+      color: #fff; display: grid; place-items: center; text-align: center;
+      font-size: 13px; font-weight: 800; line-height: 1.2; z-index: 2;
+    }
+    .mini-sat {
+      position: absolute; width: 96px; padding: 7px 9px; border-radius: 12px;
+      border: 1px solid var(--line); background: #fff; font-size: 10px; font-weight: 700; z-index: 3;
+    }
+    .mini-sat span { display: block; color: var(--muted); font-weight: 500; font-size: 9px; margin-top: 2px; }
+    .ms1 { left: 50%; top: 10px; transform: translateX(-50%); }
+    .ms2 { right: 10px; top: 64px; }
+    .ms3 { right: 14px; bottom: 52px; }
+    .ms4 { left: 50%; bottom: 10px; transform: translateX(-50%); }
+    .ms5 { left: 14px; bottom: 52px; }
+    .ms6 { left: 10px; top: 64px; }
+
+    .demo-b .cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+    .demo-b .card {
+      border: 1px solid var(--line); border-radius: 14px; background: #fff;
+      padding: 12px 10px; font-size: 10px; transition: .2s;
+    }
+    .demo-b .card.active { border-color: rgba(99,91,255,.35); background: rgba(99,91,255,.06); }
+    .demo-b .card b { display: block; font-size: 12px; margin-bottom: 8px; }
+    .demo-b .node { display: block; line-height: 1.35; margin-top: 3px; }
+    .demo-b .node.builder { color: var(--purple); }
+    .demo-b .node.product { color: var(--mint); }
+
+    .demo-c .prog-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 12px; font-size: 12px; font-weight: 800;
+    }
+    .demo-c .prog-head b { font-size: 24px; color: var(--purple); }
+    .demo-c .meter {
+      height: 22px; border-radius: 999px; background: rgba(17,24,39,.08);
+      margin-bottom: 14px; overflow: hidden;
+    }
+    .demo-c .fill {
+      height: 100%; border-radius: inherit;
+      background: linear-gradient(90deg, var(--purple), var(--mint));
+      transition: width .3s;
+    }
+    .demo-c .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; text-align: center; font-size: 10px; }
+    .demo-c .step.active b { color: var(--ink); font-size: 11px; }
+    .demo-c .step b { display: block; color: var(--muted); margin-bottom: 5px; }
+    .demo-c .step .node { display: block; color: var(--muted); line-height: 1.3; }
+
+    .demo-d { text-align: center; }
+    .demo-d .kicker { font-size: 11px; font-weight: 800; letter-spacing: .1em; color: var(--rose); margin-bottom: 8px; }
+    .demo-d .meta {
+      display: inline-block; font-size: 12px; font-weight: 800; color: var(--purple);
+      background: rgba(99,91,255,.08); padding: 5px 12px; border-radius: 999px; margin-bottom: 10px;
+    }
+    .demo-d h3 { margin: 0 0 14px; font-size: 34px; letter-spacing: -.04em; }
+    .demo-d .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 18px; }
+    .demo-d .pill {
+      border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px;
+      font-size: 11px; font-weight: 700;
+    }
+    .demo-d .pill.builder { color: var(--purple); border-color: rgba(99,91,255,.22); }
+    .demo-d .pill.product { color: var(--mint); border-color: rgba(16,163,127,.22); }
+    .demo-d .rail-wrap { position: relative; padding-top: 26px; }
+    .demo-d .pointer {
+      position: absolute; top: 0; left: 12.5%; transform: translateX(-50%);
+      font-size: 10px; font-weight: 800; color: var(--rose); transition: left .3s;
+    }
+    .demo-d .rail {
+      height: 6px; border-radius: 999px; background: rgba(17,24,39,.08);
+      position: relative; margin-bottom: 10px; overflow: hidden;
+    }
+    .demo-d .rail::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(90deg, var(--purple), var(--mint));
+      transform-origin: left; transform: scaleX(var(--fill, .25)); transition: transform .3s;
+    }
+    .demo-d .labels {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 6px;
+      font-size: 10px; color: var(--muted);
+    }
+    .demo-d .labels .active { color: var(--ink); font-weight: 800; }
+
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px 18px;
+      background: rgba(0,0,0,.35);
+    }
+    .stage-dot {
+      appearance: none;
+      border: none;
+      background: rgba(255,255,255,.14);
+      color: rgba(255,255,255,.7);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .stage-dot.active {
+      background: rgba(99,91,255,.35);
+      color: #fff;
+    }
+    .nav-hint {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      font-size: 10px;
+      color: rgba(255,255,255,.28);
+      z-index: 2;
+    }
+
+    @media (max-width: 720px) {
+      .demo-b .cards { grid-template-columns: repeat(2,1fr); }
+      .panel { padding: 20px 18px; }
+      .demo-d h3 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <header class="top">
+      <div class="scheme-tabs" id="scheme-tabs"></div>
+      <a href="./ai-builder-narrative-showcase.html">正式页 →</a>
+    </header>
+
+    <section class="stage" id="stage">
+      <div class="viewport">
+        <article class="panel" id="panel"></article>
+      </div>
+      <div class="curtain-overlay" id="curtain-overlay">
+        <div class="curtain-rod"></div>
+        <div class="curtain-stack">
+          <div class="curtain-fold"></div>
+          <div class="curtain-fold"></div>
+          <div class="curtain-fold"></div>
+        </div>
+        <button type="button" class="curtain-handle" id="curtain-handle">往上拉</button>
+      </div>
+      <div class="nav-hint">← → 切方案</div>
+    </section>
+
+    <footer class="bottom" id="stage-dots"></footer>
+  </div>
+
+  <script>
+    const stations = [
+      { title: "能力基础", builder: "LLM / Agent 基础", product: "AI 产品基础判断" },
+      { title: "阶段二", builder: "Skill 与助理原型", product: "竞品分析" },
+      { title: "阶段三", builder: "评测体系", product: "Product Spec" },
+      { title: "测评", builder: "稳定性工程", product: "Product Evals" }
+    ];
+    const schemes = [
+      { id: "a", label: "A", name: "圆环", live: false },
+      { id: "b", label: "B", name: "四格", live: false },
+      { id: "c", label: "C", name: "进度条", live: false },
+      { id: "d", label: "D", name: "聚光灯", live: true }
+    ];
+    const stops = [12.5, 37.5, 62.5, 87.5];
+    let scheme = 3;
+    let stage = 0;
+    let timer = null;
+    const CURTAIN_MS = 650;
+
+    const stageEl = document.getElementById("stage");
+    const panelEl = document.getElementById("panel");
+
+    function openCurtain() {
+      stageEl.classList.add("open");
+    }
+    function closeCurtain() {
+      stageEl.classList.remove("open");
+    }
+
+    function orbitHtml() {
+      return `<div class="demo-a"><div class="mini-orbit">
+        <div class="mini-core">项目<br>沉淀</div>
+        <div class="mini-sat ms1"><b>双轨学习</b><span>工程 + 产品</span></div>
+        <div class="mini-sat ms2"><b>产品判断</b><span>JTBD</span></div>
+        <div class="mini-sat ms3"><b>工程构建</b><span>Agent</span></div>
+        <div class="mini-sat ms4"><b>知识资产</b><span>Insight</span></div>
+        <div class="mini-sat ms5"><b>稳定性</b><span>Guardrail</span></div>
+        <div class="mini-sat ms6"><b>评测体系</b><span>Eval</span></div>
+      </div></div>`;
+    }
+
+    function cardsHtml() {
+      return `<div class="demo-b"><div class="cards">${stations.map((s, i) => `
+        <div class="card${i === stage ? " active" : ""}">
+          <b>${String(i + 1).padStart(2, "0")} ${s.title}</b>
+          <span class="node builder">${s.builder}</span>
+          <span class="node product">${s.product}</span>
+        </div>`).join("")}</div></div>`;
+    }
+
+    function progressHtml() {
+      const s = stations[stage];
+      return `<div class="demo-c">
+        <div class="prog-head"><span>进度</span><b>${s.title}</b><span>${stage + 1}/4</span></div>
+        <div class="meter"><div class="fill" style="width:${((stage + 1) / 4) * 100}%"></div></div>
+        <div class="steps">${stations.map((x, i) => `
+          <div class="step${i === stage ? " active" : ""}">
+            <b>${x.title}</b><span class="node">${x.builder}</span><span class="node">${x.product}</span>
+          </div>`).join("")}</div></div>`;
+    }
+
+    function spotlightHtml() {
+      const s = stations[stage];
+      return `<div class="demo-d">
+        <div class="kicker">学习进行到这里</div>
+        <div class="meta">${stage + 1} / 4</div>
+        <h3>${s.title}</h3>
+        <div class="pills">
+          <span class="pill builder">工程 · ${s.builder}</span>
+          <span class="pill product">产品 · ${s.product}</span>
+        </div>
+        <div class="rail-wrap">
+          <div class="pointer" style="left:${stops[stage]}%">▼</div>
+          <div class="rail" style="--fill:${(stage + 1) / 4}"></div>
+          <div class="labels">${stations.map((x, i) => `
+            <span class="${i === stage ? "active" : ""}">${x.title}</span>`).join("")}</div>
+        </div></div>`;
+    }
+
+    const demos = [orbitHtml, cardsHtml, progressHtml, spotlightHtml];
+
+    function renderPanel() {
+      const sc = schemes[scheme];
+      panelEl.innerHTML = `
+        <div class="panel-tag${sc.live ? " live" : ""}">${sc.label} · ${sc.name}${sc.live ? " · 采用" : ""}</div>
+        <h2>成果概览</h2>
+        ${demos[scheme]()}`;
+    }
+
+    function renderTabs() {
+      document.getElementById("scheme-tabs").innerHTML = schemes.map((s, i) => `
+        <button type="button" class="scheme-tab${i === scheme ? " active" : ""}${s.live ? " is-live" : ""}"
+          data-scheme="${i}">${s.label}</button>`).join("");
+    }
+
+    function renderDots() {
+      document.getElementById("stage-dots").innerHTML = stations.map((s, i) => `
+        <button type="button" class="stage-dot${i === stage ? " active" : ""}" data-stage="${i}">${s.title}</button>`).join("");
+    }
+
+    function curtainSwap(fn) {
+      clearTimeout(timer);
+      closeCurtain();
+      timer = setTimeout(() => {
+        fn();
+        renderPanel();
+        requestAnimationFrame(() => openCurtain());
+      }, CURTAIN_MS);
+    }
+
+    function setScheme(i) {
+      if (i === scheme) return;
+      curtainSwap(() => { scheme = i; renderTabs(); });
+    }
+
+    function setStage(i) {
+      if (i === stage) return;
+      stage = i;
+      renderDots();
+      renderPanel();
+    }
+
+    document.getElementById("scheme-tabs").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-scheme]");
+      if (btn) setScheme(Number(btn.dataset.scheme));
+    });
+    document.getElementById("stage-dots").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-stage]");
+      if (btn) setStage(Number(btn.dataset.stage));
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") setScheme((scheme + 3) % 4);
+      if (e.key === "ArrowRight") setScheme((scheme + 1) % 4);
+      if (e.key === "ArrowUp") setStage((stage + 3) % 4);
+      if (e.key === "ArrowDown") setStage((stage + 1) % 4);
+    });
+
+    document.getElementById("curtain-handle").addEventListener("click", openCurtain);
+    document.getElementById("curtain-overlay").addEventListener("click", (e) => {
+      if (!stageEl.classList.contains("open") && !e.target.closest(".curtain-handle")) {
+        openCurtain();
+      }
+    });
+
+    renderTabs();
+    renderDots();
+    renderPanel();
+    setTimeout(openCurtain, 700);
+  </script>
+</body>
+</html>
