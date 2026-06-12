@@ -3406,7 +3406,7 @@
     </footer>
   </main>
 
-  <script src="./showcase-data.js?v=20260612-spec-v2"></script>
+  <script src="./showcase-data.js?v=20260612-foundation-asset"></script>
   <script>
     const notes = {
       "llm-nondeterministic": {
@@ -4883,6 +4883,32 @@
       `;
     }
 
+    function foundationProductAssetSummaryMarkup(stage = {}) {
+      const insights = Array.isArray(stage.productJudgmentInsights) ? stage.productJudgmentInsights : [];
+      const items = insights.length
+        ? insights.map((item) => [item.label || item.title, item.detail || item.title])
+        : [
+            ["AI 必要性", "先判断 AI 是否真的改变工作流，而不是给普通功能加 AI 按钮。"],
+            ["Tiny Core", "把 V0.5 压缩到一个不可替代的核心体验，而不是堆功能清单。"],
+            ["用户任务", "从 JTBD 写产品：说清目标用户、触发场景、成功状态和不做什么。"],
+            ["产品承诺", "每个 AI 承诺都要能被验证，落到样本、红线和人工确认路径。"]
+          ];
+      return `
+        <div class="eval-asset-summary">
+          <h4>AI 产品基础判断沉淀</h4>
+          <p>根据项目产出里的判断框架沉淀为知识资产，不再展示通用 Obsidian 结构图。</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
     function specProductOutputSummaryMarkup() {
       const items = [
         ["说明书结构", "把竞品、JTBD、成功状态、Agent 行为、Eval Set 和验证策略收成可评审规格。"],
@@ -4914,15 +4940,18 @@
         const assistantSummary = nodeId === "assistant-prototype-builder"
           ? assistantPrototypeAssetSummaryMarkup()
           : "";
+        const foundationSummary = nodeId === "foundation-product"
+          ? foundationProductAssetSummaryMarkup(stage)
+          : "";
         const evalSummary = ["evaluation-builder", "stability-builder", "evals-product"].includes(detailId || stage.id)
           ? evalAssetSummaryMarkup()
           : "";
-        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder", "spec-product"].includes(nodeId)
+        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder", "spec-product", "foundation-product"].includes(nodeId)
           ? ""
           : nodeId === "competitive-product"
             ? competitiveRadarFlowMarkup(stage)
             : knowledgeSystemFlowMarkup();
-        return `${reflection}${assistantSummary}${evalSummary}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
+        return `${reflection}${assistantSummary}${foundationSummary}${evalSummary}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
       }
       const outputKey = section === "output" && stage.outputVersions ? "V1 / V2 演进" : item.key;
       const body = section === "output"
