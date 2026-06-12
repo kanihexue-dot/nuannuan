@@ -629,6 +629,20 @@ window.SHOWCASE_MAP_DATA = {
       "demoImage": "diagrams/spec-product-demo.png",
       "demoVideo": "demos/spec-product-demo.mp4",
       "langfuseImage": "",
+      "outputVersions": {
+        "default": "v2",
+        "v1": {
+          "kicker": "初版",
+          "title": "产品说明书 V1",
+          "summary": "课程早期的产品说明书与 Demo 结构，待贴图补充。",
+          "image": "diagrams/spec-product-v1.png"
+        },
+        "v2": {
+          "kicker": "当前沉淀",
+          "title": "产品说明书 V2",
+          "summary": "暖暖用户情绪旅程与方案核心决策主链路。"
+        }
+      },
       "evidence": {
         "learn": [
           "AI 原生产品说明书模板",
