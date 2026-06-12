@@ -543,6 +543,7 @@ window.SHOWCASE_MAP_DATA = {
       "researchCompetitive": "",
       "researchMarket": "",
       "dashboardImage": "diagrams/competitive-product-report-dashboard.png",
+      "competitiveRadarUrl": "https://guanghe.aiforce.cloud/app/app_4k5bthby2ynpx/",
       "demoImage": "",
       "demoVideo": "",
       "langfuseImage": "",
@@ -641,8 +642,20 @@ window.SHOWCASE_MAP_DATA = {
         "v2": {
           "kicker": "新版",
           "title": "产品说明书 V2",
-          "summary": "小情绪房间 V0.5 的五步体验流程，把低摩擦情绪安置、安全红线和陪伴承接合成一张流程图。",
-          "image": "diagrams/spec-product-v2.png"
+          "summary": "小情绪房间 V0.5 的沉淀链路：心情收成小种子，带入记忆小花园，在「我的」里持续生长与回看。",
+          "layout": "product-screens",
+          "images": [
+            "diagrams/spec-product-v2-01.png",
+            "diagrams/spec-product-v2-02.png",
+            "diagrams/spec-product-v2-03.png",
+            "diagrams/spec-product-v2-04.png"
+          ],
+          "imageLabels": [
+            "心情变种子",
+            "带入小花园",
+            "我的 · 记忆小花园",
+            "记忆小花园列表"
+          ]
         }
       },
       "evidence": {
