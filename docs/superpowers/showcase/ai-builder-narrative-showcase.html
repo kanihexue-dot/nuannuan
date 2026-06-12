@@ -1,0 +1,5298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Builder 双轨学习旅程</title>
+  <!-- showcase-build: 2026-06-10-knowledge-graph-fix -->
+  <style>
+    :root {
+      --bg: #f6f6f2;
+      --paper: #ffffff;
+      --paper-2: #fbfbf8;
+      --ink: #15161a;
+      --muted: #70727d;
+      --faint: #9ca0aa;
+      --line: #e4e5eb;
+      --purple: #635bff;
+      --purple-soft: rgba(99,91,255,.09);
+      --mint: #10a37f;
+      --mint-soft: rgba(16,163,127,.09);
+      --amber: #c9821d;
+      --amber-soft: rgba(201,130,29,.1);
+      --rose: #d45d79;
+      --rose-soft: rgba(212,93,121,.09);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --shadow: 0 24px 70px rgba(17, 24, 39, .08);
+      --soft-shadow: 0 12px 34px rgba(17, 24, 39, .055);
+      --font: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(99,91,255,.12), transparent 30%),
+        radial-gradient(circle at 100% 8%, rgba(16,163,127,.08), transparent 28%),
+        linear-gradient(180deg, #f8f8f5, var(--bg));
+      color: var(--ink);
+      font-family: var(--font);
+    }
+
+    .app {
+      width: min(1280px, calc(100% - 44px));
+      margin: 0 auto;
+      padding: 28px 0 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0 18px;
+      backdrop-filter: blur(18px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1 1 auto;
+      min-width: 220px;
+    }
+    .mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--purple), #3178ff);
+      box-shadow: 0 14px 28px rgba(99,91,255,.22);
+    }
+    .brand b { display: block; font-size: 15px; letter-spacing: -.02em; }
+    .brand span { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .nav a {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.74);
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 850;
+      box-shadow: 0 8px 22px rgba(17,24,39,.035);
+    }
+    .nav a:first-child {
+      background: var(--ink);
+      color: white;
+      border-color: transparent;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(330px, .85fr);
+      gap: 20px;
+      margin-top: 6px;
+    }
+    .hero-main {
+      min-height: 430px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,.84);
+      box-shadow: var(--shadow);
+      padding: 42px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      right: -120px;
+      top: -120px;
+      width: 330px;
+      height: 330px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(99,91,255,.18), transparent 68%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      max-width: 800px;
+      font-size: clamp(46px, 6vw, 84px);
+      line-height: .96;
+      letter-spacing: -.065em;
+    }
+    .hero-main p {
+      max-width: 720px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.72;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+      border-radius: 999px;
+      padding: 8px 11px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+    }
+    .chip.purple { color: var(--purple); background: var(--purple-soft); border-color: rgba(99,91,255,.16); }
+    .chip.mint { color: var(--mint); background: var(--mint-soft); border-color: rgba(16,163,127,.16); }
+    .chip.amber { color: var(--amber); background: var(--amber-soft); border-color: rgba(201,130,29,.18); }
+    .chip.rose { color: var(--rose); background: var(--rose-soft); border-color: rgba(212,93,121,.18); }
+    .hero-side {
+      display: grid;
+      gap: 14px;
+    }
+    .side-card, .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.86);
+      box-shadow: var(--soft-shadow);
+      padding: 22px;
+    }
+    .side-card h2, .panel h2 {
+      margin: 0 0 12px;
+      font-size: 23px;
+      letter-spacing: -.045em;
+    }
+    .side-card p, .panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.62;
+      font-size: 14px;
+    }
+    .evolution-strip {
+      margin-top: 14px;
+      display: grid;
+      gap: 18px;
+      padding: 18px 16px 14px;
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(99,91,255,.06), rgba(255,255,255,.94));
+    }
+    .evolution-spotlight {
+      text-align: center;
+      padding: 8px 6px 4px;
+    }
+    .evolution-spotlight-kicker {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 8px;
+    }
+    .evolution-spotlight-title {
+      margin: 0 0 12px;
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: -.05em;
+      color: var(--ink);
+    }
+    .evolution-spotlight-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(99,91,255,.08);
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--purple);
+    }
+    .evolution-spotlight-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    .evolution-spotlight-node {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 7px 12px;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .evolution-spotlight-node.builder {
+      color: var(--purple);
+      border-color: rgba(99,91,255,.2);
+    }
+    .evolution-spotlight-node.product {
+      color: var(--mint);
+      border-color: rgba(16,163,127,.22);
+    }
+    .evolution-spotlight-node:hover {
+      box-shadow: 0 8px 18px rgba(17,24,39,.06);
+    }
+    .evolution-spotlight-node small {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      opacity: .72;
+      margin-right: 4px;
+    }
+    .evolution-level-rail {
+      position: relative;
+      padding-top: 28px;
+    }
+    .evolution-rail-pointer {
+      position: absolute;
+      top: 0;
+      left: 12.5%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      color: var(--rose);
+      white-space: nowrap;
+      transition: left .35s ease;
+    }
+    .evolution-rail-pointer::after {
+      content: "▼";
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .evolution-rail-track {
+      position: relative;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(17,24,39,.08);
+      margin-bottom: 12px;
+    }
+    .evolution-rail-track::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--purple), var(--mint));
+      transform-origin: left center;
+      transform: scaleX(var(--rail-progress, .25));
+      transition: transform .35s ease;
+    }
+    .evolution-rail-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+    }
+    .evolution-rail-step {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      text-align: center;
+      cursor: pointer;
+      font: inherit;
+      color: var(--muted);
+    }
+    .evolution-rail-step b {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .evolution-rail-step span {
+      display: block;
+      margin-top: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      color: rgba(17,24,39,.28);
+    }
+    .evolution-rail-step.active {
+      color: var(--ink);
+    }
+    .evolution-rail-step.active span {
+      color: var(--purple);
+    }
+    .evolution-rail-step.active b {
+      font-size: 12px;
+    }
+    @media (max-width: 980px) {
+      .evolution-spotlight-title { font-size: 28px; }
+      .evolution-rail-steps {
+        display: flex;
+        overflow-x: auto;
+        gap: 16px;
+        padding-bottom: 2px;
+      }
+      .evolution-rail-step { min-width: 72px; }
+    }
+    .hero-side .side-card {
+      min-height: 100%;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin: 42px 0 16px;
+    }
+    .section-title h2 {
+      margin: 0;
+      font-size: 36px;
+      letter-spacing: -.05em;
+    }
+    .section-title p {
+      max-width: 620px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .timeline-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,.86);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+    .horizontal-board {
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+    .timeline-grid {
+      min-width: 1120px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .capability-timeline {
+      min-width: 1120px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 18px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .capability-timeline::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 5px;
+      background: linear-gradient(90deg, var(--purple), rgba(99,91,255,0));
+    }
+    .capability-timeline.product::before {
+      background: linear-gradient(90deg, var(--mint), rgba(16,163,127,0));
+    }
+    .capability-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+      padding-top: 4px;
+    }
+    .capability-head h3 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -.05em;
+    }
+    .capability-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      max-width: 620px;
+    }
+    .capability-badge {
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+    .capability-timeline.product .capability-badge {
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .milestone-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      position: relative;
+    }
+    .milestone-grid::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 22px;
+      border-top: 1px dashed rgba(99,91,255,.24);
+    }
+    .capability-timeline.product .milestone-grid::before {
+      border-color: rgba(16,163,127,.24);
+    }
+    .milestone-item {
+      display: grid;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .milestone-node {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.9);
+      padding: 15px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--ink);
+      font: inherit;
+      min-height: 158px;
+      position: relative;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .milestone-node:hover {
+      transform: translateY(-2px);
+      border-color: rgba(99,91,255,.28);
+      box-shadow: 0 14px 32px rgba(99,91,255,.08);
+    }
+    .milestone-node.active {
+      border-color: rgba(99,91,255,.30);
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      box-shadow: 0 14px 32px rgba(99,91,255,.08);
+    }
+    .capability-timeline.product .milestone-node:hover {
+      border-color: rgba(16,163,127,.28);
+      box-shadow: 0 14px 32px rgba(16,163,127,.07);
+    }
+    .capability-timeline.product .milestone-node.active {
+      border-color: rgba(16,163,127,.30);
+      box-shadow: 0 14px 32px rgba(16,163,127,.07);
+    }
+    .milestone-week {
+      min-width: 58px;
+      height: 34px;
+      border-radius: 14px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 950;
+      margin-bottom: 18px;
+      padding: 0 10px;
+      position: relative;
+      z-index: 1;
+      white-space: nowrap;
+    }
+    .capability-timeline.product .milestone-week {
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .milestone-node b {
+      display: block;
+      font-size: 20px;
+      letter-spacing: -.045em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .milestone-node span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .timeline-card.detail-open .horizontal-board {
+      display: none;
+    }
+    .detail-workspace[hidden] {
+      display: none;
+    }
+    .detail-workspace {
+      border: 1px solid rgba(99,91,255,.16);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(99,91,255,.10), transparent 32%),
+        linear-gradient(180deg, #fff, #fbfbff);
+      box-shadow: 0 18px 44px rgba(17,24,39,.06);
+      padding: 22px;
+      overflow: hidden;
+    }
+    .detail-workspace.product {
+      border-color: rgba(16,163,127,.16);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(16,163,127,.10), transparent 32%),
+        linear-gradient(180deg, #fff, #fbfffc);
+    }
+    .detail-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .detail-back {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.86);
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 950;
+      padding: 9px 12px;
+      box-shadow: 0 10px 24px rgba(17,24,39,.04);
+    }
+    .detail-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .detail-workspace h3 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 54px);
+      letter-spacing: -.06em;
+      line-height: 1;
+    }
+    .detail-workspace .detail-desc {
+      max-width: 880px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.72;
+    }
+    .detail-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+    }
+    .detail-switch {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 9px 12px;
+    }
+    .detail-switch.active {
+      border-color: rgba(99,91,255,.25);
+      background: var(--purple-soft);
+      color: var(--purple);
+    }
+    .detail-workspace.product .detail-switch.active {
+      border-color: rgba(16,163,127,.25);
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .detail-main {
+      display: grid;
+      grid-template-columns: minmax(280px, .72fr) minmax(520px, 1.28fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+    .detail-copy {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .evidence-directory {
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255,255,255,.78);
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(99,91,255,.04);
+    }
+    .evidence-directory h4 {
+      margin: 0;
+      font-size: 21px;
+      letter-spacing: -.04em;
+    }
+    .evidence-directory p {
+      margin: 8px 0 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .detail-block {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.78);
+      padding: 14px;
+      min-height: 118px;
+    }
+    .detail-block b {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -.025em;
+      margin-bottom: 8px;
+    }
+    .detail-block span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.62;
+    }
+    .evidence-flow-panel {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(99,91,255,.12), transparent 34%),
+        rgba(255,255,255,.78);
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    .detail-workspace.product .evidence-flow-panel {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(16,163,127,.12), transparent 34%),
+        rgba(255,255,255,.78);
+    }
+    .flow-panel-reflection {
+      border: 2px solid rgba(212,93,121,.42);
+      border-radius: 22px;
+      background: rgba(212,93,121,.06);
+      padding: 18px;
+      margin: 0 auto 18px;
+      max-width: 760px;
+    }
+    .flow-panel-reflection b {
+      display: block;
+      font-size: 11px;
+      color: var(--rose);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .flow-panel-reflection p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.68;
+      font-weight: 650;
+    }
+    .flow-panel-reflection.is-empty p {
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .knowledge-system-flow {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.88);
+      padding: 16px;
+    }
+    .knowledge-system-flow h4 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      letter-spacing: -.035em;
+    }
+    .knowledge-flow-images {
+      display: grid;
+      gap: 14px;
+    }
+    .knowledge-flow-image {
+      display: block;
+      width: 100%;
+      border: 1px solid rgba(112,114,125,.2);
+      border-radius: 12px;
+      background: #f7f5ef;
+    }
+    .competitive-radar-flow {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.9);
+      padding: 16px;
+    }
+    .competitive-radar-flow h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+    .competitive-radar-flow p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .competitive-radar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+    .competitive-radar-images {
+      display: grid;
+      gap: 14px;
+    }
+    .competitive-radar-images img {
+      display: block;
+      width: 100%;
+      border: 1px solid rgba(112,114,125,.18);
+      border-radius: 14px;
+      background: #fff;
+    }
+    .flow-panel-title {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      text-align: left;
+    }
+    .flow-panel-title h4 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -.045em;
+    }
+    .flow-panel-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      max-width: 640px;
+    }
+    .output-visual-stage {
+      width: 100%;
+      max-width: 760px;
+      margin: 4px auto 0;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.82);
+      overflow: hidden;
+      min-height: 320px;
+      position: relative;
+    }
+    .output-visual-image {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .output-visual-stage.mindmap-asset {
+      display: grid;
+      place-items: center;
+      min-height: 360px;
+      background: #fff;
+    }
+    .output-visual-stage.mindmap-asset .output-visual-image,
+    .output-visual-stage.mindmap-asset video {
+      width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+    }
+    .mindmap-obsidian-link {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(99,91,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      color: var(--purple);
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 8px 22px rgba(17,24,39,.08);
+      backdrop-filter: blur(8px);
+    }
+    .mindmap-obsidian-link:hover {
+      border-color: rgba(99,91,255,.36);
+      background: #fff;
+      transform: translateY(-1px);
+    }
+    .output-visual-stage.mindmap-asset.is-missing .output-visual-image,
+    .output-visual-stage.mindmap-asset.is-missing video {
+      display: none;
+    }
+    .output-visual-placeholder {
+      display: none;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .output-visual-stage.is-missing .output-visual-placeholder {
+      display: grid;
+      gap: 8px;
+      place-items: center;
+    }
+    .output-visual-placeholder b {
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+    .output-visual-placeholder span {
+      max-width: 420px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .output-visual-placeholder code {
+      font-size: 12px;
+      color: var(--purple);
+    }
+    .knowledge-graph-stage {
+      min-height: 340px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(99,91,255,.08), transparent 58%),
+        rgba(255,255,255,.9);
+    }
+    .knowledge-graph-play {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,.92);
+      color: var(--purple);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .knowledge-graph-play:hover {
+      transform: translateY(-1px);
+      border-color: rgba(99,91,255,.35);
+      box-shadow: 0 8px 20px rgba(99,91,255,.14);
+    }
+    .knowledge-graph-play.is-playing {
+      border-color: rgba(16,163,127,.4);
+      color: var(--mint);
+    }
+    .knowledge-graph-play svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+    .knowledge-graph-svg {
+      display: block;
+      width: 100%;
+      height: 320px;
+    }
+    .knowledge-graph-meta {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+    .knowledge-graph-hint {
+      position: absolute;
+      right: 58px;
+      top: 18px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .kg-link {
+      stroke: rgba(112,114,125,.28);
+      stroke-width: .85;
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    .kg-link.is-visible { opacity: .82; }
+    .kg-node-group {
+      opacity: 0;
+      transform-origin: center;
+      transition: opacity .25s ease;
+    }
+    .kg-node-group.is-visible {
+      opacity: 1;
+    }
+    .kg-node-circle {
+      stroke: rgba(255,255,255,.92);
+      stroke-width: 1.6px;
+      filter: drop-shadow(0 2px 4px rgba(17,24,39,.16));
+    }
+    .kg-node-circle.center { fill: var(--purple); }
+    .kg-node-circle.learn { fill: #4f8ff7; }
+    .kg-node-circle.output { fill: #e8b339; }
+    .kg-node-circle.asset { fill: #e85d6f; }
+    .kg-node-circle.transfer { fill: #4fbf8b; }
+    .kg-node-label {
+      font-size: 8px;
+      font-weight: 650;
+      fill: rgba(21,22,26,.52);
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .architecture-fallback {
+      display: none;
+      padding: 18px 16px 22px;
+    }
+    .output-visual-stage.is-missing.architecture .architecture-fallback {
+      display: block;
+    }
+    .output-visual-stage.is-missing.architecture .output-visual-placeholder {
+      display: none;
+    }
+    .architecture-fallback svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .architecture-overview-wrap {
+      padding: 16px 16px 0;
+    }
+    .architecture-overview {
+      width: 100%;
+      display: block;
+      border: 1px solid rgba(112,114,125,.18);
+      border-radius: 16px;
+      background: #fff;
+    }
+    .architecture-gallery-stack {
+      padding: 0 16px 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .architecture-gallery {
+      display: grid;
+      gap: 14px;
+      padding: 8px 2px 2px;
+    }
+    .architecture-gallery-accordion {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.9);
+      overflow: hidden;
+    }
+    .architecture-gallery-accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .architecture-gallery-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+    .architecture-gallery-accordion summary::after {
+      content: "展开";
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .architecture-gallery-accordion[open] summary::after {
+      content: "收起";
+    }
+    .architecture-gallery-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .architecture-gallery-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: saturate(.62) brightness(1.16) contrast(.86);
+    }
+    .architecture-gallery-card.tone-purple img {
+      filter: hue-rotate(-6deg) saturate(.55) brightness(1.2) contrast(.84);
+    }
+    .architecture-gallery-card.tone-green img {
+      filter: hue-rotate(-2deg) saturate(.58) brightness(1.18) contrast(.84);
+    }
+    .architecture-gallery-card.tone-eval img {
+      filter: hue-rotate(6deg) saturate(.56) brightness(1.18) contrast(.84);
+    }
+    .research-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 16px;
+    }
+    .research-panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.9);
+      overflow: hidden;
+      min-height: 240px;
+      position: relative;
+    }
+    .research-panel img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .research-panel-fallback {
+      display: none;
+      padding: 18px 16px 20px;
+      min-height: 220px;
+    }
+    .research-panel.is-missing .research-panel-fallback {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .research-panel.is-missing img {
+      display: none;
+    }
+    .research-panel-fallback b {
+      font-size: 16px;
+      letter-spacing: -.03em;
+    }
+    .research-panel-fallback span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .research-panel-fallback ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .research-panel-fallback code {
+      font-size: 11px;
+      color: #0f8f78;
+    }
+    .insight-brief {
+      padding: 16px;
+    }
+    .insight-brief-head {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(99,91,255,.08), rgba(16,163,127,.06), #fff);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .insight-brief-head h5 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -.045em;
+    }
+    .insight-brief-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .insight-brief-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .insight-brief-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      padding: 16px;
+      min-height: 164px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+    .insight-brief-card .label {
+      width: fit-content;
+      border-radius: 999px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 850;
+    }
+    .insight-brief-card b {
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: -.035em;
+    }
+    .insight-brief-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    @media (max-width: 760px) {
+      .research-board { grid-template-columns: 1fr; }
+      .insight-brief-grid { grid-template-columns: 1fr; }
+    }
+    .dashboard-fallback {
+      display: none;
+      padding: 18px 16px 20px;
+    }
+    .output-visual-stage.is-missing.dashboard .dashboard-fallback {
+      display: block;
+    }
+    .output-visual-stage.is-missing.dashboard .output-visual-placeholder {
+      display: none;
+    }
+    .dashboard-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .dashboard-kpi {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 14px;
+      background: var(--mint-soft);
+      padding: 12px 14px;
+    }
+    .dashboard-kpi span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .dashboard-kpi b {
+      font-size: 22px;
+      color: var(--mint);
+      letter-spacing: -.04em;
+    }
+    .dashboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .dashboard-table th,
+    .dashboard-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .dashboard-table th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 11px;
+    }
+    .dashboard-table td b {
+      display: block;
+      margin-bottom: 2px;
+    }
+    @media (max-width: 760px) {
+      .dashboard-kpis { grid-template-columns: 1fr; }
+    }
+    .langfuse-fallback {
+      display: none;
+      padding: 16px;
+    }
+    .output-visual-stage.is-missing.langfuse .langfuse-fallback {
+      display: block;
+    }
+    .output-visual-stage.is-missing.langfuse .output-visual-placeholder {
+      display: none;
+    }
+    .langfuse-shell {
+      border: 1px solid #e5e7ef;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      font-size: 12px;
+    }
+    .langfuse-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #edf0f7;
+      background: #fafbff;
+    }
+    .langfuse-topbar b {
+      color: #111827;
+      font-size: 13px;
+    }
+    .langfuse-topbar span {
+      color: #6b7280;
+      font-size: 11px;
+    }
+    .langfuse-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf0f7;
+    }
+    .langfuse-metric {
+      border: 1px solid #edf0f7;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #fcfdff;
+    }
+    .langfuse-metric span {
+      display: block;
+      color: #6b7280;
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+    .langfuse-metric b {
+      color: #4f46e5;
+      font-size: 16px;
+    }
+    .langfuse-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .langfuse-table th,
+    .langfuse-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #f1f3f9;
+      text-align: left;
+      vertical-align: top;
+    }
+    .langfuse-table th {
+      color: #6b7280;
+      font-size: 10px;
+      font-weight: 600;
+      background: #fafbff;
+    }
+    .langfuse-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .langfuse-pill.pass { background: #e8f8ef; color: #0f8f4d; }
+    .langfuse-pill.fail { background: #fdecec; color: #d14343; }
+    .langfuse-pill.guard { background: #fff4e5; color: #b45309; }
+    @media (max-width: 760px) {
+      .langfuse-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .demo-stage {
+      padding: 16px;
+    }
+    .demo-media {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0f1118;
+      min-height: 280px;
+      position: relative;
+    }
+    .demo-media video,
+    .demo-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .demo-media:has(video) img {
+      display: none;
+    }
+    .demo-fallback {
+      display: none;
+      padding: 28px 22px;
+      color: #f5f7fb;
+      min-height: 280px;
+    }
+    .output-visual-stage.demo.is-missing .demo-fallback {
+      display: grid;
+      gap: 14px;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+    .output-visual-stage.demo.is-missing .demo-media video,
+    .output-visual-stage.demo.is-missing .demo-media img {
+      display: none;
+    }
+    .demo-play {
+      width: 68px;
+      height: 68px;
+      border-radius: 999px;
+      border: 2px solid rgba(16,163,127,.5);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      color: var(--mint);
+      background: rgba(16,163,127,.12);
+    }
+    .demo-fallback b {
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+    .demo-fallback span,
+    .demo-fallback code {
+      color: rgba(245,247,251,.72);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .demo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .demo-tags span {
+      border: 1px solid rgba(16,163,127,.28);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      color: #b7f2df;
+      background: rgba(16,163,127,.12);
+    }
+    .product-storyboard,
+    .product-evolve,
+    .eval-design-flow,
+    .langfuse-dataset {
+      padding: 18px;
+    }
+    .eval-flow-visual {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .eval-flow-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .eval-flow-step {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 18px;
+      background: rgba(255,255,255,.88);
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      min-height: 0;
+    }
+    .eval-flow-step strong {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .eval-flow-step b {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -.03em;
+      line-height: 1.35;
+    }
+    .eval-flow-step .eval-flow-subtitle {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.58;
+    }
+    .eval-flow-step .eval-flow-label {
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .eval-flow-intro {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(99,91,255,.12);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(246,246,255,.88));
+    }
+    .eval-flow-intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .eval-flow-intro p:first-child {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+    .eval-flow-visual {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .eval-flow-visual summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 10px;
+      list-style: none;
+    }
+    .eval-flow-visual summary::-webkit-details-marker {
+      display: none;
+    }
+    .eval-flow-visual img,
+    .langfuse-dataset-visual img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+    .langfuse-dataset-kicker {
+      display: inline-flex;
+      margin-bottom: 8px;
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .langfuse-dataset-visual {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #fbfffc);
+      padding: 10px;
+      overflow: auto;
+    }
+    .langfuse-dataset-visual a {
+      display: block;
+      line-height: 0;
+    }
+    .langfuse-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .langfuse-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(16,163,127,.24);
+      border-radius: 999px;
+      background: rgba(16,163,127,.10);
+      color: var(--mint);
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+      line-height: 1;
+      transition: .18s ease;
+    }
+    .langfuse-link:hover {
+      transform: translateY(-1px);
+      background: rgba(16,163,127,.16);
+      box-shadow: 0 10px 22px rgba(16,163,127,.10);
+    }
+    .storyboard-shell,
+    .evolve-shell {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(16,163,127,.10), transparent 34%),
+        linear-gradient(180deg, #fff, #fbfffc);
+      padding: 22px;
+    }
+    .storyboard-head,
+    .evolve-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .storyboard-head h4,
+    .evolve-head h4 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -.045em;
+    }
+    .storyboard-head p,
+    .evolve-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+      max-width: 640px;
+    }
+    .storyboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .story-card {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 20px;
+      background: rgba(255,255,255,.82);
+      padding: 16px;
+      min-height: 390px;
+      display: grid;
+      align-content: space-between;
+      gap: 14px;
+      box-shadow: 0 12px 26px rgba(16,163,127,.045);
+    }
+    .story-visual {
+      height: 270px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,244,229,.86), rgba(245,255,251,.92));
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--mint);
+      font-size: 28px;
+      font-weight: 950;
+    }
+    .story-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: top center;
+      display: block;
+    }
+    .story-card small {
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .output-version-compare {
+      display: grid;
+      gap: 16px;
+    }
+    .output-version-stack {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 16px;
+    }
+    .output-version-stack.is-v2 {
+      border-color: rgba(16,163,127,.18);
+      background:
+        radial-gradient(circle at top left, rgba(16,163,127,.08), transparent 32%),
+        linear-gradient(180deg, #fff, #fbfffc);
+    }
+    .output-version-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .output-version-head h4 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+    .output-version-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.58;
+    }
+    .output-version-badge {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--purple);
+      background: var(--purple-soft);
+      white-space: nowrap;
+    }
+    .output-version-stack.is-v2 .output-version-badge {
+      color: var(--mint);
+      background: rgba(16,163,127,.10);
+    }
+    .output-version-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .product-screen-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .product-screen-card {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(16,163,127,.04);
+    }
+    .product-screen-card img {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+      object-fit: contain;
+      object-position: top center;
+      display: block;
+      background: #fff;
+    }
+    .product-screen-card b {
+      display: block;
+      padding: 6px 8px 8px;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--ink);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .story-card b {
+      display: block;
+      margin: 5px 0 6px;
+      font-size: 17px;
+      letter-spacing: -.035em;
+    }
+    .story-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.58;
+    }
+    .evolve-flow {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+    .evolve-step {
+      position: relative;
+      border: 1px solid rgba(16,163,127,.18);
+      border-radius: 18px;
+      background: rgba(255,255,255,.86);
+      padding: 14px 12px;
+      min-height: 126px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+    .evolve-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--mint);
+      font-weight: 950;
+      z-index: 2;
+    }
+    .evolve-step strong {
+      color: var(--mint);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .evolve-step b {
+      font-size: 14px;
+      letter-spacing: -.025em;
+    }
+    .evolve-step span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.48;
+    }
+    .evolve-step.is-risk {
+      border-color: rgba(211,93,121,.24);
+      background: linear-gradient(180deg, rgba(211,93,121,.08), rgba(255,255,255,.86));
+    }
+    .evolve-step.is-risk strong {
+      color: #d45d79;
+    }
+    .evidence-flow {
+      display: grid;
+      gap: 12px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .flow-step {
+      appearance: none;
+      width: 100%;
+      border: 1px solid rgba(99,91,255,.16);
+      border-radius: 22px;
+      background: rgba(255,255,255,.82);
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      padding: 16px;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      box-shadow: 0 12px 30px rgba(99,91,255,.045);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .flow-step:hover {
+      transform: translateY(-1px);
+      border-color: rgba(99,91,255,.30);
+      box-shadow: 0 16px 36px rgba(99,91,255,.08);
+    }
+    .flow-step.active {
+      border-color: rgba(99,91,255,.42);
+      background: linear-gradient(135deg, rgba(99,91,255,.13), rgba(255,255,255,.92));
+    }
+    .detail-workspace.product .flow-step {
+      border-color: rgba(16,163,127,.16);
+      box-shadow: 0 12px 30px rgba(16,163,127,.04);
+    }
+    .detail-workspace.product .flow-step:hover {
+      border-color: rgba(16,163,127,.30);
+      box-shadow: 0 16px 36px rgba(16,163,127,.07);
+    }
+    .detail-workspace.product .flow-step.active {
+      border-color: rgba(16,163,127,.42);
+      background: linear-gradient(135deg, rgba(16,163,127,.12), rgba(255,255,255,.92));
+    }
+    .flow-index {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .detail-workspace.product .flow-index {
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .flow-copy b {
+      display: block;
+      font-size: 17px;
+      letter-spacing: -.035em;
+      margin-bottom: 5px;
+    }
+    .flow-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .flow-arrow {
+      color: var(--faint);
+      font-size: 20px;
+      font-weight: 900;
+    }
+    .flow-detail {
+      width: min(100%, 720px);
+      margin: 0 auto;
+      border: 1px solid rgba(99,91,255,.16);
+      border-radius: 20px;
+      background: rgba(255,255,255,.78);
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(99,91,255,.045);
+    }
+    .detail-workspace.product .flow-detail {
+      border-color: rgba(16,163,127,.16);
+      box-shadow: 0 12px 28px rgba(16,163,127,.04);
+    }
+    .flow-detail b {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -.025em;
+      margin-bottom: 7px;
+    }
+    .flow-detail span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.58;
+    }
+    .evidence-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .evidence-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper-2);
+      color: var(--muted);
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease, color .18s ease;
+    }
+    .evidence-chip:hover, .evidence-chip.active {
+      border-color: rgba(99,91,255,.30);
+      background: var(--purple-soft);
+      color: var(--purple);
+    }
+    .detail-workspace.product .evidence-chip:hover,
+    .detail-workspace.product .evidence-chip.active {
+      border-color: rgba(16,163,127,.30);
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .output-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .output-block {
+      appearance: none;
+      position: relative;
+      overflow: hidden;
+      min-height: 136px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.78);
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      padding: 15px;
+      text-align: left;
+      transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .output-block:hover,
+    .output-block.active {
+      border-color: rgba(99,91,255,.30);
+      box-shadow: 0 14px 32px rgba(99,91,255,.08);
+      transform: translateY(-1px);
+    }
+    .detail-workspace.product .output-block:hover,
+    .detail-workspace.product .output-block.active {
+      border-color: rgba(16,163,127,.30);
+      box-shadow: 0 14px 32px rgba(16,163,127,.07);
+    }
+    .output-type {
+      display: inline-flex;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 950;
+    }
+    .detail-workspace.product .output-type {
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .output-block b {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+      letter-spacing: -.03em;
+      margin-bottom: 7px;
+    }
+    .output-visual {
+      margin-top: 12px;
+      min-height: 38px;
+    }
+    .visual-artifact {
+      height: 48px;
+      border: 1px dashed rgba(99,91,255,.35);
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(99,91,255,.12), rgba(255,255,255,.75));
+    }
+    .visual-process {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+    }
+    .visual-process span,
+    .visual-doc span,
+    .visual-decision span:last-child {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(99,91,255,.20);
+    }
+    .visual-doc {
+      display: grid;
+      gap: 6px;
+    }
+    .visual-doc span:nth-child(1) { width: 82%; }
+    .visual-doc span:nth-child(2) { width: 62%; }
+    .visual-system {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .visual-system span {
+      height: 24px;
+      border: 1px solid rgba(99,91,255,.20);
+      border-radius: 10px;
+      background: var(--paper-2);
+    }
+    .visual-proof {
+      display: flex;
+      gap: 8px;
+      align-items: end;
+    }
+    .visual-proof span {
+      width: 22px;
+      border-radius: 8px 8px 4px 4px;
+      background: rgba(99,91,255,.24);
+    }
+    .visual-proof span:nth-child(1) { height: 18px; }
+    .visual-proof span:nth-child(2) { height: 32px; }
+    .visual-proof span:nth-child(3) { height: 44px; }
+    .visual-decision {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+    .visual-decision span:first-child {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-weight: 950;
+    }
+    .chip-detail {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper-2);
+      padding: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.58;
+    }
+    .chip-detail b {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+    .obsidian-open-link {
+      display: inline-flex;
+      margin-top: 10px;
+      color: var(--purple);
+      font-weight: 850;
+      text-decoration: none;
+    }
+    .obsidian-open-link:hover {
+      text-decoration: underline;
+    }
+    .detail-sources {
+      width: min(100%, 620px);
+      margin: 22px auto 0;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+    .detail-sources summary {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 950;
+      color: var(--muted);
+    }
+    .source-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .source-link {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper-2);
+      color: var(--muted);
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .cell {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper-2);
+      min-height: 132px;
+      padding: 14px;
+      position: relative;
+    }
+    .week-cell {
+      min-height: 80px;
+      background: linear-gradient(180deg, rgba(99,91,255,.08), #fff);
+      color: var(--purple);
+      font-weight: 950;
+    }
+    .week-cell small {
+      display: block;
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 12px;
+    }
+    .axis-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 950;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+      letter-spacing: .08em;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .week-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      box-shadow: 0 14px 34px rgba(17,24,39,.05);
+      padding: 16px;
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+    .week-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 5px;
+      background: linear-gradient(90deg, var(--purple), rgba(99,91,255,0));
+    }
+    .week-card.product-lean::before {
+      background: linear-gradient(90deg, var(--mint), rgba(16,163,127,0));
+    }
+    .week-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-top: 4px;
+    }
+    .week-header b {
+      display: block;
+      color: var(--purple);
+      font-size: 28px;
+      letter-spacing: -.04em;
+      margin-bottom: 4px;
+    }
+    .week-header span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .week-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+    .lane {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      padding: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .lane:hover {
+      transform: translateY(-2px);
+      border-color: rgba(99,91,255,.28);
+      box-shadow: 0 14px 32px rgba(99,91,255,.08);
+    }
+    .lane.product:hover {
+      border-color: rgba(16,163,127,.26);
+      box-shadow: 0 14px 32px rgba(16,163,127,.07);
+    }
+    .lane-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 0;
+    }
+    .lane-title h3 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: -.035em;
+      line-height: 1.2;
+    }
+    .lane-badge {
+      border-radius: 999px;
+      padding: 6px 8px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .lane.product .lane-badge {
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .lane-points {
+      display: grid;
+      gap: 8px;
+    }
+    .lane-point {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 8px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .lane-point b {
+      color: var(--ink);
+      font-size: 12px;
+    }
+    .outcome-strip {
+      margin-top: 12px;
+      border-radius: 14px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      padding: 10px;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+    .lane.product .outcome-strip {
+      background: var(--mint-soft);
+      color: var(--mint);
+    }
+    .track-cell {
+      background: #fff;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .track-cell:hover {
+      transform: translateY(-2px);
+      border-color: rgba(99,91,255,.28);
+      box-shadow: 0 14px 32px rgba(99,91,255,.08);
+    }
+    .track-cell::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--purple);
+      box-shadow: 0 0 0 4px rgba(99,91,255,.09);
+    }
+    .track-cell.product::before {
+      background: var(--mint);
+      box-shadow: 0 0 0 4px rgba(16,163,127,.09);
+    }
+    .track-cell h3 {
+      margin: 18px 0 7px;
+      font-size: 18px;
+      letter-spacing: -.035em;
+    }
+    .track-cell p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .track-facts {
+      display: grid;
+      gap: 7px;
+      margin-top: 12px;
+    }
+    .track-fact {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper-2);
+      padding: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .track-fact b {
+      color: var(--purple);
+      font-size: 12px;
+    }
+    .track-cell.product .track-fact b { color: var(--mint); }
+    .track-fact span { color: var(--muted); }
+    .track-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr) 300px;
+      gap: 16px;
+    }
+    .rail {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.74);
+      padding: 16px;
+      box-shadow: var(--soft-shadow);
+      height: fit-content;
+    }
+    .rail-title {
+      color: var(--faint);
+      font-size: 12px;
+      letter-spacing: .12em;
+      font-weight: 950;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .rail-item {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 15px;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .rail-item.active {
+      background: var(--purple-soft);
+      border-color: rgba(99,91,255,.16);
+    }
+    .rail-subtitle {
+      margin: 14px 0 8px;
+      color: var(--faint);
+      font-size: 11px;
+      letter-spacing: .1em;
+      font-weight: 950;
+    }
+    .rail-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--purple);
+      font-weight: 950;
+      font-size: 12px;
+    }
+    .rail-item b { display: block; font-size: 13px; margin-bottom: 4px; }
+    .rail-item span { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .main-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,.84);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .stage-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+    .stage-head h3 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -.05em;
+    }
+    .stage-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.58;
+    }
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .mini {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper-2);
+      padding: 14px;
+      min-height: 132px;
+    }
+    .mini b { display: block; font-size: 13px; margin-bottom: 8px; }
+    .mini span { display: block; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .knowledge-section {
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+    .knowledge-section h4 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: -.035em;
+    }
+    .knowledge-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .knowledge-item {
+      display: grid;
+      gap: 8px;
+    }
+    .knowledge-card {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--paper-2);
+      padding: 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      color: var(--ink);
+      font: inherit;
+      min-height: 0;
+      width: 100%;
+    }
+    .knowledge-card:hover,
+    .knowledge-card.active {
+      transform: translateY(-2px);
+      border-color: rgba(99,91,255,.28);
+      box-shadow: 0 14px 32px rgba(99,91,255,.08);
+      background: linear-gradient(180deg, #fff, #fbfbff);
+    }
+    .knowledge-card .type {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 5px 8px;
+      margin-bottom: 9px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .knowledge-card.playbook .type { background: var(--mint-soft); color: var(--mint); }
+    .knowledge-card.source .type { background: var(--amber-soft); color: var(--amber); }
+    .knowledge-card b {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -.03em;
+      margin-bottom: 6px;
+    }
+    .knowledge-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .note-preview {
+      margin-top: 12px;
+      border: 1px solid rgba(99,91,255,.16);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 16px;
+    }
+    .note-preview-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .note-preview h4 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.045em;
+    }
+    .note-preview .note-type {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .note-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .note-preview-block {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper-2);
+      padding: 12px;
+    }
+    .note-preview-block b {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+    .note-preview-block span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .insight-card {
+      border: 1px solid rgba(99,91,255,.16);
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .insight-card .label {
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .1em;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .insight-card b {
+      display: block;
+      font-size: 21px;
+      letter-spacing: -.05em;
+      line-height: 1.12;
+      margin-bottom: 10px;
+    }
+    .insight-card p {
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .asset-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .asset-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.84);
+      box-shadow: var(--soft-shadow);
+      padding: 22px;
+      min-height: 260px;
+    }
+    .asset-card h3 { margin: 0 0 12px; font-size: 26px; letter-spacing: -.05em; }
+    .asset-card p { margin: 0 0 16px; color: var(--muted); line-height: 1.62; }
+    .asset-note-list {
+      display: grid;
+      gap: 8px;
+    }
+    .asset-note-item {
+      display: grid;
+      gap: 8px;
+    }
+    .asset-link {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper-2);
+      padding: 10px 12px;
+      text-align: left;
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .asset-link:hover {
+      border-color: rgba(99,91,255,.28);
+      background: #fff;
+    }
+    .asset-link.active {
+      border-color: rgba(99,91,255,.28);
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      box-shadow: 0 10px 24px rgba(99,91,255,.07);
+    }
+    .asset-card-metrics {
+      display: grid;
+      align-content: start;
+    }
+    .asset-stat-hero {
+      border: 1px solid rgba(99,91,255,.16);
+      border-radius: 20px;
+      background: var(--purple-soft);
+      padding: 18px;
+      margin: 10px 0 14px;
+    }
+    .asset-stat-hero b,
+    .asset-metric b {
+      display: block;
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: -.06em;
+    }
+    .asset-stat-hero span,
+    .asset-metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .asset-category-list,
+    .asset-metric-grid {
+      display: grid;
+      gap: 8px;
+    }
+    .asset-category-list span,
+    .asset-metric {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper-2);
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .asset-metric-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .asset-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .asset-split-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper-2);
+      padding: 10px 12px;
+    }
+    .asset-split-item b {
+      display: block;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .asset-split-item span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .asset-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .asset-tag-row span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper-2);
+      padding: 7px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .asset-type-breakdown {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .asset-type-item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper-2);
+      padding: 8px 10px;
+    }
+    .asset-type-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .asset-type-head b {
+      font-size: 12px;
+      letter-spacing: -.02em;
+    }
+    .asset-type-head span {
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .asset-type-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .eval-asset-summary {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top left, rgba(99,91,255,.10), transparent 36%),
+        linear-gradient(180deg, #fff, #fbfbff);
+      padding: 18px;
+      margin: 14px 0;
+    }
+    .eval-asset-summary h4 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+    .eval-asset-summary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .eval-asset-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .eval-asset-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.86);
+      padding: 10px 12px;
+    }
+    .eval-asset-item b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+      letter-spacing: -.02em;
+    }
+    .eval-asset-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .system-map {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .map-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.84);
+      box-shadow: var(--soft-shadow);
+      padding: 22px;
+    }
+    .map-card h3 { margin: 0 0 12px; font-size: 24px; letter-spacing: -.045em; }
+    .map-card p { margin: 0; color: var(--muted); line-height: 1.62; }
+    .map-card.center {
+      background: linear-gradient(180deg, rgba(99,91,255,.08), white);
+      border-color: rgba(99,91,255,.18);
+    }
+    .architecture-placeholder {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 50% 45%, rgba(99,91,255,.08), transparent 30%),
+        linear-gradient(180deg, #fff, #fbfbff);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      min-height: 460px;
+      margin-bottom: 16px;
+    }
+    .mindset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .mindset-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.84);
+      padding: 18px;
+    }
+    .mindset-card h4 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+    .mindset-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .mindset-before,
+    .mindset-after {
+      border-radius: 16px;
+      padding: 13px;
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .mindset-before {
+      background: var(--paper-2);
+      color: var(--muted);
+    }
+    .mindset-after {
+      background: var(--mint-soft);
+      color: var(--ink);
+      border: 1px solid rgba(16,163,127,.16);
+    }
+    .mindset-before b,
+    .mindset-after b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 12px;
+    }
+    .mindset-matrix {
+      display: grid;
+      gap: 10px;
+    }
+    .mindset-matrix-head,
+    .mindset-matrix-row {
+      display: grid;
+      grid-template-columns: .78fr .72fr 1.3fr;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .mindset-matrix-head {
+      color: var(--faint);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .mindset-matrix-head span {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.72);
+      padding: 10px 12px;
+    }
+    .mindset-matrix-head .before-col {
+      background: rgba(246,246,251,.72);
+      color: var(--faint);
+      border-color: rgba(228,229,235,.95);
+      font-weight: 700;
+      opacity: .78;
+    }
+    .mindset-matrix-head .after-col {
+      background: var(--mint-soft);
+      color: var(--mint);
+      border-color: rgba(16,163,127,.28);
+      font-weight: 950;
+      box-shadow: 0 8px 20px rgba(16,163,127,.08);
+    }
+    .mindset-dimension,
+    .mindset-cell {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.84);
+      padding: 14px;
+      line-height: 1.55;
+    }
+    .mindset-dimension {
+      display: grid;
+      align-content: center;
+      font-weight: 950;
+      letter-spacing: -.03em;
+    }
+    .mindset-cell.before {
+      background: rgba(246,246,251,.68);
+      color: var(--faint);
+      border-color: rgba(228,229,235,.92);
+      font-size: 12px;
+      opacity: .76;
+    }
+    .mindset-cell.after {
+      background: linear-gradient(180deg, rgba(232,251,245,.96), rgba(220,247,238,.9));
+      color: var(--ink);
+      border-color: rgba(16,163,127,.28);
+      font-size: 14px;
+      font-weight: 650;
+      box-shadow: 0 10px 24px rgba(16,163,127,.1);
+    }
+    .summit-insight {
+      margin-top: 16px;
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(246,246,255,.88));
+      padding: 18px;
+      display: grid;
+      grid-template-columns: .9fr 1.4fr;
+      gap: 14px;
+    }
+    .summit-copy {
+      border-radius: 20px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      padding: 18px;
+    }
+    .summit-copy .eyebrow {
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .summit-copy h4 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: -.05em;
+    }
+    .summit-copy p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+    .summit-concepts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .summit-concept {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.84);
+      padding: 14px;
+    }
+    .summit-concept b {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      letter-spacing: -.03em;
+    }
+    .summit-concept span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .placeholder-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .placeholder-head h3 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: -.05em;
+    }
+    .placeholder-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 680px;
+    }
+    .diagram-dropzone {
+      border: 1px dashed rgba(99,91,255,.32);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at center, rgba(99,91,255,.08), transparent 34%),
+        rgba(255,255,255,.72);
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .diagram-dropzone::before {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      border-radius: 22px;
+      border: 1px solid rgba(228,229,235,.72);
+      background-image:
+        linear-gradient(rgba(99,91,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,91,255,.035) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .dropzone-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 520px;
+    }
+    .dropzone-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 24px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-weight: 950;
+      font-size: 24px;
+    }
+    .dropzone-inner b {
+      display: block;
+      font-size: 24px;
+      letter-spacing: -.05em;
+      margin-bottom: 8px;
+    }
+    .dropzone-inner span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .diagram-caption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .radar-placeholder {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,.86);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-top: 18px;
+    }
+    .radar-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .radar-copy h3 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: -.05em;
+    }
+    .radar-copy p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .radar-stage {
+      border: 1px dashed rgba(16,163,127,.28);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at center, rgba(16,163,127,.08), transparent 34%),
+        linear-gradient(180deg, #fff, #fbfffc);
+      min-height: 320px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+    .radar-svg {
+      width: min(300px, 82%);
+      height: auto;
+    }
+    .radar-label {
+      position: absolute;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      padding: 7px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .rl1 { top: 22px; left: 50%; transform: translateX(-50%); }
+    .rl2 { top: 92px; right: 28px; }
+    .rl3 { bottom: 58px; right: 44px; }
+    .rl4 { bottom: 58px; left: 44px; }
+    .rl5 { top: 92px; left: 28px; }
+    .radar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .legend-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .legend-dot::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--purple);
+    }
+    .legend-dot.after::before { background: var(--mint); }
+
+    .footer {
+      margin-top: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.72);
+      color: var(--muted);
+      padding: 20px 22px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 900px) {
+      .product-screen-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .product-screen-card img { max-height: 240px; }
+    }
+
+    @media (max-width: 1050px) {
+      .hero, .asset-grid, .system-map, .mindset-grid, .summit-insight, .radar-grid, .detail-main, .output-gallery, .storyboard-grid { grid-template-columns: 1fr; }
+      .asset-type-breakdown { grid-template-columns: 1fr; }
+      .eval-asset-grid { grid-template-columns: 1fr; }
+      .evolve-flow,
+      .eval-flow-steps { grid-template-columns: 1fr; }
+      .evolve-step:not(:last-child)::after {
+        content: "↓";
+        right: auto;
+        top: auto;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .nav { justify-content: flex-start; }
+    }
+    @media (max-width: 720px) {
+      .app { width: min(100% - 28px, 1280px); }
+      .topbar { position: static; align-items: flex-start; flex-direction: column; }
+      .hero-main { padding: 28px; min-height: auto; }
+      .stat-grid, .stage-grid, .knowledge-cards, .note-preview-grid, .mindset-compare, .summit-concepts, .eval-flow-steps { grid-template-columns: 1fr; }
+      h1 { font-size: 44px; }
+      .timeline-grid { min-width: 920px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark"></span>
+        <div>
+          <b>AI Builder 双轨学习旅程</b>
+          <span>从课程学习到可复用方法论</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#journey">学习旅程</a>
+        <a href="#assets">知识资产</a>
+        <a href="#mindset">思维变化</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">学习成果展示 · 双轨工作台</div>
+        <h1>AI Builder 双轨学习旅程</h1>
+        <p>这不是课程材料的堆叠，而是一条从学习、实践到沉淀的项目路径：我把 AI Builder 课程转化成 AI 产品判断、工程闭环和个人知识系统里的可复用资产。</p>
+        <div class="chips">
+          <span class="chip purple">AI Builder 工程线</span>
+          <span class="chip mint">AI 产品经理线</span>
+          <span class="chip amber">Source / Insight / Playbook</span>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <div class="side-card">
+          <h2>成果概览</h2>
+          <div class="evolution-strip" data-evolution-strip>
+            <div class="evolution-spotlight">
+              <span class="evolution-spotlight-kicker">学习进行到这里</span>
+              <div class="evolution-spotlight-meta" data-evolution-spotlight-meta>第 1 / 4 阶段</div>
+              <h3 class="evolution-spotlight-title" data-evolution-spotlight-title>能力基础</h3>
+              <div class="evolution-spotlight-nodes">
+                <button type="button" class="evolution-spotlight-node builder" data-evolution-spotlight-builder data-open-detail="foundation-builder"><small>工程</small>LLM / Agent 基础</button>
+                <button type="button" class="evolution-spotlight-node product" data-evolution-spotlight-product data-open-detail="foundation-product"><small>产品</small>AI 产品基础判断</button>
+              </div>
+            </div>
+            <div class="evolution-level-rail" aria-label="四阶段进化轨">
+              <div class="evolution-rail-pointer" data-evolution-rail-pointer>当前位置</div>
+              <div class="evolution-rail-track" data-evolution-rail-track></div>
+              <div class="evolution-rail-steps">
+                <button type="button" class="evolution-rail-step active" data-evolution-station="0"><b>能力基础</b><span>01</span></button>
+                <button type="button" class="evolution-rail-step" data-evolution-station="1"><b>阶段二</b><span>02</span></button>
+                <button type="button" class="evolution-rail-step" data-evolution-station="2"><b>阶段三</b><span>03</span></button>
+                <button type="button" class="evolution-rail-step" data-evolution-station="3"><b>测评</b><span>04</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="journey">
+      <div class="section-title">
+        <div>
+          <h2>双能力时间线里程碑</h2>
+          <p>按两条能力线整理学习成果：AI Builder 工程线负责从模型认知走向可运行、可评测、可稳定的系统；AI 产品经理线负责从产品判断走向竞品分析、需求定义和产品验证。</p>
+        </div>
+      </div>
+      <div class="timeline-card">
+        <div class="horizontal-board">
+          <div class="capability-timeline">
+            <div class="capability-head">
+              <div>
+                <h3>AI Builder 工程能力线</h3>
+                <p>核心问题：我如何把 AI 从“会回答”推进到“能执行、可观测、可复盘、可稳定”的系统能力。</p>
+              </div>
+              <span class="capability-badge">工程线</span>
+            </div>
+            <div class="milestone-grid">
+              <div class="milestone-item"><button class="milestone-node" data-detail="foundation-builder"><span class="milestone-week" data-display-week="Week 1" data-source-week="Week0">Week 1</span><b>LLM / Agent 基础</b><span>理解 LLM 非确定性、Agent 组件和工具调用边界。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="assistant-prototype-builder"><span class="milestone-week" data-display-week="Week 1" data-source-week="Week1">Week 1</span><b>Skill 与助理原型</b><span>把重复任务封装为可调用能力，形成最小助理原型。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="evaluation-builder"><span class="milestone-week" data-display-week="Week 4" data-source-week="Week3">Week 4</span><b>评测体系</b><span>建立 eval set、trace、grader 和回归样本。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="stability-builder"><span class="milestone-week" data-display-week="Week 4" data-source-week="Week4">Week 4</span><b>稳定性工程</b><span>把 guardrail、fallback 和失败复盘纳入工程闭环。</span></button></div>
+            </div>
+          </div>
+
+          <div class="capability-timeline product">
+            <div class="capability-head">
+              <div>
+                <h3>AI 产品经理能力线</h3>
+                <p>核心问题：我如何把模型能力转译成产品判断、竞品洞察、用户任务和验证标准。</p>
+              </div>
+              <span class="capability-badge">产品线</span>
+            </div>
+            <div class="milestone-grid">
+              <div class="milestone-item"><button class="milestone-node" data-detail="foundation-product"><span class="milestone-week" data-display-week="Week 2" data-source-week="Week1">Week 2</span><b>AI 产品基础判断</b><span>判断是否需要 AI、Tiny Core、JTBD 与成功状态。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="competitive-product"><span class="milestone-week" data-display-week="Week 2" data-source-week="Week1">Week 2</span><b>竞品分析</b><span>拆解竞品的目标用户、交互路径、差异化和风险边界。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="spec-product"><span class="milestone-week" data-display-week="Week 3" data-source-week="Week3">Week 3</span><b>产品说明书</b><span>把方向整理成 Agent 行为、Eval Set 和验证策略。</span></button></div>
+              <div class="milestone-item"><button class="milestone-node" data-detail="evals-product"><span class="milestone-week" data-display-week="Week 3" data-source-week="Week3">Week 3</span><b>产品评测</b><span>围绕产品承诺设计成功标准、失败红线和场景样本。</span></button></div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-workspace" id="detailWorkspace" hidden></div>
+      </div>
+    </section>
+
+    <section id="assets">
+      <div class="section-title">
+        <div>
+          <h2>方法论与知识资产</h2>
+          <p>页面不展示所有原始材料，只展示已经被整理过、能复用的资产类型。这样看起来不是资料堆，而是一个可持续增长的知识系统。</p>
+        </div>
+      </div>
+      <div class="asset-grid">
+        <article class="asset-card asset-card-metrics">
+          <span class="chip purple">知识库</span>
+          <h3>知识资产</h3>
+          <p>按知识库文件口径统计：判断卡 + 方法论，都是下次项目可以复用的资产。</p>
+          <div class="asset-stat-hero">
+            <b>21</b>
+            <span>可复用知识资产</span>
+          </div>
+          <div class="asset-split">
+            <div class="asset-split-item"><b>12</b><span>判断卡</span></div>
+            <div class="asset-split-item"><b>9</b><span>方法论</span></div>
+          </div>
+          <div class="asset-category-list">
+            <span>AI 原生产品说明书最小结构</span>
+            <span>产品评测三步法</span>
+            <span>护栏与降级最小闭环</span>
+          </div>
+        </article>
+        <article class="asset-card asset-card-metrics ability">
+          <span class="chip mint">智能体 / 技能</span>
+          <h3>能力资产</h3>
+          <p>4 套智能体协作架构 + 16 个可运行技能，覆盖测评、产品设计、竞品调研等场景。</p>
+          <div class="asset-metric-grid">
+            <div class="asset-metric">
+              <b>4</b>
+              <span>智能体架构</span>
+            </div>
+            <div class="asset-metric">
+              <b>16</b>
+              <span>可运行技能</span>
+            </div>
+          </div>
+          <div class="asset-category-list">
+            <span>测评智能体架构图</span>
+            <span>产品设计智能体架构图</span>
+            <span>竞品调研智能体架构图</span>
+            <span>智能体协作总览</span>
+          </div>
+        </article>
+        <article class="asset-card asset-card-metrics project">
+          <span class="chip amber">项目</span>
+          <h3>项目资产</h3>
+          <p>双轨 8 个能力节点共 32 项可见产出，工程线与产品线各 16 项。</p>
+          <div class="asset-stat-hero">
+            <b>32</b>
+            <span>项目产出</span>
+          </div>
+          <div class="asset-split">
+            <div class="asset-split-item"><b>16</b><span>工程线</span></div>
+            <div class="asset-split-item"><b>16</b><span>产品线</span></div>
+          </div>
+          <div class="asset-type-breakdown">
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>文档结构</b><span>10 项</span></div>
+              <p class="asset-type-note">产品说明书、评测集、竞品摘要、场景样本库</p>
+            </div>
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>判断结论</b><span>6 项</span></div>
+              <p class="asset-type-note">完成线、架构取舍、核心体验、失败红线</p>
+            </div>
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>系统模块</b><span>5 项</span></div>
+              <p class="asset-type-note">评测体系、稳定性闭环、护栏、产品评测</p>
+            </div>
+            <div class="asset-type-item">
+              <div class="asset-type-head"><b>实物 / 过程 / 验证</b><span>11 项</span></div>
+              <p class="asset-type-note">组件图、可运行技能、评测运行、演示复盘</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="mindset">
+      <div class="architecture-placeholder">
+        <div class="placeholder-head">
+          <div>
+            <h3>思维变化区</h3>
+            <p>这里展示的是学习和项目推进过程中，判断方式如何从“做功能”转向“定义承诺、验证质量、沉淀方法”。</p>
+          </div>
+          <span class="chip purple">Mindset Shift</span>
+        </div>
+        <div class="mindset-matrix">
+          <div class="mindset-matrix-head">
+            <span>变化维度</span>
+            <span class="before-col">学习前</span>
+            <span class="after-col">学习后</span>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从资料收集到知识资产</div>
+            <div class="mindset-cell before">把材料存在文件夹里，复用时重新翻找。</div>
+            <div class="mindset-cell after">把 Source、Insight、Playbook 和 Map 沉淀成下次项目可调用的资产。</div>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从功能清单到产品承诺</div>
+            <div class="mindset-cell before">先想要加什么功能、页面和按钮。</div>
+            <div class="mindset-cell after">先定义用户任务、成功状态和 AI 应该承担的承诺边界。</div>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从 Prompt 到 Agent 行为</div>
+            <div class="mindset-cell before">把 AI 当成一次性问答工具。</div>
+            <div class="mindset-cell after">拆成目标理解、工具调用、状态追踪、失败兜底和结果整合。</div>
+          </div>
+          <div class="mindset-matrix-row">
+            <div class="mindset-dimension">从主观满意到 Eval 标准</div>
+            <div class="mindset-cell before">靠“看起来不错”判断结果。</div>
+            <div class="mindset-cell after">围绕产品承诺设计场景样本、通过标准和失败红线。</div>
+          </div>
+        </div>
+        <div class="summit-insight">
+          <div class="summit-copy">
+            <div class="eyebrow">AI Summit Input</div>
+            <h4>AI 峰会带来的概念补充</h4>
+            <p>峰会让我把课堂里的方法论放到更大的产业语境里看：AI 不只是模型能力变强，而是从模型、Agent、应用场景到安全治理，一起改变产品如何被定义、验证和交付。</p>
+          </div>
+          <div class="summit-concepts">
+            <div class="summit-concept">
+              <b>模型能力不是终点</b>
+              <span>大模型能力提升只是基础，真正的产品价值来自能否稳定解决具体用户任务。</span>
+            </div>
+            <div class="summit-concept">
+              <b>Agent 是新的工作流组织方式</b>
+              <span>从单次问答转向目标拆解、工具调用、状态管理和多步骤协作。</span>
+            </div>
+            <div class="summit-concept">
+              <b>AI 应用要回到真实场景</b>
+              <span>判断一个 AI 产品，不只看炫技效果，更要看它是否进入真实流程并形成可复用能力。</span>
+            </div>
+            <div class="summit-concept">
+              <b>安全与评测是上线前提</b>
+              <span>AI 产品需要明确边界、失败红线和持续 eval，才能从 demo 走向可信使用。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="radar-placeholder">
+        <div class="radar-grid">
+          <div class="radar-copy">
+            <h3>思维方式雷达</h3>
+            <p>这里展示学习前后判断方式的变化：从点状功能思维，转向任务承诺、Agent 协作、Eval 验证、稳定性设计和知识复用。</p>
+            <div class="radar-legend"><span class="legend-dot">学习前</span><span class="legend-dot after">学习后</span></div>
+          </div>
+          <div class="radar-stage">
+            <span class="radar-label rl1">任务承诺</span>
+            <span class="radar-label rl2">Agent 协作</span>
+            <span class="radar-label rl3">Eval 验证</span>
+            <span class="radar-label rl4">稳定性设计</span>
+            <span class="radar-label rl5">知识复用</span>
+            <svg class="radar-svg" viewBox="0 0 320 320" aria-hidden="true">
+              <polygon points="160,30 284,120 236,270 84,270 36,120" fill="none" stroke="#e4e5eb" stroke-width="2"/>
+              <polygon points="160,70 246,132 214,236 106,236 74,132" fill="none" stroke="#e4e5eb" stroke-width="2"/>
+              <polygon points="160,110 208,144 192,202 128,202 112,144" fill="none" stroke="#e4e5eb" stroke-width="2"/>
+              <line x1="160" y1="160" x2="160" y2="30" stroke="#e4e5eb"/>
+              <line x1="160" y1="160" x2="284" y2="120" stroke="#e4e5eb"/>
+              <line x1="160" y1="160" x2="236" y2="270" stroke="#e4e5eb"/>
+              <line x1="160" y1="160" x2="84" y2="270" stroke="#e4e5eb"/>
+              <line x1="160" y1="160" x2="36" y2="120" stroke="#e4e5eb"/>
+              <polygon points="160,120 202,146 188,206 124,214 98,142" fill="rgba(99,91,255,.16)" stroke="#635bff" stroke-width="3"/>
+              <polygon points="160,48 260,124 224,254 92,246 56,122" fill="rgba(16,163,127,.16)" stroke="#10a37f" stroke-width="3"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      这版页面的目标是让查看者先理解“项目学习旅程”，再看到“阶段成果”，最后看到“思维方式如何发生变化”。视觉上保留工作台感，叙事上服务于一条清楚的项目成果主线。
+    </footer>
+  </main>
+
+  <script src="./showcase-data.js?v=20260612-evals-asset"></script>
+  <script>
+    const notes = {
+      "llm-nondeterministic": {
+        type: "Insight",
+        cardClass: "insight",
+        title: "LLM 不是确定性函数",
+        summary: "LLM 是概率生成系统，AI 产品必须设计验证、反馈、兜底和人工监督。",
+        blockA: "Claim",
+        contentA: "LLM 不是普通函数；同样输入不保证稳定正确输出。",
+        blockB: "Why",
+        contentB: "真实 LLM 会幻觉、遗漏上下文、过度自信，也可能受 prompt injection 影响。",
+        blockC: "Evidence",
+        contentC: "Karpathy 强调 LLM app 需要 partial autonomy、GUI 审查和 human-in-the-loop。",
+        source: "AI Builder Week 0 课前自学"
+      },
+      "agent-not-single-turn": {
+        type: "Insight",
+        cardClass: "insight",
+        title: "Agent 不是单次问答",
+        summary: "Agent 是围绕目标持续行动的执行系统，包含规划、工具、状态、反馈和修正。",
+        blockA: "Claim",
+        contentA: "Agent 的可靠性问题来自多步链路，而不是单次回答质量。",
+        blockB: "Why",
+        contentB: "规划错、工具错、上下文漏看、反馈没处理，都会导致 Agent 失败。",
+        blockC: "Evidence",
+        contentC: "Lilian Weng 将 LLM Agent 拆成 planning、memory、tools；底层认知阶段要求画 Agent 组件图。",
+        source: "AI Builder Week 0 课前自学"
+      },
+      "skill-checklist": {
+        type: "Playbook",
+        cardClass: "playbook",
+        title: "AI Skill 设计最小检查清单",
+        summary: "把重复任务封装成可调用能力，需要清楚的输入输出、边界和真实调用记录。",
+        blockA: "Use When",
+        contentA: "设计 Cursor / Codex / Agent 使用的 skill、工具调用说明或可复用任务流程。",
+        blockB: "Steps",
+        contentB: "工具名具体、参数少而清楚、输入输出有样例、边界写明、单一职责。",
+        blockC: "Output",
+        contentC: "职责清楚的 skill、输入输出样例、边界说明、失败处理说明和真实调用记录。",
+        source: "AI Skill 设计最小检查清单"
+      },
+      "builder-deliverable": {
+        type: "Insight",
+        cardClass: "insight",
+        title: "AI Builder 的学习以交付物为准",
+        summary: "AI Builder 学习不是读完材料，而是留下能验证的产物、调用记录和下一步迁移。",
+        blockA: "Claim",
+        contentA: "没有交付物，学习就无法被复盘、验证或迁移到项目。",
+        blockB: "Evidence",
+        contentB: "底层认知阶段的最低完成线要求工具跑通、入学自测、能力画像和自检题。",
+        blockC: "Applies When",
+        contentC: "学习课程、文章、视频或工具教程，并判断笔记是否值得进入正式知识库。",
+        source: "AI Builder Week 0 课前自学"
+      },
+      "reading-four-step": {
+        type: "Playbook",
+        cardClass: "playbook",
+        title: "AI 学习材料四步阅读法",
+        summary: "把文章、视频字幕和课程材料转成可复用理解，而不是只拿到摘要。",
+        blockA: "Steps",
+        contentA: "准备、主阅读、反思、AI 结对讨论。",
+        blockB: "Outputs",
+        contentB: "一句话主张、3-5 条高信号要点、自己的判断、项目连接点、未解决问题。",
+        blockC: "Quality Check",
+        contentC: "是否还原作者结构、写出自己的判断，并说明能迁移到哪个项目。",
+        source: "AI 学习材料四步阅读法"
+      },
+      "week0-source": {
+        type: "Source",
+        cardClass: "source",
+        title: "底层认知阶段 Source Note",
+        summary: "这个阶段是 AI Builder 学习路径入口，用来建立 Builder 心态、LLM + Agent 基础、工具跑通能力和第一个最小 skill。",
+        blockA: "Main Thread",
+        contentA: "从“读材料”切换到“做出可验证产物”。",
+        blockB: "Key Points",
+        contentB: "Builder 心态、Agent 组件、工具跑通、第一个最小 Skill、学习材料处理方法。",
+        blockC: "Linked Sources",
+        contentC: "Karpathy、Lilian Weng、Anthropic Building Effective Agents 已整合。",
+        source: "10_Sources / AI Builder Week 0 课前自学"
+      },
+      "builder-map": {
+        type: "Map",
+        cardClass: "source",
+        title: "AI Builder 基础能力地图",
+        summary: "沉淀 AI Builder 从入门准备到 V0.5 产品判断的基础能力。",
+        blockA: "Core Sources",
+        contentA: "底层认知阶段 Source、定义最小方向阶段 Source。",
+        blockB: "关键洞察",
+        contentB: "交付物意识、Agent 基础、LLM 非确定性、AI 产品判断。",
+        blockC: "Playbooks",
+        contentC: "AI 学习材料四步阅读法、AI Skill 设计最小检查清单、产品评测三步法。",
+        source: "Knowledge Vault Map"
+      }
+    };
+
+    const details = {
+      "foundation-builder": {
+        stage: "foundation",
+        title: "建立底层认知 · LLM / Agent 基础",
+        desc: "从 Karpathy、Lilian Weng 和 Anthropic 的材料建立底层判断：LLM 是概率生成系统，Agent 是规划、记忆、工具与反馈组成的执行系统。",
+        tag: "工程线",
+        learn: "Software 3.0、LLM 非确定性、Agent 的 planning / memory / tools，以及 workflow 和 Agent 的差异。",
+        output: "把底层认知阶段从“读材料”转成 Builder 最低完成线：工具跑通、Agent 组件图、第一个最小 Skill 和真实调用记录。",
+        assets: "点击下方知识卡，可以查看对应笔记摘要和来源。",
+        notes: ["llm-nondeterministic", "agent-not-single-turn", "skill-checklist"],
+        insightTitle: "LLM 不是确定性函数",
+        insightDesc: "Karpathy 把 LLM 描述为强大但会幻觉、遗忘上下文、受 prompt injection 影响的概率生成系统，因此 AI 产品必须设计验证、反馈、兜底和人工监督。",
+        methodTitle: "Agent 复杂度必须由 eval 证明",
+        methodDesc: "Anthropic 的 Building Effective Agents 支持这个判断：先从简单 LLM 调用开始，只有 eval 证明有收益时才增加 agentic workflow。",
+        evidence: {
+          learn: ["Karpathy LLM OS", "Lilian Weng Agent", "Anthropic Agents", "Software 3.0"],
+          output: ["Agent 组件图", "第一个最小 Skill", "工具跑通记录", "Builder 最低完成线"],
+          asset: ["[[LLM 不是确定性函数]]", "[[Agent 不是单次问答]]", "[[AI Skill 设计最小检查清单]]"],
+          transfer: ["Agent 复杂度判断", "Skill 设计起点", "Eval 前置原则", "人机协同边界"]
+        }
+      },
+      "foundation-product": {
+        stage: "foundation",
+        title: "建立底层认知 · AI 产品基础判断",
+        desc: "产品线把 LLM / Agent 基础转成产品判断：AI 产品不是把模型接进界面，而是围绕不确定输出重新设计验证、反馈和失败处理。",
+        tag: "产品线",
+        learn: "LLM app 需要 partial autonomy、GUI 审查、human-in-the-loop 和 autonomy slider，而不是直接放飞 autonomous agent。",
+        output: "形成 AI 产品的第一条底层判断：产品承诺必须把验证、反馈、兜底和人工确认纳入体验设计。",
+        assets: "点击下方知识卡，可以查看对应笔记摘要和来源。",
+        notes: ["llm-nondeterministic", "builder-deliverable", "week0-source"],
+        insightTitle: "AI 产品必须为不确定性设计",
+        insightDesc: "如果把 LLM 当成普通函数，就会误以为同样输入能稳定得到正确输出；真实产品必须处理幻觉、遗漏、过度自信和安全风险。",
+        methodTitle: "先做 Iron Man suit，不急着全自动",
+        methodDesc: "底层认知阶段的 Karpathy 材料更支持增强式产品：人负责验证，AI 负责生成，通过界面和反馈循环提高验证效率。",
+        evidence: {
+          learn: ["LLM 非确定性", "partial autonomy", "GUI 审查", "human-in-the-loop"],
+          output: ["AI 产品判断原则", "验证反馈机制", "失败处理边界", "人工确认节点"],
+          asset: ["[[LLM 不是确定性函数]]", "[[AI Builder 的学习以交付物为准]]", "[[底层认知阶段 Source Note]]"],
+          transfer: ["AI 功能边界判断", "自动化等级选择", "风险兜底设计", "产品承诺校验"]
+        }
+      },
+      "assistant-prototype-builder": {
+        stage: "direction",
+        title: "定义最小方向 · Skill 与助理原型",
+        desc: "工程线聚焦如何把重复任务封装成可调用能力，而不是只停留在聊天提示词。",
+        tag: "工程线",
+        learn: "工具调用、Skill 结构、输入输出边界、单一职责。",
+        output: "完成最小助理原型方向和 AI Skill 设计检查清单。",
+        assets: "后续接入定义最小方向阶段的 Skill、助理原型和工具调用知识卡。",
+        notes: ["skill-checklist"],
+        insightTitle: "Skill 是可复用能力，不是提示词片段",
+        insightDesc: "好的 Skill 要有清晰输入、输出、边界和调用场景。",
+        methodTitle: "先封装高频动作",
+        methodDesc: "从重复、稳定、可验证的任务开始做 Skill，而不是一开始追求万能助理。",
+        evidence: {
+          learn: ["工具调用", "Skill 结构", "输入输出边界", "单一职责"],
+          output: ["最小助理原型", "Skill 检查清单", "高频任务封装", "调用场景定义"],
+          asset: ["[[AI Skill 设计最小检查清单]]"],
+          transfer: ["任务管理 Skill", "知识处理 Skill", "Agent 工具边界", "可复用助理原型"]
+        }
+      },
+      "spec-product": {
+        stage: "direction",
+        title: "定义最小方向 · JTBD 与 Tiny Core",
+        desc: "产品线聚焦用户任务和最小核心，把 AI 产品方向写成可验证的产品说明书。",
+        tag: "产品线",
+        learn: "JTBD、Tiny Core、AI 原生产品说明书，以及如何把竞品洞察转成自己的最小核心。",
+        output: "定义产品说明书结构，明确要验证的核心用户任务。",
+        assets: "后续接入定义最小方向阶段的 JTBD、Tiny Core 和 AI 产品说明书知识卡。",
+        notes: ["builder-map"],
+        insightTitle: "AI 产品不是普通功能加 AI 按钮",
+        insightDesc: "真正的 AI-Native 产品要重设任务路径、反馈机制和失败处理。",
+        methodTitle: "先缩小 Tiny Core",
+        methodDesc: "先验证最小关键任务，再扩大功能范围。",
+        evidence: {
+          learn: ["JTBD", "Tiny Core", "AI 原生产品说明书", "核心任务验证"],
+          output: ["产品说明书结构", "核心用户任务", "最小验证方向", "产品承诺草案"],
+          asset: ["[[AI Builder 基础能力地图]]"],
+          transfer: ["需求收敛", "MVP 定义", "AI 产品说明书", "验证优先级"]
+        }
+      },
+      "competitive-product": {
+        stage: "competitive",
+        title: "竞品分析 · 模式拆解与机会判断",
+        desc: "产品经理线在形成需求之前，先拆解同类 AI 产品：它们服务谁、解决什么任务、如何承诺能力、在哪里处理失败，以及你的机会差异在哪里。",
+        tag: "产品线",
+        learn: "AI 竞品分析不能只看功能清单，要看目标用户、核心任务、AI 交互路径、能力承诺、失败处理和商业/体验差异。",
+        output: "形成竞品分析框架：用户任务对比、核心流程拆解、能力边界、差异化机会和可借鉴模式。",
+        assets: "后续接入 AI 产品竞品分析框架、竞品拆解模板和机会判断知识卡。",
+        notes: ["builder-map", "llm-nondeterministic"],
+        insightTitle: "竞品分析不是功能盘点",
+        insightDesc: "AI 产品的竞品分析重点不是谁有更多按钮，而是谁更清楚地处理了用户任务、模型不确定性和失败边界。",
+        methodTitle: "先拆任务，再看功能",
+        methodDesc: "先问竞品承诺帮用户完成什么任务，再看它如何组织输入、输出、反馈、确认和兜底。",
+        evidence: {
+          learn: ["目标用户", "核心任务", "AI 交互路径", "失败边界"],
+          output: ["竞品分析框架", "流程拆解表", "能力边界对比", "机会判断"],
+          asset: ["[[AI Builder 基础能力地图]]", "[[LLM 不是确定性函数]]"],
+          transfer: ["竞品拆解模板", "机会识别", "差异化判断", "风险对比"]
+        }
+      },
+      "evaluation-builder": {
+        stage: "validation",
+        title: "构建验证闭环 · 评测体系",
+        desc: "工程线把 demo 转成可重复验证的系统：eval set、trace logger、grader 和回归样本。",
+        tag: "工程线",
+        learn: "产品契约、LLM Judge 校准、正常 / 边界 / 对抗样本、trace 记录。",
+        output: "形成评测体系五层框架、产品 Eval v0 方法、LLM Judge 使用原则。",
+        assets: "后续接入构建验证闭环阶段的 Eval、Trace 和 LLM Judge 知识卡。",
+        notes: ["llm-nondeterministic"],
+        insightTitle: "LLM Judge 不是天然裁判",
+        insightDesc: "Judge 也会偏差、漂移和误判，必须被校准并与人工样本对齐。",
+        methodTitle: "Trace 先于优化",
+        methodDesc: "先记录输入、输出、工具调用和失败原因，才知道该修哪里。",
+        evidence: {
+          learn: ["eval set", "trace logger", "grader", "回归样本"],
+          output: ["评测体系五层框架", "产品评测 v0", "LLM Judge 原则", "失败样本记录"],
+          asset: ["[[LLM 不是确定性函数]]"],
+          transfer: ["测试样本设计", "Trace Debug", "回归验证", "Judge 校准"]
+        }
+      },
+      "evals-product": {
+        stage: "validation",
+        title: "构建验证闭环 · 产品评测",
+        desc: "产品线把评测对象从模型能力转回产品承诺，判断用户任务是否真的被完成。",
+        tag: "产品线",
+        learn: "产品契约、成功标准、失败红线、场景样本。",
+        output: "拆出正常、边界、对抗样本，并建立产品评测三步法。",
+        assets: "后续接入构建验证闭环阶段的产品评测知识卡。",
+        notes: ["builder-map"],
+        insightTitle: "产品评测必须围绕产品承诺",
+        insightDesc: "不要围绕通用模型榜单评测，要围绕产品对用户的承诺评测。",
+        methodTitle: "产品 Eval 围绕承诺",
+        methodDesc: "不要围绕模型榜单评测，要围绕产品对用户的承诺评测。",
+        evidence: {
+          learn: ["产品契约", "成功标准", "失败红线", "场景样本"],
+          output: ["正常样本", "边界样本", "对抗样本", "产品评测三步法"],
+          asset: ["[[AI Builder 基础能力地图]]"],
+          transfer: ["产品承诺验证", "场景样本库", "失败红线定义", "上线前评测"]
+        }
+      },
+      "stability-builder": {
+        stage: "stability",
+        title: "沉淀稳定系统 · 稳定性工程",
+        desc: "工程线把失败样本、护栏、兜底和回归纳入闭环，让系统从能跑走向可信。",
+        tag: "工程线",
+        learn: "Trace logger、observability、guardrail、fallback、regression set。",
+        output: "形成稳定性工程闭环、Guardrail 与 Fallback 最小闭环。",
+        assets: "后续接入沉淀稳定系统阶段的 Guardrail、Fallback 和 Trace Fix 知识卡。",
+        notes: ["builder-map"],
+        insightTitle: "Guardrail 没有 Fallback 就只是拒绝",
+        insightDesc: "真正的稳定性工程要让系统知道什么时候降级、解释边界或转人工。",
+        methodTitle: "每个拒绝都要有后路",
+        methodDesc: "为拒绝、低置信度和工具失败分别配置可解释的兜底路径。",
+        evidence: {
+          learn: ["observability", "guardrail", "fallback", "regression set"],
+          output: ["稳定性工程闭环", "Guardrail 最小闭环", "Fallback 路径", "失败复盘样本"],
+          asset: ["[[AI Builder 基础能力地图]]"],
+          transfer: ["兜底策略", "降级路径", "转人工规则", "稳定性复盘"]
+        }
+      },
+      
+    };
+
+    function applyShowcaseMapData() {
+      const mapData = window.SHOWCASE_MAP_DATA;
+      if (!mapData || !mapData.nodes) return;
+
+      Object.entries(mapData.nodes).forEach(([detailId, node]) => {
+        const existing = details[detailId] || {};
+        details[detailId] = {
+          ...existing,
+          stage: existing.stage || detailId.split("-")[0],
+          title: node.title || existing.title || detailId,
+          desc: existing.desc || node.evidenceDetail?.learn?.[node.evidence?.learn?.[0]] || "这个能力节点由 Obsidian Showcase Map 生成。",
+          tag: node.track || existing.tag || "",
+          notes: existing.notes || [],
+          evidence: node.evidence || existing.evidence || {},
+          evidenceDetail: node.evidenceDetail || existing.evidenceDetail || {},
+          evidenceMeta: node.evidenceMeta || existing.evidenceMeta || {},
+          reflection: node.reflection || existing.reflection || "",
+          projectOutput: node.projectOutput || existing.projectOutput || "mindmap",
+          mindMap: node.mindMap || existing.mindMap || "",
+          architectureOverview: node.architectureOverview || existing.architectureOverview || "",
+          architectureGallery: node.architectureGallery || existing.architectureGallery || [],
+          productJudgmentInsights: node.productJudgmentInsights || existing.productJudgmentInsights || [],
+          competitiveInsights: node.competitiveInsights || existing.competitiveInsights || [],
+          researchCompetitive: node.researchCompetitive || existing.researchCompetitive || "",
+          researchMarket: node.researchMarket || existing.researchMarket || "",
+          dashboardImage: node.dashboardImage || existing.dashboardImage || "",
+          demoImage: node.demoImage || existing.demoImage || "",
+          demoVideo: node.demoVideo || existing.demoVideo || "",
+          langfuseImage: node.langfuseImage || existing.langfuseImage || "",
+          evalDesignFlowImage: node.evalDesignFlowImage || existing.evalDesignFlowImage || "",
+          langfuseDatasetName: node.langfuseDatasetName || existing.langfuseDatasetName || "",
+          langfuseUrl: node.langfuseUrl || existing.langfuseUrl || "",
+          competitiveRadarUrl: node.competitiveRadarUrl || existing.competitiveRadarUrl || "",
+          langfuseDatasetSummary: node.langfuseDatasetSummary || existing.langfuseDatasetSummary || "",
+          outputVersions: node.outputVersions || existing.outputVersions || null,
+          id: node.id || detailId,
+          showcaseMapTitle: node.title
+        };
+      });
+    }
+
+    applyShowcaseMapData();
+
+    function notePreviewMarkup(note) {
+      return `
+        <div class="note-preview">
+          <div class="note-preview-head">
+            <div>
+              <h4>${note.title}</h4>
+            </div>
+            <span class="note-type">${note.type}</span>
+          </div>
+          <div class="note-preview-grid">
+            <div class="note-preview-block"><b>${note.blockA}</b><span>${note.contentA}</span></div>
+            <div class="note-preview-block"><b>${note.blockB}</b><span>${note.contentB}</span></div>
+            <div class="note-preview-block"><b>${note.blockC}</b><span>${note.contentC}</span></div>
+          </div>
+          <div class="diagram-caption">来源：${note.source}</div>
+        </div>
+      `;
+    }
+
+    function expandNoteInItem(noteId, item) {
+      const note = notes[noteId];
+      if (!note || !item) return;
+      const list = item.closest(".knowledge-cards, .asset-note-list");
+      list.querySelectorAll(".note-preview").forEach((preview) => preview.remove());
+      list.querySelectorAll("[data-note]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.note === noteId);
+      });
+      item.insertAdjacentHTML("beforeend", notePreviewMarkup(note));
+    }
+
+    function renderKnowledgeCards(container, noteIds = []) {
+      container.innerHTML = noteIds.map((noteId) => {
+        const note = notes[noteId];
+        if (!note) return "";
+        return `
+          <div class="knowledge-item">
+            <button class="knowledge-card ${note.cardClass}" data-note="${noteId}">
+              <span class="type">${note.type}</span>
+              <b>${note.title}</b>
+              <span>${note.summary}</span>
+            </button>
+          </div>
+        `;
+      }).join("");
+      container.querySelectorAll("[data-note]").forEach((item) => {
+        item.addEventListener("click", () => expandNoteInItem(item.dataset.note, item.closest(".knowledge-item")));
+      });
+      const firstItem = container.querySelector(".knowledge-item");
+      if (noteIds.length && firstItem) expandNoteInItem(noteIds[0], firstItem);
+    }
+
+    const detailTracks = {
+      builder: ["foundation-builder", "assistant-prototype-builder", "evaluation-builder", "stability-builder"],
+      product: ["foundation-product", "competitive-product", "spec-product", "evals-product"]
+    };
+
+    function trackForDetail(detailId) {
+      return detailTracks.product.includes(detailId) ? "product" : "builder";
+    }
+
+    function detailIndex(detailId) {
+      const track = trackForDetail(detailId);
+      return detailTracks[track].indexOf(detailId) + 1;
+    }
+
+    function sourceLinksMarkup(noteIds = []) {
+      return noteIds.map((noteId) => {
+        const note = notes[noteId];
+        if (!note) return "";
+        return `<span class="source-link">[[${note.title}]]</span>`;
+      }).join("");
+    }
+
+    function switcherMarkup(activeId) {
+      const track = trackForDetail(activeId);
+      return detailTracks[track].map((detailId, index) => {
+        const stage = details[detailId];
+        return `
+          <button class="detail-switch ${detailId === activeId ? "active" : ""}" data-switch-detail="${detailId}">
+            ${String(index + 1).padStart(2, "0")} ${stage.title.replace(/^.*·\s*/, "")}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function flowSection(stage, section) {
+      const evidence = stage.evidence || {};
+      const sections = {
+        learn: {
+          title: "学习输入",
+          key: "判断映射",
+          detail: "每枚标签对应一条从学习材料沉淀出的判断、原则或可迁移方法。",
+          items: [...(evidence.asset || []), ...(evidence.transfer || [])]
+        },
+        output: {
+          title: "项目产出",
+          key: "可见成果 / 过程产物",
+          detail: "把 AI Native 学习过程整理成可连接、可复用的知识网络。",
+          items: evidence.output || []
+        },
+        asset: {
+          title: "知识资产",
+          key: "复盘思考",
+          detail: "做完沉淀后，用一句话写下你的复盘与思考。",
+          items: []
+        }
+      };
+      return sections[section] || sections.output;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function reflectionMarkup(stage) {
+      if (!stage.reflection) return "";
+      return `<div class="flow-panel-reflection"><b>沉淀感悟</b><p>${escapeHtml(stage.reflection)}</p></div>`;
+    }
+
+    function knowledgeSystemFlowMarkup() {
+      return `
+        <div class="knowledge-system-flow">
+          <h4>Obsidian 知识系统结构</h4>
+          <div class="knowledge-flow-images">
+            <img class="knowledge-flow-image" src="diagrams/knowledge-system-traditional.png" alt="传统知识库方式：把资料存起来，等需要时再找">
+            <img class="knowledge-flow-image" src="diagrams/knowledge-system-agent.png" alt="我的 Agent 知识库方式：把资料加工成可复用成果">
+          </div>
+        </div>
+      `;
+    }
+
+    function evaluationArchitectureFallbackSvg() {
+      return `
+        <svg viewBox="0 0 920 360" role="img" aria-label="评测体系架构图">
+          <defs>
+            <linearGradient id="evalArchFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f7f2ff"/>
+              <stop offset="100%" stop-color="#f2f7ff"/>
+            </linearGradient>
+          </defs>
+          <rect x="12" y="12" width="896" height="336" rx="24" fill="url(#evalArchFill)" stroke="#e7e2f4"/>
+          <g font-family="system-ui, sans-serif" font-size="13" fill="#1f1a2e">
+            <rect x="36" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="95" y="172" text-anchor="middle" font-weight="700">产品契约</text>
+            <text x="95" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">任务 / 成功标准</text>
+            <text x="95" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">失败红线</text>
+            <rect x="176" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="235" y="172" text-anchor="middle" font-weight="700">Eval Set</text>
+            <text x="235" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">正常 / 边界</text>
+            <text x="235" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">对抗样本</text>
+            <rect x="316" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="375" y="172" text-anchor="middle" font-weight="700">Trace</text>
+            <text x="375" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">tool calls</text>
+            <text x="375" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">状态 / 成本</text>
+            <rect x="456" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="515" y="172" text-anchor="middle" font-weight="700">Grader</text>
+            <text x="515" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">LLM Judge</text>
+            <text x="515" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">人工校准</text>
+            <rect x="596" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="655" y="172" text-anchor="middle" font-weight="700">错误分类</text>
+            <text x="655" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">contract / tool</text>
+            <text x="655" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">routing / model</text>
+            <rect x="736" y="142" width="118" height="76" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="795" y="172" text-anchor="middle" font-weight="700">回归治理</text>
+            <text x="795" y="192" text-anchor="middle" fill="#6f6a82" font-size="11">regression set</text>
+            <text x="795" y="206" text-anchor="middle" fill="#6f6a82" font-size="11">Eval Run 对比</text>
+            <path d="M154 180 H176" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M294 180 H316" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M434 180 H456" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M574 180 H596" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M714 180 H736" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M795 218 C795 286 235 286 235 228" fill="none" stroke="#d45d79" stroke-width="2" stroke-dasharray="6 6"/>
+            <text x="515" y="302" text-anchor="middle" fill="#d45d79" font-size="12">失败样本回流 → 修复 → 重跑评测</text>
+          </g>
+        </svg>
+      `;
+    }
+
+    function architectureFallbackSvg() {
+      return `
+        <svg viewBox="0 0 920 360" role="img" aria-label="Agent 调用架构图">
+          <defs>
+            <linearGradient id="archFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f7f2ff"/>
+              <stop offset="100%" stop-color="#eef8ff"/>
+            </linearGradient>
+          </defs>
+          <rect x="12" y="12" width="896" height="336" rx="24" fill="url(#archFill)" stroke="#e7e2f4"/>
+          <g font-family="system-ui, sans-serif" font-size="14" fill="#1f1a2e">
+            <rect x="48" y="148" width="132" height="64" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="114" y="176" text-anchor="middle" font-weight="700">用户请求</text>
+            <text x="114" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">自然语言任务</text>
+            <rect x="232" y="132" width="156" height="96" rx="18" fill="#fff" stroke="#cdb8ff"/>
+            <text x="310" y="168" text-anchor="middle" font-weight="700">Open Core / Open Codex</text>
+            <text x="310" y="190" text-anchor="middle" fill="#6f6a82" font-size="12">Persona / 边界</text>
+            <text x="310" y="208" text-anchor="middle" fill="#6f6a82" font-size="12">路由与编排</text>
+            <rect x="440" y="148" width="132" height="64" rx="16" fill="#fff" stroke="#d8d2ea"/>
+            <text x="506" y="176" text-anchor="middle" font-weight="700">Skill 调用</text>
+            <text x="506" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">16 个可运行 Skill</text>
+            <rect x="624" y="124" width="120" height="52" rx="14" fill="#fff" stroke="#d8d2ea"/>
+            <text x="684" y="150" text-anchor="middle" font-weight="700">工具 A</text>
+            <text x="684" y="166" text-anchor="middle" fill="#6f6a82" font-size="11">检索 / 整理</text>
+            <rect x="624" y="188" width="120" height="52" rx="14" fill="#fff" stroke="#d8d2ea"/>
+            <text x="684" y="214" text-anchor="middle" font-weight="700">工具 B</text>
+            <text x="684" y="230" text-anchor="middle" fill="#6f6a82" font-size="11">执行 / 记录</text>
+            <rect x="780" y="148" width="112" height="64" rx="16" fill="#fff" stroke="#cdb8ff"/>
+            <text x="836" y="176" text-anchor="middle" font-weight="700">结果回传</text>
+            <text x="836" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">可验证输出</text>
+            <path d="M180 180 H232" stroke="#8f7fd6" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M388 180 H440" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M572 180 H624" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M744 150 H780" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M744 214 H780" stroke="#8f7fd6" stroke-width="2"/>
+            <path d="M836 212 C836 286 310 286 310 228" fill="none" stroke="#d45d79" stroke-width="2" stroke-dasharray="6 6"/>
+            <text x="560" y="302" text-anchor="middle" fill="#d45d79" font-size="12">Trace / 调用记录 / 失败边界</text>
+          </g>
+        </svg>
+      `;
+    }
+
+    function researchPanelMarkup(title, summary, bullets, imagePath) {
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      return `
+        <div class="research-panel" data-research-panel>
+          <img src="${escapeAttr(src)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('[data-research-panel]').classList.add('is-missing')" />
+          <div class="research-panel-fallback">
+            <b>${escapeHtml(title)}</b>
+            <span>${escapeHtml(summary)}</span>
+            <ul>${bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+            <span>导出展示图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function dashboardFallbackMarkup() {
+      return `
+        <div class="dashboard-kpis">
+          <div class="dashboard-kpi"><span>关键竞品</span><b>4</b></div>
+          <div class="dashboard-kpi"><span>差异化机会</span><b>2</b></div>
+          <div class="dashboard-kpi"><span>风险信号</span><b>3</b></div>
+        </div>
+        <table class="dashboard-table">
+          <thead>
+            <tr><th>竞品</th><th>核心任务</th><th>AI 工作流变化</th><th>失败 / 信任边界</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>竞品 A</b>高赞需求集中</td><td>整理 + 决策辅助</td><td>生成候选，不自动执行</td><td>低置信度回退人工</td></tr>
+            <tr><td><b>竞品 B</b>功能堆叠明显</td><td>多任务入口</td><td>AI 按钮包装</td><td>失败时无解释路径</td></tr>
+            <tr><td><b>通用模型</b>替代方案</td><td>开放式问答</td><td>无任务承诺</td><td>结果不可验证</td></tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    function insightBriefMarkup(stage, options = {}) {
+      const insights = options.items || [];
+      const title = options.title || "核心洞察";
+      const summary = options.summary || "把长报告压缩成可展示、可复用的判断卡片。";
+      return `
+        <div class="output-visual-stage insight-brief-stage" data-output-visual-stage>
+          <div class="insight-brief">
+            <div class="insight-brief-head">
+              <h5>${escapeHtml(title)}</h5>
+              <p>${escapeHtml(summary)}</p>
+            </div>
+            <div class="insight-brief-grid">
+              ${insights.map((item) => `
+                <article class="insight-brief-card">
+                  <span class="label">${escapeHtml(item.label || "Insight")}</span>
+                  <b>${escapeHtml(item.title || "")}</b>
+                  <p>${escapeHtml(item.detail || "")}</p>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function demoFallbackMarkup(imagePath, videoPath) {
+      return `
+        <div class="demo-play">▶</div>
+        <b>V0.5 Demo 展示</b>
+        <span>放上录屏或截图后，这里会展示你的产品说明书对应 demo。</span>
+        <div class="demo-tags">
+          <span>Agent 行为边界</span>
+          <span>Happy Path</span>
+          <span>Eval Set 样例</span>
+        </div>
+        <span>截图放到 <code>${escapeHtml(imagePath)}</code>，录屏放到 <code>${escapeHtml(videoPath)}</code>。</span>
+      `;
+    }
+
+    function demoMarkup(stage) {
+      const nodeId = stage.id || "node";
+      const imagePath = stage.demoImage || `diagrams/${nodeId}-demo.png`;
+      const videoPath = stage.demoVideo || `demos/${nodeId}-demo.mp4`;
+      const imageSrc = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const videoSrc = videoPath.startsWith("http") ? videoPath : `./${videoPath}`;
+      return `
+        <div class="output-visual-stage demo" data-output-visual-stage>
+          <div class="demo-stage">
+            <div class="demo-media">
+              <video controls playsinline preload="metadata" poster="${escapeAttr(imageSrc)}" onerror="this.remove()">
+                <source src="${escapeAttr(videoSrc)}" type="video/mp4" />
+              </video>
+              <img src="${escapeAttr(imageSrc)}" alt="产品说明书 Demo 展示" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+              <div class="demo-fallback">${demoFallbackMarkup(imagePath, videoPath)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function productSpecStoryboardMarkup() {
+      const cards = [
+        ["01", "想说但没人接", "学习、人际、家庭压力来了，用户只是想找一个不会说教的地方。", "diagrams/nuannuan-tradeoff-01.png"],
+        ["02", "低摩擦开口", "用心情标签或一句短输入开始，不要求用户先组织完整表达。", "diagrams/nuannuan-tradeoff-02.png"],
+        ["03", "AI 朋友式承接", "短句共情、轻追问，不诊断、不扮演心理医生、不机械敷衍。", "diagrams/nuannuan-tradeoff-03.png"],
+        ["04", "安全分流与沉淀", "普通情绪继续陪伴；高风险触发红线兜底，可选择保存为心情小种子。", "diagrams/nuannuan-tradeoff-04.png"]
+      ];
+      return `
+        <div class="output-visual-stage product-storyboard">
+          <div class="storyboard-shell">
+            <div class="storyboard-head">
+              <div>
+                <h4>产品说明书 · 暖暖用户情绪旅程</h4>
+                <p>抓取 PRD 中「方案核心决策」和「Demo 方案实现」的主链路：从想倾诉，到低门槛开口，再到 AI 即时承接和安全沉淀。</p>
+              </div>
+              <span class="chip mint">产品设计</span>
+            </div>
+            <div class="storyboard-grid">
+              ${cards.map(([index, title, detail, visual]) => `
+                <article class="story-card">
+                  <div class="story-visual"><img src="${escapeAttr(visual)}" alt="${escapeAttr(title)}" loading="lazy" /></div>
+                  <div>
+                    <small>${escapeHtml(index)}</small>
+                    <b>${escapeHtml(title)}</b>
+                    <span>${escapeHtml(detail)}</span>
+                  </div>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function evalDesignFlowMarkup(stage) {
+      const imagePath = stage.evalDesignFlowImage || "diagrams/eval-design-flow.png";
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const steps = [
+        [
+          "1",
+          "测评素材 — 黄金测评集 + Bad Case 池",
+          "输入测试题：稳定考卷负责回归，新错题负责补洞。"
+        ],
+        [
+          "2",
+          "Grader 打分 — 按测评标准自动判断好坏",
+          "输出分数和原因：Grader 不是凭感觉，而是按尺子判。"
+        ],
+        [
+          "3",
+          "结果判断 — 看通过率与失败项",
+          "失败才进入分析：先筛出问题，不把所有样本都人工翻一遍。"
+        ],
+        [
+          "4",
+          "归因分析 — 判断问题来自哪里",
+          "决定改哪里：样本、标准、Prompt 还是模型。"
+        ],
+        [
+          "5",
+          "回流更新 — 补样本 / 改标准 / 调 Prompt",
+          "更新后重新跑 Eval：把修复结果沉淀回下一轮回归。"
+        ]
+      ];
+      return `
+        <div class="output-visual-stage eval-design-flow">
+          <div class="evolve-shell">
+            <div class="evolve-head">
+              <div>
+                <h4>评测设计简版流程</h4>
+              </div>
+              <span class="chip purple">评测流程</span>
+            </div>
+            <div class="eval-flow-steps">
+              ${steps.map(([index, title, subtitle]) => `
+                <article class="eval-flow-step">
+                  <strong>${escapeHtml(index)}</strong>
+                  <b>${escapeHtml(title)}</b>
+                  <span class="eval-flow-subtitle">${escapeHtml(subtitle)}</span>
+                </article>
+              `).join("")}
+            </div>
+            <div class="eval-flow-visual">
+              <img src="${escapeAttr(src)}" alt="评测设计简版流程" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function productEvolveFlowMarkup() {
+      const steps = [
+        ["Promise", "产品承诺", "低压力表达、即时情绪承接、安全转接"],
+        ["Eval", "自动化测评", "50 条高频学生吐槽测试集，Rubric 跑分"],
+        ["Rubric", "发布门槛", "回复不过长、不爹味、不敷衍，跑分 >90%"],
+        ["Guardrails", "安全护栏", "输入与输出双向过滤，高风险毫秒级拦截"],
+        ["Trace", "链路追踪", "记录输入、判断、输出和拦截链路"],
+        ["Fix", "样本回流", "异常回复回到 Eval 和 Guardrails 修正规则"],
+        ["Evolve", "下一轮迭代", "效果可验证、关系可沉淀、安全可规模化"]
+      ];
+      return `
+        <div class="output-visual-stage product-evolve">
+          <div class="evolve-shell">
+            <div class="evolve-head">
+              <div>
+                <h4>产品迭代闭环</h4>
+                <p>只保留 PRD「质量与风险防控」里的闭环：事前定义、事中拦截、事后追踪，再回到下一轮产品迭代。</p>
+              </div>
+              <span class="chip mint">Flowchart</span>
+            </div>
+            <div class="evolve-flow">
+              ${steps.map(([label, title, detail]) => `
+                <article class="evolve-step ${label === "Guardrails" ? "is-risk" : ""}">
+                  <strong>${escapeHtml(label)}</strong>
+                  <b>${escapeHtml(title)}</b>
+                  <span>${escapeHtml(detail)}</span>
+                </article>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function dashboardMarkup(stage) {
+      if (Array.isArray(stage.competitiveInsights) && stage.competitiveInsights.length) {
+        return insightBriefMarkup(stage, {
+          title: "竞品洞察 · 情绪陪伴产品机会",
+          summary: "从消费级 AI 情绪陪伴调研中提炼出最能支撑产品方向判断的结论。",
+          items: stage.competitiveInsights
+        });
+      }
+      const imagePath = stage.dashboardImage || `diagrams/${stage.id || "node"}-report-dashboard.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      return `
+        <div class="output-visual-stage dashboard" data-output-visual-stage>
+          <img class="output-visual-image" src="${escapeAttr(src)}" alt="竞品报告数据看板" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          <div class="output-visual-placeholder">
+            <b>竞品报告数据看板</b>
+            <span>导出你的竞品报告看板 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+          <div class="dashboard-fallback">
+            <div class="flow-panel-title" style="margin:0 0 14px;text-align:left;">
+              <h4 style="font-size:22px;">竞品报告数据看板 · 示意</h4>
+            </div>
+            ${dashboardFallbackMarkup()}
+          </div>
+        </div>
+      `;
+    }
+
+    function researchBoardMarkup(stage) {
+      if (Array.isArray(stage.productJudgmentInsights) && stage.productJudgmentInsights.length) {
+        return insightBriefMarkup(stage, {
+          title: "AI 产品基础判断 · AI Native 思考框架",
+          summary: "没有对应贴图时，用判断框架展示产品思考能力：先判断 AI 必要性，再收敛 tiny core，最后把承诺变成可验证标准。",
+          items: stage.productJudgmentInsights
+        });
+      }
+      const nodeId = stage.id || "node";
+      const competitivePath = stage.researchCompetitive || `diagrams/${nodeId}-competitive.png`;
+      const marketPath = stage.researchMarket || `diagrams/${nodeId}-market.png`;
+      return `
+        <div class="output-visual-stage research" data-output-visual-stage>
+          <div class="research-board">
+            ${researchPanelMarkup(
+              "竞品调研展示",
+              "用六维拆解看竞品如何定义任务、承诺能力和处理失败。",
+              ["Vision / 团队 / 功能", "需求 / 反馈 / 迭代", "AI 是否改变工作流"],
+              competitivePath
+            )}
+            ${researchPanelMarkup(
+              "市场调研展示",
+              "从用户雇用场景出发，收敛 tiny core 与成功状态。",
+              ["JTBD / 目标用户", "Tiny Core 候选", "成功状态与验证路径"],
+              marketPath
+            )}
+          </div>
+        </div>
+      `;
+    }
+
+    function langfuseFallbackMarkup() {
+      return `
+        <div class="langfuse-shell">
+          <div class="langfuse-topbar">
+            <b>Langfuse · 线上测评</b>
+            <span>stability-builder / regression-run</span>
+          </div>
+          <div class="langfuse-metrics">
+            <div class="langfuse-metric"><span>Traces</span><b>128</b></div>
+            <div class="langfuse-metric"><span>Pass Rate</span><b>86%</b></div>
+            <div class="langfuse-metric"><span>Guardrail Hit</span><b>7</b></div>
+            <div class="langfuse-metric"><span>Fallback</span><b>4</b></div>
+          </div>
+          <table class="langfuse-table">
+            <thead>
+              <tr><th>Trace</th><th>Eval Score</th><th>失败分类</th><th>状态</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>tool-routing-042</td><td>0.92</td><td>—</td><td><span class="langfuse-pill pass">pass</span></td></tr>
+              <tr><td>guardrail-output-017</td><td>0.41</td><td>output</td><td><span class="langfuse-pill guard">guardrail</span></td></tr>
+              <tr><td>fallback-handoff-003</td><td>0.55</td><td>routing</td><td><span class="langfuse-pill fail">fallback</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function langfuseMarkup(stage) {
+      const imagePath = stage.langfuseImage || `diagrams/${stage.id || "node"}-langfuse.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const datasetName = stage.langfuseDatasetName || "nuannuan-scene-v21-50-回归";
+      const summary = stage.langfuseDatasetSummary || "在 Langfuse 沉淀 50 条场景回归样本，用输入、预期输出和元数据支撑 trace → eval → fix 的稳定性闭环。";
+      const langfuseUrl = stage.langfuseUrl || "https://cloud.langfuse.com";
+      return `
+        <div class="output-visual-stage langfuse langfuse-dataset" data-output-visual-stage>
+          <div class="evolve-shell">
+            <div class="evolve-head">
+              <div>
+                <span class="langfuse-dataset-kicker">Langfuse 回归数据集</span>
+                <h4>${escapeHtml(datasetName)}</h4>
+                <p>${escapeHtml(summary)}</p>
+                <div class="langfuse-actions">
+                  <a class="langfuse-link" href="${escapeAttr(langfuseUrl)}" target="_blank" rel="noopener noreferrer">打开 Langfuse 线上平台 ↗</a>
+                </div>
+              </div>
+              <span class="chip mint">Regression Set</span>
+            </div>
+            <div class="langfuse-dataset-visual">
+              <a href="${escapeAttr(src)}" target="_blank" rel="noopener noreferrer" title="点击查看原图">
+                <img src="${escapeAttr(src)}" alt="Langfuse 回归数据集展示" loading="eager" decoding="sync" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+              </a>
+            </div>
+          </div>
+          <div class="output-visual-placeholder">
+            <b>Langfuse 回归数据集展示</b>
+            <span>导出 Langfuse 数据集截图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+          <div class="langfuse-fallback">
+            <div class="flow-panel-title" style="margin:0 0 12px;text-align:left;">
+              <h4 style="font-size:22px;">Langfuse 回归数据集 · 示意</h4>
+            </div>
+            ${langfuseFallbackMarkup()}
+          </div>
+        </div>
+      `;
+    }
+
+    function architectureDiagramMarkup(stage, kind = "agent") {
+      const isEval = kind === "evaluation";
+      const nodeId = stage.id || "node";
+      const imagePath = stage.mindMap || `diagrams/${nodeId}-${isEval ? "eval-arch" : "agent-arch"}.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const title = isEval ? "评测体系架构图" : "Agent 调用架构图";
+      const hint = isEval
+        ? `导出评测体系架构图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可替换内置示意图。`
+        : `导出 Agent 调用架构图 PNG，放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可替换内置示意图。`;
+      const fallback = isEval ? evaluationArchitectureFallbackSvg() : architectureFallbackSvg();
+      const overviewPath = stage.architectureOverview || "";
+      const gallery = Array.isArray(stage.architectureGallery) ? stage.architectureGallery : [];
+      if (!isEval && gallery.length) {
+        const overviewSrc = overviewPath
+          ? (overviewPath.startsWith("http") ? overviewPath : `./${overviewPath}`)
+          : "";
+        return `
+          <div class="output-visual-stage architecture agent-architecture" data-output-visual-stage>
+            ${overviewSrc ? `<div class="architecture-overview-wrap"><img class="architecture-overview" src="${escapeAttr(overviewSrc)}" alt="4 套智能体协作总览" loading="lazy" /></div>` : ""}
+            <div class="architecture-gallery-stack">
+              ${gallery.map((item, index) => {
+                const entry = typeof item === "string" ? { path: item } : (item || {});
+                const image = entry.path || "";
+                const imageSrc = image.startsWith("http") ? image : `./${image}`;
+                const tone = (entry.tone || "").toLowerCase();
+                const titleText = entry.title || `架构图 ${index + 1}`;
+                return `
+                  <details class="architecture-gallery-accordion">
+                    <summary>${escapeHtml(titleText)}</summary>
+                    <div class="architecture-gallery">
+                      <div class="architecture-gallery-card ${tone ? `tone-${escapeAttr(tone)}` : ""}">
+                        <img src="${escapeAttr(imageSrc)}" alt="${escapeAttr(titleText)}" loading="lazy" />
+                      </div>
+                    </div>
+                  </details>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="output-visual-stage architecture ${isEval ? "eval-architecture" : "agent-architecture"}" data-output-visual-stage>
+          <img class="output-visual-image" src="${escapeAttr(src)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          <div class="output-visual-placeholder">
+            <b>${title}</b>
+            <span>${hint}</span>
+          </div>
+          <div class="architecture-fallback">${fallback}</div>
+        </div>
+      `;
+    }
+
+    function projectOutputV1Markup(stage) {
+      const v1 = stage.outputVersions?.v1 || {};
+      const imagePath = v1.image || "";
+      const images = Array.isArray(v1.images) && v1.images.length ? v1.images : (imagePath ? [imagePath] : []);
+      if (!images.length) {
+        return `
+          <div class="output-visual-stage output-version-placeholder" data-output-visual-stage>
+            <div class="output-visual-placeholder">
+              <b>${escapeHtml(v1.title || "V1 版项目产出")}</b>
+              <span>${escapeHtml(v1.summary || "V1 贴图待补充。")}</span>
+            </div>
+          </div>
+        `;
+      }
+      if (images.length === 1) {
+        const src = images[0].startsWith("http") ? images[0] : `./${images[0]}`;
+        return `
+          <div class="output-visual-stage output-version-image" data-output-visual-stage>
+            <img class="output-visual-image" src="${escapeAttr(src)}" alt="${escapeAttr(v1.title || "V1 版项目产出")}" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+            <div class="output-visual-placeholder">
+              <b>${escapeHtml(v1.title || "V1 版项目产出")}</b>
+              <span>${escapeHtml(v1.summary || "")}</span>
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="output-visual-stage output-version-gallery">
+          <div class="storyboard-grid">
+            ${images.map((image, index) => {
+              const src = image.startsWith("http") ? image : `./${image}`;
+              return `
+                <article class="story-card">
+                  <div class="story-visual"><img src="${escapeAttr(src)}" alt="${escapeAttr(v1.title || "V1")} ${index + 1}" loading="lazy" /></div>
+                </article>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function projectOutputImageMarkup(version = {}, fallbackTitle = "项目产出") {
+      const imagePath = version.image || "";
+      const images = Array.isArray(version.images) && version.images.length ? version.images : (imagePath ? [imagePath] : []);
+      if (!images.length) return "";
+      if (images.length === 1) {
+        const src = images[0].startsWith("http") ? images[0] : `./${images[0]}`;
+        return `
+          <div class="output-version-image" data-output-visual-stage>
+            <img src="${escapeAttr(src)}" alt="${escapeAttr(version.title || fallbackTitle)}" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          </div>
+        `;
+      }
+      const labels = Array.isArray(version.imageLabels) ? version.imageLabels : [];
+      const useProductScreens = version.layout === "product-screens" || images.length === 4;
+      if (useProductScreens) {
+        return `
+          <div class="product-screen-grid">
+            ${images.map((image, index) => {
+              const src = image.startsWith("http") ? image : `./${image}`;
+              const label = labels[index] || "";
+              return `
+                <article class="product-screen-card">
+                  <img src="${escapeAttr(src)}" alt="${escapeAttr(version.title || fallbackTitle)} ${index + 1}" loading="lazy" />
+                  ${label ? `<b>${escapeHtml(label)}</b>` : ""}
+                </article>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
+      return `
+        <div class="storyboard-grid">
+          ${images.map((image, index) => {
+            const src = image.startsWith("http") ? image : `./${image}`;
+            return `
+              <article class="story-card">
+                <div class="story-visual"><img src="${escapeAttr(src)}" alt="${escapeAttr(version.title || fallbackTitle)} ${index + 1}" loading="lazy" /></div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function projectOutputVersionShellMarkup(stage, innerMarkup) {
+      const versions = stage.outputVersions || {};
+      const v1 = versions.v1 || {};
+      const v2 = versions.v2 || {};
+      const v1Markup = projectOutputImageMarkup(v1, "V1 初版项目产出") || innerMarkup;
+      const v2Markup = projectOutputImageMarkup(v2, "V2 新版项目产出") || innerMarkup;
+      return `
+        <div class="output-version-compare">
+          <div class="output-version-stack is-v1">
+            <div class="output-version-head">
+              <div>
+                <h4>${escapeHtml(v1.title || "V1 初版")}</h4>
+                <p>${escapeHtml(v1.summary || "早期版本保留原始表达和结构，用来对比后续如何收敛。")}</p>
+              </div>
+              <span class="output-version-badge">V1 · ${escapeHtml(v1.kicker || "初版")}</span>
+            </div>
+            ${v1Markup}
+          </div>
+          <div class="output-version-stack is-v2">
+            <div class="output-version-head">
+              <div>
+                <h4>${escapeHtml(v2.title || "V2 新版")}</h4>
+                <p>${escapeHtml(v2.summary || "新版把体验流程、关键场景和安全机制收敛成更直观的展示。")}</p>
+              </div>
+              <span class="output-version-badge">V2 · ${escapeHtml(v2.kicker || "新版")}</span>
+            </div>
+            ${v2Markup}
+          </div>
+        </div>
+      `;
+    }
+
+    function projectOutputInnerMarkup(stage) {
+      if ((stage.id || stage.detailId) === "spec-product") {
+        return productSpecStoryboardMarkup();
+      }
+      if ((stage.id || stage.detailId) === "evals-product") {
+        return productEvolveFlowMarkup();
+      }
+      if ((stage.id || stage.detailId) === "evaluation-builder") {
+        return evalDesignFlowMarkup(stage);
+      }
+      const visual = stage.projectOutput || "mindmap";
+      if (visual === "research") {
+        return researchBoardMarkup(stage);
+      }
+      if (visual === "dashboard") {
+        return dashboardMarkup(stage);
+      }
+      if (visual === "demo") {
+        return demoMarkup(stage);
+      }
+      if (visual === "architecture") {
+        return architectureDiagramMarkup(stage, "agent");
+      }
+      if (visual === "eval-architecture") {
+        return architectureDiagramMarkup(stage, "evaluation");
+      }
+      if (visual === "eval-flow") {
+        return evalDesignFlowMarkup(stage);
+      }
+      if (visual === "langfuse") {
+        return langfuseMarkup(stage);
+      }
+      return mindmapAssetMarkup(stage);
+    }
+
+    function projectOutputMarkup(stage) {
+      const nodeId = stage.id || stage.detailId;
+      const inner = projectOutputInnerMarkup(stage);
+      const summary = nodeId === "spec-product" ? specProductOutputSummaryMarkup() : "";
+      if (stage.outputVersions) {
+        return `${summary}${projectOutputVersionShellMarkup(stage, inner)}`;
+      }
+      return `${summary}${inner}`;
+    }
+
+    function mindmapAssetMarkup(stage) {
+      const imagePath = stage.mindMap || `mindmaps/${stage.id || "node"}.png`;
+      const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
+      const obsidianGraphHref = "obsidian://open?vault=knowledge-vault";
+      const isVideo = /\.(mp4|webm|mov)$/i.test(imagePath);
+      const media = isVideo
+        ? `<video class="output-visual-image" src="${escapeAttr(src)}" autoplay muted loop playsinline controls onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')"></video>`
+        : `<img class="output-visual-image" src="${escapeAttr(src)}" alt="Obsidian 知识脑图" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />`;
+
+      return `
+        <div class="output-visual-stage mindmap mindmap-asset" data-output-visual-stage>
+          <a class="mindmap-obsidian-link" href="${escapeAttr(obsidianGraphHref)}" title="打开 Obsidian 后可进入关系图谱视图">在 Obsidian 打开脑图</a>
+          ${media}
+          <div class="output-visual-placeholder">
+            <b>Obsidian 知识脑图</b>
+            <span>把 Obsidian 图谱截图或录屏放到 <code>${escapeHtml(imagePath)}</code>，刷新页面即可显示。</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function mindmapGraphMarkup(stage, detailId = "") {
+      const nodeKey = detailId || stage.id || "";
+      return `
+        <div class="output-visual-stage mindmap knowledge-graph-stage" data-output-visual-stage data-knowledge-graph data-node-id="${escapeAttr(nodeKey)}">
+          <button type="button" class="knowledge-graph-play" data-knowledge-graph-play title="知识生长时间轴" aria-label="播放知识节点生长动画">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l1.2 3.6L17 8l-3.6 1.2L12 13l-1.2-3.8L7 8l3.8-1.4L12 3z"/>
+              <path d="M5 14l.8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8L5 14z"/>
+              <path d="M18 15l.7 2L21 18l-2 .7L18 21l-.7-2.3L15 18l2.3-.8L18 15z"/>
+            </svg>
+          </button>
+          <span class="knowledge-graph-hint">知识生长 · 点 ✨ 重播</span>
+          <svg class="knowledge-graph-svg" data-knowledge-graph-svg viewBox="0 0 640 320" role="img" aria-label="知识节点关系图"></svg>
+          <div class="knowledge-graph-meta"><span data-knowledge-graph-count>0</span> / <span data-knowledge-graph-total>0</span> 节点</div>
+        </div>
+      `;
+    }
+
+    function truncateGraphLabel(label, max = 10) {
+      const text = String(label || "").trim();
+      return text.length <= max ? text : `${text.slice(0, max)}…`;
+    }
+
+    function buildKnowledgeGraphTimeline(stage) {
+      const events = [];
+      let linkIndex = 0;
+      const pushLink = (from, to) => {
+        events.push({ type: "link", id: `link-${linkIndex += 1}`, from, to });
+      };
+
+      const center = {
+        id: "center",
+        label: stage.title || "项目沉淀",
+        group: "center"
+      };
+      events.push({ type: "node", ...center });
+
+      (stage.evidence?.learn || []).forEach((label, index) => {
+        const id = `learn-${index}`;
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "learn" });
+        pushLink("center", id);
+      });
+
+      const learnIds = (stage.evidence?.learn || []).map((_, index) => `learn-${index}`);
+      (stage.evidence?.output || []).forEach((label, index) => {
+        const id = `output-${index}`;
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "output" });
+        pushLink(learnIds[index % Math.max(learnIds.length, 1)] || "center", id);
+      });
+
+      const assetIds = [];
+      (stage.evidence?.asset || []).forEach((label, index) => {
+        const id = `asset-${index}`;
+        assetIds.push(id);
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "asset" });
+        pushLink("center", id);
+        if (learnIds.length) {
+          pushLink(learnIds[index % learnIds.length], id);
+        }
+      });
+
+      (stage.evidence?.transfer || []).forEach((label, index) => {
+        const id = `transfer-${index}`;
+        events.push({ type: "node", id, label: cleanEvidenceLabel(label), group: "transfer" });
+        pushLink(
+          assetIds[index % Math.max(assetIds.length, 1)] || learnIds[index % Math.max(learnIds.length, 1)] || "center",
+          id
+        );
+      });
+
+      const outputIds = (stage.evidence?.output || []).map((_, index) => `output-${index}`);
+      assetIds.forEach((assetId, index) => {
+        if (outputIds.length) pushLink(outputIds[index % outputIds.length], assetId);
+      });
+      learnIds.forEach((learnId, index) => {
+        if (outputIds.length) pushLink(learnId, outputIds[(index + 1) % outputIds.length]);
+      });
+
+      return events;
+    }
+
+    function seededGraphValue(key) {
+      let hash = 2166136261;
+      String(key).split("").forEach((char) => {
+        hash ^= char.charCodeAt(0);
+        hash = Math.imul(hash, 16777619);
+      });
+      return ((hash >>> 0) % 1000) / 1000;
+    }
+
+    function layoutKnowledgeGraphNodes(nodes, width, height) {
+      const cx = width / 2;
+      const cy = height / 2;
+      const groupBias = {
+        learn: { x: -48, y: -34 },
+        output: { x: 42, y: -24 },
+        asset: { x: 46, y: 44 },
+        transfer: { x: -46, y: 44 }
+      };
+
+      nodes.forEach((node, index) => {
+        if (node.group === "center") {
+          node.x = cx;
+          node.y = cy;
+          node.startX = cx;
+          node.startY = cy;
+          return;
+        }
+
+        const randomA = seededGraphValue(`${node.id}-angle`);
+        const randomB = seededGraphValue(`${node.id}-radius`);
+        const randomC = seededGraphValue(`${node.id}-jitter`);
+        const angle = randomA * Math.PI * 2;
+        const radius = 58 + randomB * 104;
+        const bias = groupBias[node.group] || { x: 0, y: 0 };
+        node.x = Math.max(40, Math.min(width - 40, cx + bias.x + Math.cos(angle) * radius));
+        node.y = Math.max(36, Math.min(height - 36, cy + bias.y + Math.sin(angle) * radius * .72 + (randomC - .5) * 24));
+        node.startX = cx + (randomC - .5) * 12;
+        node.startY = cy + (randomA - .5) * 12;
+        node.floatPhase = randomA * Math.PI * 2;
+        node.floatAmp = 1.2 + randomB * 2.4;
+        node.revealOrder = index;
+      });
+    }
+
+    function renderKnowledgeGraphSvg(svg, stage) {
+      const events = buildKnowledgeGraphTimeline(stage);
+      const nodes = events.filter((event) => event.type === "node").map((event) => ({ ...event }));
+      layoutKnowledgeGraphNodes(nodes, 640, 320);
+      const nodeMap = Object.fromEntries(nodes.map((node) => [node.id, node]));
+      const links = events
+        .filter((event) => event.type === "link")
+        .filter((link) => nodeMap[link.from] && nodeMap[link.to]);
+
+      const nodeRadius = {
+        center: 9,
+        learn: 6,
+        output: 6,
+        asset: 6.5,
+        transfer: 6
+      };
+
+      svg.innerHTML = `
+        <g class="kg-links">
+          ${links.map((link) => {
+            const from = nodeMap[link.from];
+            const to = nodeMap[link.to];
+            return `<line class="kg-link" data-kg-link="${link.id}" x1="${from.x}" y1="${from.y}" x2="${from.x}" y2="${from.y}" data-x1="${from.x}" data-y1="${from.y}" data-x2="${to.x}" data-y2="${to.y}"></line>`;
+          }).join("")}
+        </g>
+        <g class="kg-nodes">
+          ${nodes.map((node) => {
+            const r = nodeRadius[node.group] || 10;
+            return `
+              <g class="kg-node-group is-hidden" data-kg-node="${node.id}" data-x="${node.x}" data-y="${node.y}" data-start-x="${node.startX}" data-start-y="${node.startY}" data-phase="${node.floatPhase || 0}" data-amp="${node.floatAmp || 0}" transform="translate(${node.startX} ${node.startY})">
+                <circle class="kg-node-circle ${node.group}" r="${r}" cx="0" cy="0"></circle>
+                <text class="kg-node-label" x="0" y="${r + 14}">
+                  <title>${escapeHtml(node.label)}</title>
+                  ${node.group === "center" || node.group === "asset" ? escapeHtml(truncateGraphLabel(node.label, node.group === "center" ? 8 : 7)) : ""}
+                </text>
+              </g>
+            `;
+          }).join("")}
+        </g>
+      `;
+
+      return { events, nodeTotal: nodes.length };
+    }
+
+    function animateGraphNode(nodeEl, duration = 620) {
+      const startX = Number(nodeEl.dataset.startX || nodeEl.dataset.x || 0);
+      const startY = Number(nodeEl.dataset.startY || nodeEl.dataset.y || 0);
+      const endX = Number(nodeEl.dataset.x || startX);
+      const endY = Number(nodeEl.dataset.y || startY);
+      const phase = Number(nodeEl.dataset.phase || 0);
+      const amp = Number(nodeEl.dataset.amp || 0);
+      const start = performance.now();
+
+      const tick = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        const drift = Math.sin(t * Math.PI + phase) * amp;
+        const x = startX + (endX - startX) * ease + drift;
+        const y = startY + (endY - startY) * ease + Math.cos(t * Math.PI + phase) * amp * .6;
+        nodeEl.setAttribute("transform", `translate(${x} ${y})`);
+        if (t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          nodeEl.setAttribute("transform", `translate(${endX} ${endY})`);
+        }
+      };
+
+      requestAnimationFrame(tick);
+    }
+
+    function animateGraphLink(linkEl, duration = 360) {
+      const x1 = Number(linkEl.dataset.x1 || 0);
+      const y1 = Number(linkEl.dataset.y1 || 0);
+      const x2 = Number(linkEl.dataset.x2 || x1);
+      const y2 = Number(linkEl.dataset.y2 || y1);
+      const start = performance.now();
+
+      const tick = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 2);
+        linkEl.setAttribute("x1", String(x1));
+        linkEl.setAttribute("y1", String(y1));
+        linkEl.setAttribute("x2", String(x1 + (x2 - x1) * ease));
+        linkEl.setAttribute("y2", String(y1 + (y2 - y1) * ease));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    }
+
+    function playKnowledgeGraphTimelapse(container, stage) {
+      const svg = container.querySelector("[data-knowledge-graph-svg]");
+      const playButton = container.querySelector("[data-knowledge-graph-play]");
+      const countEl = container.querySelector("[data-knowledge-graph-count]");
+      const totalEl = container.querySelector("[data-knowledge-graph-total]");
+      if (!svg || !playButton) return;
+
+      if (container._kgTimer) {
+        clearTimeout(container._kgTimer);
+        container._kgTimer = null;
+      }
+
+      const { events, nodeTotal } = renderKnowledgeGraphSvg(svg, stage);
+      totalEl.textContent = String(nodeTotal);
+      countEl.textContent = "0";
+      playButton.classList.add("is-playing");
+
+      let nodeCount = 0;
+      let index = 0;
+
+      const revealNext = () => {
+        if (index >= events.length) {
+          playButton.classList.remove("is-playing");
+          container._kgTimer = null;
+          return;
+        }
+
+        const event = events[index];
+        index += 1;
+
+        if (event.type === "node") {
+          const nodeEl = svg.querySelector(`[data-kg-node="${event.id}"]`);
+          if (nodeEl) {
+            nodeEl.classList.remove("is-hidden");
+            requestAnimationFrame(() => {
+              nodeEl.classList.add("is-visible");
+              animateGraphNode(nodeEl);
+            });
+          }
+          nodeCount += 1;
+          countEl.textContent = String(nodeCount);
+        }
+
+        if (event.type === "link") {
+          const linkEl = svg.querySelector(`[data-kg-link="${event.id}"]`);
+          if (linkEl) {
+            linkEl.classList.add("is-visible");
+            animateGraphLink(linkEl);
+          }
+        }
+
+        const delay = event.type === "node" ? 145 : 70;
+        container._kgTimer = setTimeout(revealNext, delay);
+      };
+
+      revealNext();
+    }
+
+    function initKnowledgeGraphTimelapse(container) {
+      const nodeId = container.dataset.nodeId;
+      const stage = details[nodeId];
+      if (!stage) return;
+
+      const playButton = container.querySelector("[data-knowledge-graph-play]");
+      const svg = container.querySelector("[data-knowledge-graph-svg]");
+      const totalEl = container.querySelector("[data-knowledge-graph-total]");
+      if (!playButton || !svg || !totalEl) return;
+      if (container.dataset.kgBound === "1") return;
+      container.dataset.kgBound = "1";
+
+      const start = () => playKnowledgeGraphTimelapse(container, stage);
+      playButton.addEventListener("click", start);
+
+      const { nodeTotal } = renderKnowledgeGraphSvg(svg, stage);
+      totalEl.textContent = String(nodeTotal);
+      window.setTimeout(start, 420);
+    }
+
+    function bindMindmapGraph(scope) {
+      scope?.querySelectorAll("[data-knowledge-graph]").forEach((container) => {
+        initKnowledgeGraphTimelapse(container);
+      });
+    }
+
+    function competitiveRadarFlowMarkup(stage = {}) {
+      const radarUrl = stage.competitiveRadarUrl || "";
+      const imageMarkup = (src, alt) => {
+        const img = `<img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy" />`;
+        if (!radarUrl) return img;
+        return `<a href="${escapeAttr(radarUrl)}" target="_blank" rel="noopener noreferrer" title="打开竞品雷达线上看板">${img}</a>`;
+      };
+      return `
+        <div class="competitive-radar-flow">
+          <h4>竞品雷达图</h4>
+          <p>把竞品报告中的能力雷达放入「竞品分析」节点，用来展示不同产品在用户陪伴、表达承接、风险边界与 AI 能力上的差异。</p>
+          ${radarUrl ? `
+            <div class="competitive-radar-actions">
+              <a class="langfuse-link" href="${escapeAttr(radarUrl)}" target="_blank" rel="noopener noreferrer">打开竞品雷达线上看板 ↗</a>
+            </div>
+          ` : ""}
+          <div class="competitive-radar-images">
+            ${imageMarkup("./diagrams/competitive-report/report-image-08.png", "消费级 AI 情绪陪伴 App 竞品雷达图")}
+            ${imageMarkup("./diagrams/competitive-report/report-image-10.png", "LLM 情绪陪伴产品能力雷达图")}
+          </div>
+        </div>
+      `;
+    }
+
+    function evalAssetSummaryMarkup() {
+      const langfuseSummary = details["stability-builder"]?.langfuseDatasetSummary || "在 Langfuse 沉淀 50 条场景回归样本，用输入、预期输出和元数据支撑 trace → eval → fix 的稳定性闭环。";
+      const items = [
+        ["样本资产", "20 条 Eval Set + 50 条回归样本，覆盖正常、边界、对抗和 Bad Case。"],
+        ["判分资产", "Grader 按标准输出分数和原因，减少只凭主观感觉判断。"],
+        ["归因资产", "失败项被映射到样本、标准、Prompt、模型或工具链路。"],
+        ["回归资产", "Bad Case 回流为稳定考卷，修复后重新跑评测。"]
+      ];
+      return `
+        <div class="eval-asset-summary">
+          <h4>测评集沉淀总结</h4>
+          <p>${escapeHtml(langfuseSummary)}</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function assistantPrototypeAssetSummaryMarkup() {
+      const items = [
+        ["可运行技能", "把重复任务拆成 16 个可调用 Skill，证明助理能力可以被复用。"],
+        ["助理原型", "Open Core / Open Codex 作为载体，跑通工具调用和任务执行。"],
+        ["行为边界", "定义 Persona、Tools、允许边界和禁止边界，减少误调用和过度承诺。"],
+        ["架构取舍", "比较多套 Agent 方案，沉淀出适合 V0.5 的协作结构。"]
+      ];
+      return `
+        <div class="eval-asset-summary">
+          <h4>Skill 云助理原型沉淀</h4>
+          <p>这个节点的知识资产不再展示通用 Obsidian 结构，而是聚焦项目产出：Skill、助理原型、行为边界和架构取舍。</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function foundationProductAssetSummaryMarkup(stage = {}) {
+      const insights = Array.isArray(stage.productJudgmentInsights) ? stage.productJudgmentInsights : [];
+      const items = insights.length
+        ? insights.map((item) => [item.label || item.title, item.detail || item.title])
+        : [
+            ["AI 必要性", "先判断 AI 是否真的改变工作流，而不是给普通功能加 AI 按钮。"],
+            ["Tiny Core", "把 V0.5 压缩到一个不可替代的核心体验，而不是堆功能清单。"],
+            ["用户任务", "从 JTBD 写产品：说清目标用户、触发场景、成功状态和不做什么。"],
+            ["产品承诺", "每个 AI 承诺都要能被验证，落到样本、红线和人工确认路径。"]
+          ];
+      return `
+        <div class="eval-asset-summary">
+          <h4>AI 产品基础判断沉淀</h4>
+          <p>根据项目产出里的判断框架沉淀为知识资产，不再展示通用 Obsidian 结构图。</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function specProductOutputSummaryMarkup() {
+      const items = [
+        ["说明书结构", "把竞品、JTBD、成功状态、Agent 行为、Eval Set 和验证策略收成可评审规格。"],
+        ["行为边界", "写清 Persona、Tools、允许与禁止边界，避免 spec 只剩一句「帮用户完成任务」。"],
+        ["验证策略", "用 Research Preview 降低早期承诺，保留未解问题和下一步验证点。"],
+        ["体验沉淀", "小情绪房间 V0.5 把低摩擦安置、安全红线和记忆小花园收成可演示链路。"]
+      ];
+      return `
+        <div class="eval-asset-summary output-summary-card">
+          <h4>产品说明书沉淀总结</h4>
+          <p>把说明书结构、行为边界、验证策略和体验链路收成一张可对照的产出总结，再往下接 V1 / V2 演进。</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function flowDetailMarkup(stage, section = "output", detailId = "") {
+      const item = flowSection(stage, section);
+      if (section === "asset") {
+        const reflection = reflectionMarkup(stage) || `<div class="flow-panel-reflection is-empty"><b>沉淀感悟</b><p>做完这个节点的沉淀后，用一句话写下你的复盘与思考。</p></div>`;
+        const nodeId = detailId || stage.id;
+        const assistantSummary = nodeId === "assistant-prototype-builder"
+          ? assistantPrototypeAssetSummaryMarkup()
+          : "";
+        const foundationSummary = nodeId === "foundation-product"
+          ? foundationProductAssetSummaryMarkup(stage)
+          : "";
+        const evalSummary = ["evaluation-builder", "stability-builder", "evals-product"].includes(detailId || stage.id)
+          ? evalAssetSummaryMarkup()
+          : "";
+        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder", "spec-product", "foundation-product", "evals-product"].includes(nodeId)
+          ? ""
+          : nodeId === "competitive-product"
+            ? competitiveRadarFlowMarkup(stage)
+            : knowledgeSystemFlowMarkup();
+        return `${reflection}${assistantSummary}${foundationSummary}${evalSummary}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
+      }
+      const outputKey = section === "output" && stage.outputVersions ? "V1 / V2 演进" : item.key;
+      const body = section === "output"
+        ? projectOutputMarkup({ ...stage, id: stage.id || detailId, detailId: detailId || stage.id })
+        : `<div class="evidence-chips">${(item.items || []).map((label, index) => `<button class="evidence-chip" data-chip-label="${escapeAttr(label)}" data-chip-section="${section}" data-chip-index="${index}" data-chip-detail-text="${escapeAttr(mappedChipDetail(stage, section, label))}">${cleanEvidenceLabel(label)}</button>`).join("")}</div>`;
+      return `<div class="flow-panel-title"><h4>${item.title} · ${outputKey}</h4><p class="flow-panel-subtitle">${escapeHtml(item.detail)}</p></div>${body}<div class="chip-detail" data-chip-detail hidden></div>`;
+    }
+
+    const outputTypes = {
+      artifact: ["成果实物", '<div class="visual-artifact"></div>'],
+      process: ["过程记录", '<div class="visual-process"><span></span><span></span><span></span></div>'],
+      doc: ["文档结构", '<div class="visual-doc"><span></span><span></span><span></span></div>'],
+      system: ["系统模块", '<div class="visual-system"><span></span><span></span><span></span></div>'],
+      proof: ["验证证据", '<div class="visual-proof"><span></span><span></span><span></span></div>'],
+      decision: ["判断结论", '<div class="visual-decision"><span>✓</span><span></span></div>']
+    };
+
+    function outputGalleryMarkup(stage, items = []) {
+      return `<div class="output-gallery">
+        ${items.map((label) => {
+          const type = stage.evidenceMeta?.output?.[label]?.type || "artifact";
+          const [typeLabel, visual] = outputTypes[type] || outputTypes.artifact;
+          return `
+            <button class="output-block output-${escapeAttr(type)}" data-chip-label="${escapeAttr(label)}" data-chip-section="output" data-chip-detail-text="${escapeAttr(mappedChipDetail(stage, "output", label))}">
+              <span class="output-type">${escapeAttr(typeLabel)}</span>
+              <b>${escapeAttr(cleanEvidenceLabel(label))}</b>
+              <span>${escapeAttr(mappedChipDetail(stage, "output", label))}</span>
+              <div class="output-visual">${visual}</div>
+            </button>
+          `;
+        }).join("")}
+      </div>`;
+    }
+
+    function escapeAttr(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function cleanEvidenceLabel(label) {
+      const wikiMatch = String(label).match(/^\[\[(.+)\]\]$/);
+      return wikiMatch ? wikiMatch[1] : label;
+    }
+
+    function obsidianOpenMarkup(label) {
+      const wikiTitle = cleanEvidenceLabel(label);
+      if (wikiTitle === label) return "";
+      const vault = encodeURIComponent("knowledge-vault");
+      const file = encodeURIComponent(wikiTitle);
+      return `<a class="obsidian-open-link" href="obsidian://open?vault=${vault}&file=${file}">在 Obsidian 打开：${wikiTitle}</a>`;
+    }
+
+    function mappedChipDetail(stage, section, label) {
+      if (section === "learn" || section === "asset") {
+        return stage.evidenceDetail?.asset?.[label] || stage.evidenceDetail?.transfer?.[label] || "";
+      }
+      return stage.evidenceDetail?.[section]?.[label] || "";
+    }
+
+    function chipDetailMarkup(label, section, mappedDetail = "") {
+      const descriptions = {
+        learn: "这是该判断在本能力节点中的映射说明，说明它如何从学习输入沉淀为可复用认知。",
+        output: "这是该能力节点形成的可见产出，用来证明学习已经转化为具体作品或过程成果。",
+        asset: "这是已经沉淀进知识系统、可在下次项目中直接复用的判断、方法和地图。"
+      };
+      return `<b>${cleanEvidenceLabel(label)}</b>${mappedDetail || descriptions[section] || "这是该能力节点下的具体证据项。"}${obsidianOpenMarkup(label)}`;
+    }
+
+    function bindOutputVersionCompare(scope) {
+      const root = scope?.matches?.("[data-output-version-compare]")
+        ? scope
+        : scope?.querySelector?.("[data-output-version-compare]");
+      if (!root) return;
+      root.querySelectorAll("[data-output-version]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const version = tab.dataset.outputVersion;
+          root.querySelectorAll("[data-output-version]").forEach((item) => {
+            const active = item.dataset.outputVersion === version;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-selected", active ? "true" : "false");
+          });
+          root.querySelectorAll("[data-output-version-panel]").forEach((panel) => {
+            const active = panel.dataset.outputVersionPanel === version;
+            panel.classList.toggle("is-active", active);
+            panel.hidden = !active;
+          });
+        });
+      });
+    }
+
+    function bindChipInteractions(scope) {
+      scope.querySelectorAll("[data-chip-label]").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          scope.querySelectorAll("[data-chip-label]").forEach((item) => item.classList.remove("active"));
+          chip.classList.add("active");
+          const detail = scope.querySelector("[data-chip-detail]");
+          detail.hidden = false;
+          detail.innerHTML = chipDetailMarkup(chip.dataset.chipLabel, chip.dataset.chipSection, chip.dataset.chipDetailText);
+        });
+      });
+    }
+
+    function flowStepsMarkup(activeSection = "output", detailId = "") {
+      const stage = details[detailId] || {};
+      const outputKey = stage.outputVersions ? "V1 / V2 演进" : "脑图 / 架构图";
+      const steps = [
+        ["learn", "01", "学习输入", "判断映射"],
+        ["output", "02", "项目产出", outputKey],
+        ["asset", "03", "知识资产", "复盘思考"]
+      ];
+      return steps.map(([section, index, title, key], stepIndex) => `
+        <button class="flow-step ${section === activeSection ? "active" : ""}" data-flow-section="${section}">
+          <span class="flow-index">${index}</span>
+          <span class="flow-copy"><b>${title}</b><span>${key}</span></span>
+          <span class="flow-arrow">${stepIndex === steps.length - 1 ? "✓" : "→"}</span>
+        </button>
+      `).join("");
+    }
+
+    function evidenceDirectoryMarkup(detailId = "") {
+      return `
+        <aside class="evidence-directory">
+          <h4>证据目录</h4>
+          <p>按同一套目录查看每个能力节点的证据层级。</p>
+          <div class="evidence-flow" aria-label="证据目录">
+            ${flowStepsMarkup("output", detailId)}
+          </div>
+        </aside>
+      `;
+    }
+
+    function evidenceDetailPanelMarkup(stage, detailId) {
+      return `
+        <aside class="evidence-flow-panel">
+          <div class="flow-detail" data-flow-detail>${flowDetailMarkup(stage, "output", detailId)}</div>
+          <details class="detail-sources">
+            <summary>相关来源与知识卡</summary>
+            <div class="source-links">${sourceLinksMarkup(stage.notes || [])}</div>
+          </details>
+        </aside>
+      `;
+    }
+
+    function detailWorkspaceMarkup(detailId) {
+      const stage = details[detailId];
+      const track = trackForDetail(detailId);
+      const trackLabel = stage.tag || (track === "product" ? "AI 产品经理能力线" : "AI Builder 工程能力线");
+      const index = String(detailIndex(detailId)).padStart(2, "0");
+
+      return `
+        <div class="detail-top">
+          <div>
+            <div class="detail-kicker">
+              <span class="chip ${track === "product" ? "mint" : "purple"}">${trackLabel}</span>
+              <span class="chip">${index}</span>
+              <span class="chip amber">能力节点详情</span>
+            </div>
+            <h3>${stage.title}</h3>
+            <p class="detail-desc">${stage.desc}</p>
+          </div>
+          <button class="detail-back" data-close-detail>← 返回双轨时间线</button>
+        </div>
+        <div class="detail-switcher">${switcherMarkup(detailId)}</div>
+        <div class="detail-main">
+          ${evidenceDirectoryMarkup(detailId)}
+          ${evidenceDetailPanelMarkup(stage, detailId)}
+        </div>
+      `;
+    }
+
+    const evolutionDetailMap = {
+      "foundation-builder": 0,
+      "foundation-product": 0,
+      "assistant-prototype-builder": 1,
+      "competitive-product": 1,
+      "evaluation-builder": 2,
+      "spec-product": 2,
+      "stability-builder": 3,
+      "evals-product": 3
+    };
+
+    const evolutionStations = [
+      {
+        title: "能力基础",
+        builder: { id: "foundation-builder", label: "LLM / Agent 基础" },
+        product: { id: "foundation-product", label: "AI 产品基础判断" }
+      },
+      {
+        title: "阶段二",
+        builder: { id: "assistant-prototype-builder", label: "Skill 与助理原型" },
+        product: { id: "competitive-product", label: "竞品分析" }
+      },
+      {
+        title: "阶段三",
+        builder: { id: "evaluation-builder", label: "评测体系" },
+        product: { id: "spec-product", label: "产品说明书" }
+      },
+      {
+        title: "测评",
+        builder: { id: "stability-builder", label: "稳定性工程" },
+        product: { id: "evals-product", label: "产品评测" }
+      }
+    ];
+    const evolutionRailStops = [12.5, 37.5, 62.5, 87.5];
+
+    function setEvolutionStation(stationIndex) {
+      const strip = document.querySelector("[data-evolution-strip]");
+      if (!strip) return;
+      const safeIndex = Math.max(0, Math.min(3, stationIndex));
+      const station = evolutionStations[safeIndex];
+      const title = strip.querySelector("[data-evolution-spotlight-title]");
+      const meta = strip.querySelector("[data-evolution-spotlight-meta]");
+      const builder = strip.querySelector("[data-evolution-spotlight-builder]");
+      const product = strip.querySelector("[data-evolution-spotlight-product]");
+      const pointer = strip.querySelector("[data-evolution-rail-pointer]");
+      const track = strip.querySelector("[data-evolution-rail-track]");
+
+      if (title) title.textContent = station.title;
+      if (meta) meta.textContent = `第 ${safeIndex + 1} / 4 阶段`;
+      if (builder) {
+        builder.dataset.openDetail = station.builder.id;
+        builder.innerHTML = `<small>工程</small>${station.builder.label}`;
+      }
+      if (product) {
+        product.dataset.openDetail = station.product.id;
+        product.innerHTML = `<small>产品</small>${station.product.label}`;
+      }
+      if (pointer) pointer.style.left = `${evolutionRailStops[safeIndex]}%`;
+      if (track) track.style.setProperty("--rail-progress", String((safeIndex + 1) / 4));
+
+      strip.querySelectorAll("[data-evolution-station]").forEach((step) => {
+        const index = Number(step.dataset.evolutionStation);
+        step.classList.toggle("active", index === safeIndex);
+      });
+    }
+
+    function scrollToJourney() {
+      document.getElementById("journey")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function bindEvolutionStrip() {
+      const strip = document.querySelector("[data-evolution-strip]");
+      if (!strip) return;
+
+      strip.addEventListener("click", (event) => {
+        const nodeLink = event.target.closest("[data-open-detail]");
+        if (nodeLink && strip.contains(nodeLink)) {
+          event.stopPropagation();
+          const detailId = nodeLink.dataset.openDetail;
+          setEvolutionStation(evolutionDetailMap[detailId] ?? 0);
+          openDetailWorkspace(detailId);
+          return;
+        }
+        const railStep = event.target.closest("[data-evolution-station]");
+        if (railStep && strip.contains(railStep)) {
+          setEvolutionStation(Number(railStep.dataset.evolutionStation));
+          scrollToJourney();
+        }
+      });
+    }
+
+    function closeDetailWorkspace() {
+      const timelineCard = document.querySelector(".timeline-card");
+      const workspace = document.getElementById("detailWorkspace");
+      timelineCard.classList.remove("detail-open");
+      workspace.hidden = true;
+      workspace.className = "detail-workspace";
+      workspace.innerHTML = "";
+      document.querySelectorAll(".milestone-node").forEach((node) => node.classList.remove("active"));
+    }
+
+    function openDetailWorkspace(detailId) {
+      const stage = details[detailId];
+      if (!stage) return;
+      const timelineCard = document.querySelector(".timeline-card");
+      const workspace = document.getElementById("detailWorkspace");
+      const track = trackForDetail(detailId);
+      timelineCard.classList.add("detail-open");
+      workspace.hidden = false;
+      workspace.className = `detail-workspace ${track === "product" ? "product" : ""}`.trim();
+      workspace.innerHTML = detailWorkspaceMarkup(detailId);
+      document.querySelectorAll(".milestone-node").forEach((node) => {
+        node.classList.toggle("active", node.dataset.detail === detailId);
+      });
+      setEvolutionStation(evolutionDetailMap[detailId] ?? 0);
+      workspace.querySelector("[data-close-detail]").addEventListener("click", closeDetailWorkspace);
+      workspace.querySelectorAll("[data-switch-detail]").forEach((button) => {
+        button.addEventListener("click", () => openDetailWorkspace(button.dataset.switchDetail));
+      });
+      workspace.querySelectorAll("[data-flow-section]").forEach((step) => {
+        step.addEventListener("click", () => {
+          workspace.querySelectorAll("[data-flow-section]").forEach((item) => item.classList.remove("active"));
+          step.classList.add("active");
+          workspace.querySelector("[data-flow-detail]").innerHTML = flowDetailMarkup(stage, step.dataset.flowSection, detailId);
+          const flowDetail = workspace.querySelector("[data-flow-detail]");
+          bindChipInteractions(flowDetail);
+          bindOutputVersionCompare(flowDetail);
+          bindMindmapGraph(flowDetail);
+        });
+      });
+      const flowDetail = workspace.querySelector("[data-flow-detail]");
+      bindChipInteractions(flowDetail);
+      bindOutputVersionCompare(flowDetail);
+      bindMindmapGraph(flowDetail);
+      requestAnimationFrame(() => {
+        workspace.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
+    document.querySelectorAll(".milestone-node").forEach((item) => {
+      item.addEventListener("click", () => openDetailWorkspace(item.dataset.detail));
+    });
+
+    bindEvolutionStrip();
+    setEvolutionStation(0);
+    function applyInitialWorkspaceFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const detailId = params.get("detail");
+      const section = params.get("section");
+      if (!detailId || !details[detailId]) return;
+      openDetailWorkspace(detailId);
+      if (!section || !["learn", "output", "asset"].includes(section)) return;
+      const workspace = document.getElementById("detailWorkspace");
+      const target = workspace?.querySelector(`[data-flow-section="${section}"]`);
+      target?.click();
+    }
+    applyInitialWorkspaceFromUrl();
+
+    document.querySelectorAll(".asset-link").forEach((item) => {
+      item.addEventListener("click", () => {
+        expandNoteInItem(item.dataset.note, item.closest(".asset-note-item"));
+      });
+    });
+
+  </script>
+</body>
+</html>
