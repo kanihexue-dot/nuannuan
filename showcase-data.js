@@ -94,7 +94,7 @@ window.SHOWCASE_MAP_DATA = {
         },
         "output": {
           "Agent 组件图": "把 Agent 拆成目标、规划、记忆、工具、反馈和修正，作为后续系统设计底图。",
-          "工具跑通记录": "保留 Cursor / OpenClaw / Hello World 的真实操作记录，证明学习进入可复现状态。",
+          "工具跑通记录": "保留 Cursor / Open Core / Open Codex / Hello World 的真实操作记录，证明学习进入可复现状态。",
           "Builder 最低完成线": "用工具跑通、组件图、自测和调用记录定义 Week0 的完成标准。",
           "第一个最小 Skill": "把一个重复动作封装成可调用能力，验证知识沉淀可以变成执行入口。"
         },
@@ -165,13 +165,13 @@ window.SHOWCASE_MAP_DATA = {
       "evidence": {
         "learn": [
           "AI Builder Week 1 V0.5",
-          "OpenClaw 个人助理 v1",
+          "Open Core / Open Codex 云助理原型",
           "Skill 设计原则",
           "Agent 架构方案对比"
         ],
         "output": [
-          "3 个可运行 Skill",
-          "OpenClaw 助理原型",
+          "16 个可运行 Skill",
+          "Open Core / Open Codex 助理原型",
           "Agent 行为边界",
           "架构方案对比"
         ],
@@ -190,13 +190,13 @@ window.SHOWCASE_MAP_DATA = {
       "evidenceDetail": {
         "learn": {
           "AI Builder Week 1 V0.5": "Week1 要求把想法推进到可评审的 V0.5，并搭出最小助理原型。",
-          "OpenClaw 个人助理 v1": "用个人助理作为可运行载体，验证 skills、工具边界和 Agent 行为定义。",
+          "Open Core / Open Codex 云助理原型": "用 Open Core 和 Open Codex 作为云助理载体，验证 skills、工具边界和 Agent 行为定义。",
           "Skill 设计原则": "工具名具体、参数少而清楚、输入输出有样例、边界写明、单一职责。",
           "Agent 架构方案对比": "用多方案比较帮助判断助理原型的工具组合、执行边界和复杂度。"
         },
         "output": {
-          "3 个可运行 Skill": "把重复任务拆成可调用能力，证明助理不是只靠聊天提示词运行。",
-          "OpenClaw 助理原型": "完成一个能调用工具、执行任务并暴露边界的个人助理 v1。",
+          "16 个可运行 Skill": "把重复任务拆成 16 个可调用能力，证明助理不是只靠聊天提示词运行。",
+          "Open Core / Open Codex 助理原型": "完成 Open Core / Open Codex 云助理原型，跑通工具调用、任务执行和边界暴露。",
           "Agent 行为边界": "定义 Persona、Tools、允许边界和禁止边界，减少误调用和过度承诺。",
           "架构方案对比": "比较至少 3 个助理架构方案，选择更适合 V0.5 的实现路径。"
         },
@@ -215,10 +215,10 @@ window.SHOWCASE_MAP_DATA = {
       "evidenceMeta": {
         "learn": {},
         "output": {
-          "3 个可运行 Skill": {
+          "16 个可运行 Skill": {
             "type": "artifact"
           },
-          "OpenClaw 助理原型": {
+          "Open Core / Open Codex 助理原型": {
             "type": "artifact"
           },
           "Agent 行为边界": {
@@ -332,6 +332,7 @@ window.SHOWCASE_MAP_DATA = {
       "demoVideo": "",
       "langfuseImage": "diagrams/stability-builder-langfuse.png",
       "langfuseDatasetName": "nuannuan-scene-v21-50-回归",
+      "langfuseUrl": "https://cloud.langfuse.com",
       "langfuseDatasetSummary": "在 Langfuse 沉淀 50 条场景回归样本，用输入、预期输出和元数据支撑 trace → eval → fix 的稳定性闭环。",
       "evidence": {
         "learn": [
@@ -634,13 +635,14 @@ window.SHOWCASE_MAP_DATA = {
         "v1": {
           "kicker": "初版",
           "title": "产品说明书 V1",
-          "summary": "课程早期的产品说明书与 Demo 结构，待贴图补充。",
+          "summary": "初版保留产品说明书的早期表达，用来对照新版如何收敛成完整体验流程。",
           "image": "diagrams/spec-product-v1.png"
         },
         "v2": {
-          "kicker": "当前沉淀",
+          "kicker": "新版",
           "title": "产品说明书 V2",
-          "summary": "暖暖用户情绪旅程与方案核心决策主链路。"
+          "summary": "小情绪房间 V0.5 的五步体验流程，把低摩擦情绪安置、安全红线和陪伴承接合成一张流程图。",
+          "image": "diagrams/spec-product-v2.png"
         }
       },
       "evidence": {
