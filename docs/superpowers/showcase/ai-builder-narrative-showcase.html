@@ -1502,6 +1502,32 @@
       display: block;
       line-height: 0;
     }
+    .langfuse-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .langfuse-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(16,163,127,.24);
+      border-radius: 999px;
+      background: rgba(16,163,127,.10);
+      color: var(--mint);
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+      line-height: 1;
+      transition: .18s ease;
+    }
+    .langfuse-link:hover {
+      transform: translateY(-1px);
+      background: rgba(16,163,127,.16);
+      box-shadow: 0 10px 22px rgba(16,163,127,.10);
+    }
     .storyboard-shell,
     .evolve-shell {
       border: 1px solid var(--line);
@@ -1576,40 +1602,59 @@
     }
     .output-version-compare {
       display: grid;
-      gap: 12px;
+      gap: 16px;
     }
-    .output-version-bar {
-      display: inline-flex;
-      gap: 4px;
-      padding: 4px;
+    .output-version-stack {
       border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--paper-2);
-      width: fit-content;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      padding: 16px;
     }
-    .output-version-tab {
-      appearance: none;
-      border: none;
-      background: transparent;
-      border-radius: 999px;
-      padding: 8px 14px;
+    .output-version-stack.is-v2 {
+      border-color: rgba(16,163,127,.18);
+      background:
+        radial-gradient(circle at top left, rgba(16,163,127,.08), transparent 32%),
+        linear-gradient(180deg, #fff, #fbfffc);
+    }
+    .output-version-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .output-version-head h4 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+    .output-version-head p {
+      margin: 0;
       color: var(--muted);
-      font: inherit;
-      font-size: 12px;
-      font-weight: 850;
-      cursor: pointer;
-      transition: .18s ease;
+      font-size: 13px;
+      line-height: 1.58;
     }
-    .output-version-tab.active {
-      background: #fff;
-      color: var(--ink);
-      box-shadow: 0 4px 14px rgba(17,24,39,.08);
+    .output-version-badge {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--purple);
+      background: var(--purple-soft);
+      white-space: nowrap;
     }
-    .detail-workspace.product .output-version-tab.active {
+    .output-version-stack.is-v2 .output-version-badge {
       color: var(--mint);
+      background: rgba(16,163,127,.10);
     }
-    .output-version-panel[hidden] {
-      display: none !important;
+    .output-version-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
     }
 
     .story-card b {
@@ -2604,6 +2649,50 @@
       font-size: 11px;
       line-height: 1.45;
     }
+    .eval-asset-summary {
+      border: 1px solid rgba(99,91,255,.14);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top left, rgba(99,91,255,.10), transparent 36%),
+        linear-gradient(180deg, #fff, #fbfbff);
+      padding: 18px;
+      margin: 14px 0;
+    }
+    .eval-asset-summary h4 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      letter-spacing: -.04em;
+    }
+    .eval-asset-summary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .eval-asset-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .eval-asset-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.86);
+      padding: 10px 12px;
+    }
+    .eval-asset-item b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+      letter-spacing: -.02em;
+    }
+    .eval-asset-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
 
     .system-map {
       display: grid;
@@ -2977,6 +3066,7 @@
     @media (max-width: 1050px) {
       .hero, .asset-grid, .system-map, .mindset-grid, .summit-insight, .radar-grid, .detail-main, .output-gallery, .storyboard-grid { grid-template-columns: 1fr; }
       .asset-type-breakdown { grid-template-columns: 1fr; }
+      .eval-asset-grid { grid-template-columns: 1fr; }
       .evolve-flow,
       .eval-flow-steps { grid-template-columns: 1fr; }
       .evolve-step:not(:last-child)::after {
@@ -3570,6 +3660,7 @@
           langfuseImage: node.langfuseImage || existing.langfuseImage || "",
           evalDesignFlowImage: node.evalDesignFlowImage || existing.evalDesignFlowImage || "",
           langfuseDatasetName: node.langfuseDatasetName || existing.langfuseDatasetName || "",
+          langfuseUrl: node.langfuseUrl || existing.langfuseUrl || "",
           langfuseDatasetSummary: node.langfuseDatasetSummary || existing.langfuseDatasetSummary || "",
           outputVersions: node.outputVersions || existing.outputVersions || null,
           id: node.id || detailId,
@@ -3776,12 +3867,12 @@
             <text x="114" y="176" text-anchor="middle" font-weight="700">用户请求</text>
             <text x="114" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">自然语言任务</text>
             <rect x="232" y="132" width="156" height="96" rx="18" fill="#fff" stroke="#cdb8ff"/>
-            <text x="310" y="168" text-anchor="middle" font-weight="700">OpenClaw 助理</text>
+            <text x="310" y="168" text-anchor="middle" font-weight="700">Open Core / Open Codex</text>
             <text x="310" y="190" text-anchor="middle" fill="#6f6a82" font-size="12">Persona / 边界</text>
             <text x="310" y="208" text-anchor="middle" fill="#6f6a82" font-size="12">路由与编排</text>
             <rect x="440" y="148" width="132" height="64" rx="16" fill="#fff" stroke="#d8d2ea"/>
             <text x="506" y="176" text-anchor="middle" font-weight="700">Skill 调用</text>
-            <text x="506" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">3 个可运行 Skill</text>
+            <text x="506" y="198" text-anchor="middle" fill="#6f6a82" font-size="12">16 个可运行 Skill</text>
             <rect x="624" y="124" width="120" height="52" rx="14" fill="#fff" stroke="#d8d2ea"/>
             <text x="684" y="150" text-anchor="middle" font-weight="700">工具 A</text>
             <text x="684" y="166" text-anchor="middle" fill="#6f6a82" font-size="11">检索 / 整理</text>
@@ -4112,6 +4203,7 @@
       const src = imagePath.startsWith("http") ? imagePath : `./${imagePath}`;
       const datasetName = stage.langfuseDatasetName || "nuannuan-scene-v21-50-回归";
       const summary = stage.langfuseDatasetSummary || "在 Langfuse 沉淀 50 条场景回归样本，用输入、预期输出和元数据支撑 trace → eval → fix 的稳定性闭环。";
+      const langfuseUrl = stage.langfuseUrl || "https://cloud.langfuse.com";
       return `
         <div class="output-visual-stage langfuse langfuse-dataset" data-output-visual-stage>
           <div class="evolve-shell">
@@ -4120,6 +4212,9 @@
                 <span class="langfuse-dataset-kicker">Langfuse 回归数据集</span>
                 <h4>${escapeHtml(datasetName)}</h4>
                 <p>${escapeHtml(summary)}</p>
+                <div class="langfuse-actions">
+                  <a class="langfuse-link" href="${escapeAttr(langfuseUrl)}" target="_blank" rel="noopener noreferrer">打开 Langfuse 线上平台 ↗</a>
+                </div>
               </div>
               <span class="chip mint">Regression Set</span>
             </div>
@@ -4238,22 +4333,59 @@
       `;
     }
 
+    function projectOutputImageMarkup(version = {}, fallbackTitle = "项目产出") {
+      const imagePath = version.image || "";
+      const images = Array.isArray(version.images) && version.images.length ? version.images : (imagePath ? [imagePath] : []);
+      if (!images.length) return "";
+      if (images.length === 1) {
+        const src = images[0].startsWith("http") ? images[0] : `./${images[0]}`;
+        return `
+          <div class="output-version-image" data-output-visual-stage>
+            <img src="${escapeAttr(src)}" alt="${escapeAttr(version.title || fallbackTitle)}" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+          </div>
+        `;
+      }
+      return `
+        <div class="storyboard-grid">
+          ${images.map((image, index) => {
+            const src = image.startsWith("http") ? image : `./${image}`;
+            return `
+              <article class="story-card">
+                <div class="story-visual"><img src="${escapeAttr(src)}" alt="${escapeAttr(version.title || fallbackTitle)} ${index + 1}" loading="lazy" /></div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
     function projectOutputVersionShellMarkup(stage, innerMarkup) {
       const versions = stage.outputVersions || {};
       const v1 = versions.v1 || {};
       const v2 = versions.v2 || {};
-      const defaultVersion = versions.default === "v1" ? "v1" : "v2";
+      const v1Markup = projectOutputImageMarkup(v1, "V1 初版项目产出") || innerMarkup;
+      const v2Markup = projectOutputImageMarkup(v2, "V2 新版项目产出") || innerMarkup;
       return `
-        <div class="output-version-compare" data-output-version-compare data-default-version="${escapeAttr(defaultVersion)}">
-          <div class="output-version-bar" role="tablist" aria-label="项目产出版本切换">
-            <button type="button" class="output-version-tab ${defaultVersion === "v1" ? "active" : ""}" data-output-version="v1" role="tab" aria-selected="${defaultVersion === "v1"}">V1 · ${escapeHtml(v1.kicker || "初版")}</button>
-            <button type="button" class="output-version-tab ${defaultVersion === "v2" ? "active" : ""}" data-output-version="v2" role="tab" aria-selected="${defaultVersion === "v2"}">V2 · ${escapeHtml(v2.kicker || "当前沉淀")}</button>
+        <div class="output-version-compare">
+          <div class="output-version-stack is-v1">
+            <div class="output-version-head">
+              <div>
+                <h4>${escapeHtml(v1.title || "V1 初版")}</h4>
+                <p>${escapeHtml(v1.summary || "早期版本保留原始表达和结构，用来对比后续如何收敛。")}</p>
+              </div>
+              <span class="output-version-badge">V1 · ${escapeHtml(v1.kicker || "初版")}</span>
+            </div>
+            ${v1Markup}
           </div>
-          <div class="output-version-panel ${defaultVersion === "v1" ? "is-active" : ""}" data-output-version-panel="v1" role="tabpanel" ${defaultVersion === "v1" ? "" : "hidden"}>
-            ${projectOutputV1Markup(stage)}
-          </div>
-          <div class="output-version-panel ${defaultVersion === "v2" ? "is-active" : ""}" data-output-version-panel="v2" role="tabpanel" ${defaultVersion === "v2" ? "" : "hidden"}>
-            ${innerMarkup}
+          <div class="output-version-stack is-v2">
+            <div class="output-version-head">
+              <div>
+                <h4>${escapeHtml(v2.title || "V2 新版")}</h4>
+                <p>${escapeHtml(v2.summary || "新版把体验流程、关键场景和安全机制收敛成更直观的展示。")}</p>
+              </div>
+              <span class="output-version-badge">V2 · ${escapeHtml(v2.kicker || "新版")}</span>
+            </div>
+            ${v2Markup}
           </div>
         </div>
       `;
@@ -4635,14 +4767,70 @@
       `;
     }
 
+    function evalAssetSummaryMarkup() {
+      const langfuseSummary = details["stability-builder"]?.langfuseDatasetSummary || "在 Langfuse 沉淀 50 条场景回归样本，用输入、预期输出和元数据支撑 trace → eval → fix 的稳定性闭环。";
+      const items = [
+        ["样本资产", "20 条 Eval Set + 50 条回归样本，覆盖正常、边界、对抗和 Bad Case。"],
+        ["判分资产", "Grader 按标准输出分数和原因，减少只凭主观感觉判断。"],
+        ["归因资产", "失败项被映射到样本、标准、Prompt、模型或工具链路。"],
+        ["回归资产", "Bad Case 回流为稳定考卷，修复后重新跑评测。"]
+      ];
+      return `
+        <div class="eval-asset-summary">
+          <h4>测评集沉淀总结</h4>
+          <p>${escapeHtml(langfuseSummary)}</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function assistantPrototypeAssetSummaryMarkup() {
+      const items = [
+        ["可运行技能", "把重复任务拆成 16 个可调用 Skill，证明助理能力可以被复用。"],
+        ["助理原型", "Open Core / Open Codex 云助理原型 作为载体，跑通工具调用和任务执行。"],
+        ["行为边界", "定义 Persona、Tools、允许边界和禁止边界，减少误调用和过度承诺。"],
+        ["架构取舍", "比较多套 Agent 方案，沉淀出适合 V0.5 的协作结构。"]
+      ];
+      return `
+        <div class="eval-asset-summary">
+          <h4>Skill 云助理原型沉淀</h4>
+          <p>这个节点的知识资产不再展示通用 Obsidian 结构，而是聚焦项目产出：Skill、助理原型、行为边界和架构取舍。</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
     function flowDetailMarkup(stage, section = "output", detailId = "") {
       const item = flowSection(stage, section);
       if (section === "asset") {
         const reflection = reflectionMarkup(stage) || `<div class="flow-panel-reflection is-empty"><b>沉淀感悟</b><p>做完这个节点的沉淀后，用一句话写下你的复盘与思考。</p></div>`;
-        const assetVisual = (detailId || stage.id) === "competitive-product"
-          ? competitiveRadarFlowMarkup()
-          : knowledgeSystemFlowMarkup();
-        return `${reflection}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
+        const nodeId = detailId || stage.id;
+        const assistantSummary = nodeId === "assistant-prototype-builder"
+          ? assistantPrototypeAssetSummaryMarkup()
+          : "";
+        const evalSummary = ["evaluation-builder", "stability-builder", "evals-product"].includes(detailId || stage.id)
+          ? evalAssetSummaryMarkup()
+          : "";
+        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder"].includes(nodeId)
+          ? ""
+          : nodeId === "competitive-product"
+            ? competitiveRadarFlowMarkup()
+            : knowledgeSystemFlowMarkup();
+        return `${reflection}${assistantSummary}${evalSummary}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
       }
       const outputKey = section === "output" && stage.outputVersions ? "V1 / V2 演进" : item.key;
       const body = section === "output"
