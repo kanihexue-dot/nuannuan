@@ -3410,7 +3410,7 @@
     </footer>
   </main>
 
-  <script src="./showcase-data.js?v=20260612-product-row"></script>
+  <script src="./showcase-data.js?v=20260612-evals-asset"></script>
   <script>
     const notes = {
       "llm-nondeterministic": {
@@ -4950,7 +4950,7 @@
         const evalSummary = ["evaluation-builder", "stability-builder", "evals-product"].includes(detailId || stage.id)
           ? evalAssetSummaryMarkup()
           : "";
-        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder", "spec-product", "foundation-product"].includes(nodeId)
+        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder", "spec-product", "foundation-product", "evals-product"].includes(nodeId)
           ? ""
           : nodeId === "competitive-product"
             ? competitiveRadarFlowMarkup(stage)
