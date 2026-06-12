@@ -761,6 +761,12 @@
       font-size: 13px;
       line-height: 1.6;
     }
+    .competitive-radar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
     .competitive-radar-images {
       display: grid;
       gap: 14px;
@@ -1655,6 +1661,33 @@
       border-radius: 18px;
       border: 1px solid var(--line);
       background: #fff;
+    }
+    .product-screen-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .product-screen-card {
+      border: 1px solid rgba(16,163,127,.16);
+      border-radius: 18px;
+      background: rgba(255,255,255,.82);
+      overflow: hidden;
+      box-shadow: 0 10px 22px rgba(16,163,127,.04);
+    }
+    .product-screen-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #fff;
+    }
+    .product-screen-card b {
+      display: block;
+      padding: 10px 12px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink);
+      text-align: center;
+      line-height: 1.45;
     }
 
     .story-card b {
@@ -3063,6 +3096,10 @@
       line-height: 1.7;
     }
 
+    @media (max-width: 768px) {
+      .product-screen-grid { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 1050px) {
       .hero, .asset-grid, .system-map, .mindset-grid, .summit-insight, .radar-grid, .detail-main, .output-gallery, .storyboard-grid { grid-template-columns: 1fr; }
       .asset-type-breakdown { grid-template-columns: 1fr; }
@@ -3369,7 +3406,7 @@
     </footer>
   </main>
 
-  <script src="./showcase-data.js?v=20260610-kg"></script>
+  <script src="./showcase-data.js?v=20260612-spec-v2"></script>
   <script>
     const notes = {
       "llm-nondeterministic": {
@@ -3661,6 +3698,7 @@
           evalDesignFlowImage: node.evalDesignFlowImage || existing.evalDesignFlowImage || "",
           langfuseDatasetName: node.langfuseDatasetName || existing.langfuseDatasetName || "",
           langfuseUrl: node.langfuseUrl || existing.langfuseUrl || "",
+          competitiveRadarUrl: node.competitiveRadarUrl || existing.competitiveRadarUrl || "",
           langfuseDatasetSummary: node.langfuseDatasetSummary || existing.langfuseDatasetSummary || "",
           outputVersions: node.outputVersions || existing.outputVersions || null,
           id: node.id || detailId,
@@ -4345,6 +4383,24 @@
           </div>
         `;
       }
+      const labels = Array.isArray(version.imageLabels) ? version.imageLabels : [];
+      const useProductScreens = version.layout === "product-screens" || images.length === 4;
+      if (useProductScreens) {
+        return `
+          <div class="product-screen-grid">
+            ${images.map((image, index) => {
+              const src = image.startsWith("http") ? image : `./${image}`;
+              const label = labels[index] || "";
+              return `
+                <article class="product-screen-card">
+                  <img src="${escapeAttr(src)}" alt="${escapeAttr(version.title || fallbackTitle)} ${index + 1}" loading="lazy" />
+                  ${label ? `<b>${escapeHtml(label)}</b>` : ""}
+                </article>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
       return `
         <div class="storyboard-grid">
           ${images.map((image, index) => {
@@ -4427,11 +4483,13 @@
     }
 
     function projectOutputMarkup(stage) {
+      const nodeId = stage.id || stage.detailId;
       const inner = projectOutputInnerMarkup(stage);
+      const summary = nodeId === "spec-product" ? specProductOutputSummaryMarkup() : "";
       if (stage.outputVersions) {
-        return projectOutputVersionShellMarkup(stage, inner);
+        return `${summary}${projectOutputVersionShellMarkup(stage, inner)}`;
       }
-      return inner;
+      return `${summary}${inner}`;
     }
 
     function mindmapAssetMarkup(stage) {
@@ -4754,14 +4812,25 @@
       });
     }
 
-    function competitiveRadarFlowMarkup() {
+    function competitiveRadarFlowMarkup(stage = {}) {
+      const radarUrl = stage.competitiveRadarUrl || "";
+      const imageMarkup = (src, alt) => {
+        const img = `<img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy" />`;
+        if (!radarUrl) return img;
+        return `<a href="${escapeAttr(radarUrl)}" target="_blank" rel="noopener noreferrer" title="打开竞品雷达线上看板">${img}</a>`;
+      };
       return `
         <div class="competitive-radar-flow">
           <h4>竞品雷达图</h4>
           <p>把竞品报告中的能力雷达放入「竞品分析」节点，用来展示不同产品在用户陪伴、表达承接、风险边界与 AI 能力上的差异。</p>
+          ${radarUrl ? `
+            <div class="competitive-radar-actions">
+              <a class="langfuse-link" href="${escapeAttr(radarUrl)}" target="_blank" rel="noopener noreferrer">打开竞品雷达线上看板 ↗</a>
+            </div>
+          ` : ""}
           <div class="competitive-radar-images">
-            <img src="./diagrams/competitive-report/report-image-08.png" alt="消费级 AI 情绪陪伴 App 竞品雷达图" loading="lazy" />
-            <img src="./diagrams/competitive-report/report-image-10.png" alt="LLM 情绪陪伴产品能力雷达图" loading="lazy" />
+            ${imageMarkup("./diagrams/competitive-report/report-image-08.png", "消费级 AI 情绪陪伴 App 竞品雷达图")}
+            ${imageMarkup("./diagrams/competitive-report/report-image-10.png", "LLM 情绪陪伴产品能力雷达图")}
           </div>
         </div>
       `;
@@ -4794,7 +4863,7 @@
     function assistantPrototypeAssetSummaryMarkup() {
       const items = [
         ["可运行技能", "把重复任务拆成 16 个可调用 Skill，证明助理能力可以被复用。"],
-        ["助理原型", "Open Core / Open Codex 云助理原型 作为载体，跑通工具调用和任务执行。"],
+        ["助理原型", "Open Core / Open Codex 作为载体，跑通工具调用和任务执行。"],
         ["行为边界", "定义 Persona、Tools、允许边界和禁止边界，减少误调用和过度承诺。"],
         ["架构取舍", "比较多套 Agent 方案，沉淀出适合 V0.5 的协作结构。"]
       ];
@@ -4802,6 +4871,29 @@
         <div class="eval-asset-summary">
           <h4>Skill 云助理原型沉淀</h4>
           <p>这个节点的知识资产不再展示通用 Obsidian 结构，而是聚焦项目产出：Skill、助理原型、行为边界和架构取舍。</p>
+          <div class="eval-asset-grid">
+            ${items.map(([title, detail]) => `
+              <div class="eval-asset-item">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(detail)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function specProductOutputSummaryMarkup() {
+      const items = [
+        ["说明书结构", "把竞品、JTBD、成功状态、Agent 行为、Eval Set 和验证策略收成可评审规格。"],
+        ["行为边界", "写清 Persona、Tools、允许与禁止边界，避免 spec 只剩一句「帮用户完成任务」。"],
+        ["验证策略", "用 Research Preview 降低早期承诺，保留未解问题和下一步验证点。"],
+        ["体验沉淀", "小情绪房间 V0.5 把低摩擦安置、安全红线和记忆小花园收成可演示链路。"]
+      ];
+      return `
+        <div class="eval-asset-summary output-summary-card">
+          <h4>产品说明书沉淀总结</h4>
+          <p>把说明书结构、行为边界、验证策略和体验链路收成一张可对照的产出总结，再往下接 V1 / V2 演进。</p>
           <div class="eval-asset-grid">
             ${items.map(([title, detail]) => `
               <div class="eval-asset-item">
@@ -4825,10 +4917,10 @@
         const evalSummary = ["evaluation-builder", "stability-builder", "evals-product"].includes(detailId || stage.id)
           ? evalAssetSummaryMarkup()
           : "";
-        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder"].includes(nodeId)
+        const assetVisual = ["assistant-prototype-builder", "evaluation-builder", "stability-builder", "spec-product"].includes(nodeId)
           ? ""
           : nodeId === "competitive-product"
-            ? competitiveRadarFlowMarkup()
+            ? competitiveRadarFlowMarkup(stage)
             : knowledgeSystemFlowMarkup();
         return `${reflection}${assistantSummary}${evalSummary}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
       }
