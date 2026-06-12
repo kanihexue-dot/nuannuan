@@ -1664,30 +1664,33 @@
     }
     .product-screen-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
     }
     .product-screen-card {
       border: 1px solid rgba(16,163,127,.16);
-      border-radius: 18px;
+      border-radius: 14px;
       background: rgba(255,255,255,.82);
       overflow: hidden;
-      box-shadow: 0 10px 22px rgba(16,163,127,.04);
+      box-shadow: 0 6px 16px rgba(16,163,127,.04);
     }
     .product-screen-card img {
       width: 100%;
       height: auto;
+      max-height: 200px;
+      object-fit: contain;
+      object-position: top center;
       display: block;
       background: #fff;
     }
     .product-screen-card b {
       display: block;
-      padding: 10px 12px 12px;
-      font-size: 12px;
+      padding: 6px 8px 8px;
+      font-size: 10px;
       font-weight: 800;
       color: var(--ink);
       text-align: center;
-      line-height: 1.45;
+      line-height: 1.4;
     }
 
     .story-card b {
@@ -3096,8 +3099,9 @@
       line-height: 1.7;
     }
 
-    @media (max-width: 768px) {
-      .product-screen-grid { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .product-screen-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .product-screen-card img { max-height: 240px; }
     }
 
     @media (max-width: 1050px) {
@@ -3406,7 +3410,7 @@
     </footer>
   </main>
 
-  <script src="./showcase-data.js?v=20260612-foundation-asset"></script>
+  <script src="./showcase-data.js?v=20260612-product-row"></script>
   <script>
     const notes = {
       "llm-nondeterministic": {
