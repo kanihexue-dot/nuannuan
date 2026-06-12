@@ -1574,6 +1574,44 @@
       letter-spacing: .08em;
       text-transform: uppercase;
     }
+    .output-version-compare {
+      display: grid;
+      gap: 12px;
+    }
+    .output-version-bar {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper-2);
+      width: fit-content;
+    }
+    .output-version-tab {
+      appearance: none;
+      border: none;
+      background: transparent;
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: var(--muted);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .output-version-tab.active {
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 4px 14px rgba(17,24,39,.08);
+    }
+    .detail-workspace.product .output-version-tab.active {
+      color: var(--mint);
+    }
+    .output-version-panel[hidden] {
+      display: none !important;
+    }
+
     .story-card b {
       display: block;
       margin: 5px 0 6px;
@@ -3533,6 +3571,7 @@
           evalDesignFlowImage: node.evalDesignFlowImage || existing.evalDesignFlowImage || "",
           langfuseDatasetName: node.langfuseDatasetName || existing.langfuseDatasetName || "",
           langfuseDatasetSummary: node.langfuseDatasetSummary || existing.langfuseDatasetSummary || "",
+          outputVersions: node.outputVersions || existing.outputVersions || null,
           id: node.id || detailId,
           showcaseMapTitle: node.title
         };
@@ -4157,7 +4196,70 @@
       `;
     }
 
-    function projectOutputMarkup(stage) {
+    function projectOutputV1Markup(stage) {
+      const v1 = stage.outputVersions?.v1 || {};
+      const imagePath = v1.image || "";
+      const images = Array.isArray(v1.images) && v1.images.length ? v1.images : (imagePath ? [imagePath] : []);
+      if (!images.length) {
+        return `
+          <div class="output-visual-stage output-version-placeholder" data-output-visual-stage>
+            <div class="output-visual-placeholder">
+              <b>${escapeHtml(v1.title || "V1 版项目产出")}</b>
+              <span>${escapeHtml(v1.summary || "V1 贴图待补充。")}</span>
+            </div>
+          </div>
+        `;
+      }
+      if (images.length === 1) {
+        const src = images[0].startsWith("http") ? images[0] : `./${images[0]}`;
+        return `
+          <div class="output-visual-stage output-version-image" data-output-visual-stage>
+            <img class="output-visual-image" src="${escapeAttr(src)}" alt="${escapeAttr(v1.title || "V1 版项目产出")}" loading="lazy" onerror="this.closest('[data-output-visual-stage]').classList.add('is-missing')" />
+            <div class="output-visual-placeholder">
+              <b>${escapeHtml(v1.title || "V1 版项目产出")}</b>
+              <span>${escapeHtml(v1.summary || "")}</span>
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="output-visual-stage output-version-gallery">
+          <div class="storyboard-grid">
+            ${images.map((image, index) => {
+              const src = image.startsWith("http") ? image : `./${image}`;
+              return `
+                <article class="story-card">
+                  <div class="story-visual"><img src="${escapeAttr(src)}" alt="${escapeAttr(v1.title || "V1")} ${index + 1}" loading="lazy" /></div>
+                </article>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function projectOutputVersionShellMarkup(stage, innerMarkup) {
+      const versions = stage.outputVersions || {};
+      const v1 = versions.v1 || {};
+      const v2 = versions.v2 || {};
+      const defaultVersion = versions.default === "v1" ? "v1" : "v2";
+      return `
+        <div class="output-version-compare" data-output-version-compare data-default-version="${escapeAttr(defaultVersion)}">
+          <div class="output-version-bar" role="tablist" aria-label="项目产出版本切换">
+            <button type="button" class="output-version-tab ${defaultVersion === "v1" ? "active" : ""}" data-output-version="v1" role="tab" aria-selected="${defaultVersion === "v1"}">V1 · ${escapeHtml(v1.kicker || "初版")}</button>
+            <button type="button" class="output-version-tab ${defaultVersion === "v2" ? "active" : ""}" data-output-version="v2" role="tab" aria-selected="${defaultVersion === "v2"}">V2 · ${escapeHtml(v2.kicker || "当前沉淀")}</button>
+          </div>
+          <div class="output-version-panel ${defaultVersion === "v1" ? "is-active" : ""}" data-output-version-panel="v1" role="tabpanel" ${defaultVersion === "v1" ? "" : "hidden"}>
+            ${projectOutputV1Markup(stage)}
+          </div>
+          <div class="output-version-panel ${defaultVersion === "v2" ? "is-active" : ""}" data-output-version-panel="v2" role="tabpanel" ${defaultVersion === "v2" ? "" : "hidden"}>
+            ${innerMarkup}
+          </div>
+        </div>
+      `;
+    }
+
+    function projectOutputInnerMarkup(stage) {
       if ((stage.id || stage.detailId) === "spec-product") {
         return productSpecStoryboardMarkup();
       }
@@ -4190,6 +4292,14 @@
         return langfuseMarkup(stage);
       }
       return mindmapAssetMarkup(stage);
+    }
+
+    function projectOutputMarkup(stage) {
+      const inner = projectOutputInnerMarkup(stage);
+      if (stage.outputVersions) {
+        return projectOutputVersionShellMarkup(stage, inner);
+      }
+      return inner;
     }
 
     function mindmapAssetMarkup(stage) {
@@ -4534,10 +4644,11 @@
           : knowledgeSystemFlowMarkup();
         return `${reflection}${assetVisual}<div class="chip-detail" data-chip-detail hidden></div>`;
       }
+      const outputKey = section === "output" && stage.outputVersions ? "V1 / V2 演进" : item.key;
       const body = section === "output"
         ? projectOutputMarkup({ ...stage, id: stage.id || detailId, detailId: detailId || stage.id })
         : `<div class="evidence-chips">${(item.items || []).map((label, index) => `<button class="evidence-chip" data-chip-label="${escapeAttr(label)}" data-chip-section="${section}" data-chip-index="${index}" data-chip-detail-text="${escapeAttr(mappedChipDetail(stage, section, label))}">${cleanEvidenceLabel(label)}</button>`).join("")}</div>`;
-      return `<div class="flow-panel-title"><h4>${item.title} · ${item.key}</h4><p class="flow-panel-subtitle">${escapeHtml(item.detail)}</p></div>${body}<div class="chip-detail" data-chip-detail hidden></div>`;
+      return `<div class="flow-panel-title"><h4>${item.title} · ${outputKey}</h4><p class="flow-panel-subtitle">${escapeHtml(item.detail)}</p></div>${body}<div class="chip-detail" data-chip-detail hidden></div>`;
     }
 
     const outputTypes = {
@@ -4603,6 +4714,28 @@
       return `<b>${cleanEvidenceLabel(label)}</b>${mappedDetail || descriptions[section] || "这是该能力节点下的具体证据项。"}${obsidianOpenMarkup(label)}`;
     }
 
+    function bindOutputVersionCompare(scope) {
+      const root = scope?.matches?.("[data-output-version-compare]")
+        ? scope
+        : scope?.querySelector?.("[data-output-version-compare]");
+      if (!root) return;
+      root.querySelectorAll("[data-output-version]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const version = tab.dataset.outputVersion;
+          root.querySelectorAll("[data-output-version]").forEach((item) => {
+            const active = item.dataset.outputVersion === version;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-selected", active ? "true" : "false");
+          });
+          root.querySelectorAll("[data-output-version-panel]").forEach((panel) => {
+            const active = panel.dataset.outputVersionPanel === version;
+            panel.classList.toggle("is-active", active);
+            panel.hidden = !active;
+          });
+        });
+      });
+    }
+
     function bindChipInteractions(scope) {
       scope.querySelectorAll("[data-chip-label]").forEach((chip) => {
         chip.addEventListener("click", () => {
@@ -4615,10 +4748,12 @@
       });
     }
 
-    function flowStepsMarkup(activeSection = "output") {
+    function flowStepsMarkup(activeSection = "output", detailId = "") {
+      const stage = details[detailId] || {};
+      const outputKey = stage.outputVersions ? "V1 / V2 演进" : "脑图 / 架构图";
       const steps = [
         ["learn", "01", "学习输入", "判断映射"],
-        ["output", "02", "项目产出", "脑图 / 架构图"],
+        ["output", "02", "项目产出", outputKey],
         ["asset", "03", "知识资产", "复盘思考"]
       ];
       return steps.map(([section, index, title, key], stepIndex) => `
@@ -4630,13 +4765,13 @@
       `).join("");
     }
 
-    function evidenceDirectoryMarkup() {
+    function evidenceDirectoryMarkup(detailId = "") {
       return `
         <aside class="evidence-directory">
           <h4>证据目录</h4>
           <p>按同一套目录查看每个能力节点的证据层级。</p>
           <div class="evidence-flow" aria-label="证据目录">
-            ${flowStepsMarkup("output")}
+            ${flowStepsMarkup("output", detailId)}
           </div>
         </aside>
       `;
@@ -4675,7 +4810,7 @@
         </div>
         <div class="detail-switcher">${switcherMarkup(detailId)}</div>
         <div class="detail-main">
-          ${evidenceDirectoryMarkup()}
+          ${evidenceDirectoryMarkup(detailId)}
           ${evidenceDetailPanelMarkup(stage, detailId)}
         </div>
       `;
@@ -4807,11 +4942,13 @@
           workspace.querySelector("[data-flow-detail]").innerHTML = flowDetailMarkup(stage, step.dataset.flowSection, detailId);
           const flowDetail = workspace.querySelector("[data-flow-detail]");
           bindChipInteractions(flowDetail);
+          bindOutputVersionCompare(flowDetail);
           bindMindmapGraph(flowDetail);
         });
       });
       const flowDetail = workspace.querySelector("[data-flow-detail]");
       bindChipInteractions(flowDetail);
+      bindOutputVersionCompare(flowDetail);
       bindMindmapGraph(flowDetail);
       requestAnimationFrame(() => {
         workspace.scrollIntoView({ behavior: "smooth", block: "start" });
