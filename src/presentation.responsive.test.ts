@@ -18,8 +18,10 @@ describe("presentation responsive CSS", () => {
     const stackedBlock = css.slice(stackedBlockStart, mobileBlockStart);
 
     expect(wideBlock).toContain(".app-shell");
-    expect(wideBlock).not.toContain(".presentation-grid");
+    expect(wideBlock).toContain(".presentation-grid");
+    expect(wideBlock).toContain("minmax(0, 700px) minmax(300px, 380px)");
     expect(stackedBlock).toContain(".presentation-grid");
-    expect(stackedBlock).toContain(".stage-canvas__body");
+    expect(stackedBlock).toContain("grid-template-columns: 1fr");
+    expect(stackedBlock).toContain(".narrative-card");
   });
 });

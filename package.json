@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "obsidian:init": "node scripts/obsidian-workspace/init-vault.mjs",
+    "obsidian:ingest": "node scripts/obsidian-workspace/ingest-source.mjs",
+    "obsidian:confirm": "node scripts/obsidian-workspace/confirm-source-note.mjs",
+    "obsidian:autoloop": "node scripts/obsidian-workspace/auto-close-loop.mjs",
+    "obsidian:bulk-autoloop": "node scripts/obsidian-workspace/bulk-auto-close-loop.mjs",
+    "obsidian:refresh": "node scripts/obsidian-workspace/refresh-system-views.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
